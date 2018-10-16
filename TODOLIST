@@ -1,18 +1,28 @@
 Tâches à coder :
 
 - Commence par faire le front : interface, bouttons, etc.
-  - Page 1 : 
-  - Page 2 : 
-  - Page 3 : 
-  - Page 4 : 
-  - Page 5 : 
-  - Page 6 : 
-  - Page 7 : 
-  - Page 8 : 
-  - Page 9 : 
-  - Page 10: 
-  - Page 11: 
-  - Page 12: 
+  - Page 1 : login
+      ->
+  - Page 2 : register
+      ->
+  - Page 3 : home
+      -> 
+  - Page 4 : calendar
+      -> Après le back
+  - Page 5 : bannière
+      ->
+  - Page 6 : create_league
+      ->
+  - Page 7 : user/id
+      -> Antoine
+  - Page 8 : match/id
+      -> Roméo
+    (Page 8bis : match/id (avec des trucs affichés en plus) )
+  - Page 9 : search/
+      ->
+  - Page 11: league/id
+      -> Antoine
+  - Page 12: suggest_match
 
 - Back
 - Routing
