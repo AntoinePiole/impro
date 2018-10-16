@@ -2,27 +2,28 @@ Tâches à coder :
 
 - Commence par faire le front : interface, bouttons, etc.
   - Page 1 : login
-      ->
+      -> Antoine
   - Page 2 : register
-      ->
+      -> Roméo
   - Page 3 : home
-      -> 
+      -> Roméo
   - Page 4 : calendar
       -> Après le back
   - Page 5 : bannière
-      ->
+      -> Antoine 
   - Page 6 : create_league
-      ->
+      -> Roméo
   - Page 7 : user/id
       -> Antoine
   - Page 8 : match/id
       -> Roméo
     (Page 8bis : match/id (avec des trucs affichés en plus) )
   - Page 9 : search/
-      ->
+      -> Roméo
   - Page 11: league/id
       -> Antoine
   - Page 12: suggest_match
+      -> Antoine
 
 - Back
 - Routing
