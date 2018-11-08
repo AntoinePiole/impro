@@ -27,7 +27,6 @@ export class Signup extends React.Component {
         }
         API.signup(_send).then(function(data){
             if (data.status === 204) {
-                console.log("messed up")
                 this.setState({
                     error:true
                 })

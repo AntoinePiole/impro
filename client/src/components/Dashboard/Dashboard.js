@@ -33,13 +33,10 @@ export class Dashboard extends React.Component {
         window.location = "/search";
     }
     render() {
-        console.log(localStorage)
         return(
             <div className="Dashboard">
                 <h1>Coucou Roméo !</h1>
-
-
-                <ButtonGroup bsSize="large">
+                <ButtonGroup className="Button" bsSize="large">
                     <Button onClick={this.home}>Ecran d'acceuil</Button>
                     <Button onClick={this.user}>Mon profil</Button>
                     <Button onClick={this.league}>Mes ligues</Button>
