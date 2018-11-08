@@ -33,12 +33,13 @@ function signup(req, res) {
             _u.save(function (err, user) {
                 if (err) {
                     res.status(500).json({
-                        "text": "Erreur interne"
+                        "text": "Erreur interne en essayant de créer le compte"
                     })
                 } else {
                     res.status(200).json({
                         "text": "Succès",
-                        "token": user.getToken()
+                        "token": user.getToken(),
+                        "id": user._id
                     })
                 }
             })
@@ -83,8 +84,10 @@ function login(req, res) {
                 })
             } else {
                 if (user.authenticate(req.body.password)) {
+                    console.log("logged in with " + user)
                     res.status(200).json({
                         "token": user.getToken(),
+                        "id": user._id,
                         "text": "Authentification réussi"
                     })
                 } else {

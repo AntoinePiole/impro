@@ -8,7 +8,8 @@ export class Signup extends React.Component {
         this.state = {
             email : "",
             password: "",
-            cpassword: ""
+            cpassword: "",
+            error: false
         }
         this.handleChange.bind(this);
         this.send.bind(this);
@@ -25,8 +26,17 @@ export class Signup extends React.Component {
             password: this.state.password
         }
         API.signup(_send).then(function(data){
-            localStorage.setItem('token', data.data.token);
-            window.location = "/dashboard"
+            if (data.status === 204) {
+                console.log("messed up")
+                this.setState({
+                    error:true
+                })
+            }
+            else {
+                localStorage.setItem('token', data.data.token);
+                localStorage.setItem('id', data.data.id)
+                window.location = "/home"
+            }
         },function(error){
             console.log(error);
             return;
@@ -37,8 +47,10 @@ export class Signup extends React.Component {
             [event.target.id]: event.target.value
         });
     }
+
     render() {
         return(
+            //TODO : DISPLAY SOMETHING TO WARN THE USER WHEN THE EMAIL ALREADY EXISTS ( IE WHEN THIS.STATE.ERROR IS TRUE )
             <div className="Login">
                 <FormGroup controlId="email" bsSize="large">
                 <ControlLabel>Email</ControlLabel>

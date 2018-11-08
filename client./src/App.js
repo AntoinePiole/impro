@@ -10,11 +10,11 @@ class App extends Component {
         render() {
         return (
         <div className="App">
+        <Route component = {Dashboard}/>
             <div className="App-content">
                 <Switch>  
                     <Route exact path="/login" component={Login}/>
                     <Route exact path ="/signup" component={Signup}/>
-                    <PrivateRoute path='/dashboard' component={Dashboard} />
                 </Switch>
             </div>
         </div>
