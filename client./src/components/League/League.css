@@ -19,6 +19,7 @@
 
 .UserList div {
     display: inline-block;
-    width: 30%;
+    width: 85%;
     color: blueviolet;
+    border:none;
 }

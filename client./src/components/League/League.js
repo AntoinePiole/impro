@@ -50,7 +50,7 @@ export class League extends React.Component {
     }
     render() {
         return (
-            <div className="border border-dark" id="League">
+            <div className="League" id="League">
                 {this.state.editting ?
                     <div className="LeagueDisplay" >
 

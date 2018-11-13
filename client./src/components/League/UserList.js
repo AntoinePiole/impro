@@ -31,7 +31,7 @@ export class UserList extends React.Component {
                     <ListGroupItem key={user.user.id} >
                         {user.isAdmin?<span className="glyphicon glyphicon-asterisk"></span> : <span className="glyphicon glyphicon-user"></span>} 
                         <a onClick={() => this.selectUser(user)}>
-                            {user.user.name? user.user.name : user.user.first_name + user.user.last_name}
+                            {user.user.name? user.user.name : user.user.first_name + ' ' + user.user.last_name}
                         </a>
                         {<Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(user)}/>} 
                     </ListGroupItem>
