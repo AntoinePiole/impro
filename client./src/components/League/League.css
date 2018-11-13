@@ -1,0 +1,24 @@
+.League div {
+    display: inline-block;
+    border-radius: 0.3px;
+    border-color: black;
+    border-style: solid;
+
+}
+.LeagueDisplay div {
+    width: 100%;
+    color:blue;
+    border:none;
+}
+
+.ValidationButton div {
+    width: 100%;
+    color:blue;
+    border:none;
+}
+
+.UserList div {
+    display: inline-block;
+    width: 30%;
+    color: blueviolet;
+}

@@ -58,7 +58,7 @@ export class User extends React.Component {
     }
     render() {
         return (
-            <div className="border border-dark" className="User" id="User">
+            <div className="border border-dark" id="User">
                 {this.state.editting ?
                     <div className="UserDisplay" >
                         <FormGroup controlId="first_name">

@@ -6,7 +6,7 @@ export class LeagueList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            leagues : [{league : {name : "Lit de Camp", id:"1"}, isAdmin : true}, {league : {name : "Lit deux Camp", id:"2"}, isAdmin : false}]
+            leagues : [{league : {name : "Lit de Camp", id:"1"}, isAdmin : true}, {league : {name : "Lit deux Camps", id:"2"}, isAdmin : false}]
         }
         this.selectLeague = this.selectLeague.bind(this);
     }
@@ -18,7 +18,7 @@ export class LeagueList extends React.Component {
     }
 
     leaveLeague (league) {
-        console.log("leave the league")
+        console.log("leave the league", league)
     }
 
     render() {
