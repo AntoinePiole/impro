@@ -84,7 +84,7 @@ function login(req, res) {
                 })
             } else {
                 if (user.authenticate(req.body.password)) {
-                    console.log("logged in with " + user)
+                    //console.log("logged in with " + user)
                     res.status(200).json({
                         "token": user.getToken(),
                         "id": user._id,
@@ -100,7 +100,33 @@ function login(req, res) {
     }
 }
 
-//On exporte nos deux fonctions
 
+function getById(req, res) {
+    console.log("trying to find something")
+    try {
+        _id = req.params.id
+    } catch (err) {
+        res.status(500).json({
+            "text": "invalid request"
+        })
+    }
+    var query = User.findOne({_id:_id});
+    
+    query.exec(function(err, user){
+        if (err) {
+            res.status(500).json({
+                "text": "Erreur interne"
+            })
+        }
+        else {
+        res.status(200).json({ //note : this does not send a secure user, it isn't crypted, etc. In final version, change it so that is contains no critical information.
+            "user" : user
+        })
+        }
+    })
+}
+
+//On exporte nos deux fonctions
+exports.getById = getById;
 exports.login = login;
 exports.signup = signup;

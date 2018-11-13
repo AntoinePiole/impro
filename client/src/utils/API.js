@@ -22,5 +22,9 @@ export default {
     },
     logout : function() {
         localStorage.clear();
-    }
+    },
+    getUserById : function(id) {
+        console.log(burl + '/user/'+id)
+        return axios.get(burl + '/user/'+id)
+    },
 }
