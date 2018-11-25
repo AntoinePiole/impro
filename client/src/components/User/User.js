@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
-import API from '../../utils/API';
-import Moment from 'moment';
+import * as moment from 'moment';
 import { LeagueList } from './LeagueList'
+import { UserEdit } from './UserEdit'
+import { UserDisplay } from './UserDisplay'
 import './User.css';
 
 
@@ -36,7 +36,6 @@ export class User extends React.Component {
             phone : '06.52.78.03.66',
             desc : 'Le meilleur improvisateur de toute la Nouvelle-Calédonie'
         })
-        Moment.locale('fr');
     }
 
     setEdittingMode = event => {
@@ -57,62 +56,13 @@ export class User extends React.Component {
         })
     }
     render() {
+        const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
-            <div className="User" id="User">
+            <div className="User">
                 {this.state.editting ?
-                    <div className="UserDisplay" >
-                        <FormGroup controlId="first_name">
-                        <ControlLabel>Prénom</ControlLabel>
-                        <FormControl type="text" value={this.state.first_name} onChange={this.handleChange}/>
-                        </FormGroup>
-
-                        <FormGroup controlId="last_name">
-                        <ControlLabel>Nom de famille</ControlLabel>
-                        <FormControl type="text" value={this.state.last_name} onChange={this.handleChange}/>
-                        </FormGroup>
-
-                        <FormGroup controlId="username">
-                        <ControlLabel>Pseudo</ControlLabel>
-                        <FormControl type="text" value={this.state.username} onChange={this.handleChange}/>
-                        </FormGroup>
-
-                        <FormGroup controlId="email">
-                        <ControlLabel>Email</ControlLabel>
-                        <FormControl type="email" value={this.state.email} onChange={this.handleChange}/>
-                        </FormGroup>
-
-                        <FormGroup controlId="phone">
-                        <ControlLabel>Tél.</ControlLabel>
-                        <FormControl type="text" value={this.state.phone} onChange={this.handleChange}/>
-                        </FormGroup>
-
-                        <FormGroup controlId="desc">
-                        <ControlLabel>Bio</ControlLabel>
-                        <FormControl type="text" value={this.state.desc} onChange={this.handleChange}/>
-                        </FormGroup>
-                        <p></p>
-                        <Button className="ValidationButton" onClick={this.send} bsSize="large"type="submit">
-                            Valider modifications
-                        </Button>
-                    </div>
+                    <UserEdit id={this.state.id} email={this.state.email} first_name={this.state.first_name} last_name={this.state.last_name} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} send={this.send} /> 
                 :
-                    <div className="UserDisplay">
-                        <h1>Page de {this.state.username? this.state.username : this.state.first_name + ' ' + this.state.last_name
-                            }
-                        </h1>
-                        <p> Prénom : {this.state.first_name}</p>
-                        <p> Nom de famille : {this.state.last_name}</p>
-                        <p> Date de naissance : {this.state.birthday===""? 'Non renseignée': Moment(this.state.birthday).format('l')}</p>
-                        <p> Pseudonyme : {this.state.username===""? 'Non renseigné' : this.state.username}</p>
-                        <p> Tél. : {this.state.phone===""? 'Non renseigné': this.state.phone}</p>
-                        <p> Email : {this.state.email===""? 'Non renseigné': this.state.email}</p>
-                        <p className = 'userDescription'> Bio : {this.state.desc===""? 'Non renseigné': this.state.desc}</p>
-                        {this.state.id === localStorage.getItem('id')? 
-                            <Button onClick={this.setEdittingMode} bsSize="large" type="submit">
-                                Modifier mon profil
-                            </Button>
-                        : null}
-                    </div>
+                    <UserDisplay id={this.state.id} email={this.state.email} first_name={this.state.first_name} last_name={this.state.last_name} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="LeagueList">
                     <LeagueList/>    

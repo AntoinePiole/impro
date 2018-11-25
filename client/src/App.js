@@ -6,7 +6,6 @@ import { User } from './components/User/User.js';
 import { League } from './components/League/League.js';
 import { Signup } from './components/Signup/Signup.js';
 import { SearchResultContainer } from './components/SearchResult/SearchResultContainer.js';
-import { PrivateRoute } from './components/PrivateRoute.js';
 import './App.css';
 
 class App extends Component {

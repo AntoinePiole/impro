@@ -1,6 +1,5 @@
 import React from 'react';
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
-import API from '../../utils/API';
 
 export class UserList extends React.Component {
     constructor(props) {

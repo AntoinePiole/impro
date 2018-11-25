@@ -5,7 +5,7 @@ import { Login } from './components/Login/Login.js';
 import { User } from './components/User/User.js';
 import { League } from './components/League/League.js';
 import { Signup } from './components/Signup/Signup.js';
-import { PrivateRoute } from './components/PrivateRoute.js';
+import { SearchResultContainer } from './components/SearchResult/SearchResultContainer.js';
 import './App.css';
 
 class App extends Component {
@@ -19,6 +19,7 @@ class App extends Component {
                     <Route exact path ="/signup" component={Signup}/>
                     <Route path ="/user/:id" component={User}/>
                     <Route path ="/league/:id" component={League}/>
+                    <Route path ="/search" component={SearchResultContainer} />
                 </Switch>
             </div>
         </div>
