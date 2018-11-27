@@ -1,0 +1,64 @@
+########## Getters ##########
+getUser(String id)
+  Gets a single user by its id
+ 
+getLeague(String id)
+  Gets a single league (including its list of members and their rank in the league) by its id
+  
+getMatch(String id)
+  Gets a single march (including both lists of members and their role in the match) by its id
+  
+########## Setters ##########
+setUser(String id, ...)
+  Sets a single user by its id
+ 
+setLeague(String id, ...)
+  Sets a single league (including its list of members and their rank in the league), found by its id
+  
+setMatch(String id, ...)
+  Sets a single march (including both lists of members and their role in the match) by its id
+ 
+########## Logging ###########
+login(String email, String password)
+  login
+
+signup(String email, String password, ........)
+  sign up with a lot of parameters
+ 
+########## User in a match ##########  
+addToMatch(String userId, String matchId, String role)
+  Role can be : "user1" (user in league1), "user2" (user in league2), "admin", "referee" or "MC"
+  
+removeFromMatch(String userId, String matchId)
+  Removes an user from a match
+  
+addUserRoleInMatch(String userId, String matchId, String role)
+  Adds a role to the list of roles of an user in a match
+  
+removeUserRoleFromMatch(String userId, String matchId, String role)
+  Removes a role from the list of roles of an user in a match
+
+setUserRoleInMatch(String userId, String matchId, String role)
+  Role can be : user1 (user in league1), user2 (user in league2), admin1 or admin2, referee, 
+  
+########## User in a league ##########
+addToLeague(String userId, String leagueId)
+  Adds an user to a league with role "user"
+
+removeFromLeague(String userId, String leagueId)
+  Removes an user from a league
+  
+setRoleInLeague(String userId, String leagueId, String role)
+  Role can be : user or admin
+  
+########## Search ##########
+searchUser(String params)
+  Search in the User database
+  
+searchMatch(String params)
+  Search in the Match database
+  
+searchLeague(String params)
+  Search in the League database
+  
+##########
