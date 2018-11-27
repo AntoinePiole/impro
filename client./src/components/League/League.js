@@ -13,7 +13,9 @@ export class League extends React.Component {
             editting : false,
             name : "",
             nickname : "",
-            desc : ""
+            desc : "",
+            isAdmin : false
+
         }
     }
 
@@ -25,8 +27,12 @@ export class League extends React.Component {
             editting : false,
             name : "Ligue d'Improvisation Théâtrale dédiée au truc",
             nickname : "Lit de Camp",
-            desc : "Ligue d'impro de CentraleSupelec"
+            desc : "Ligue d'impro de CentraleSupelec",
         })
+        this.setState({
+            isAdmin : (window.location.toString().substr(window.location.toString().lastIndexOf("/")+1) === localStorage.getItem('id')) // this is stupid, change it so that we browse the league's users to find out whether the current user if an admin of the list
+        })
+        console.log(localStorage.getItem('id'))
     }
 
     setEdittingMode = event => {
@@ -51,12 +57,12 @@ export class League extends React.Component {
         return (
             <div className="League">
                 {this.state.editting ?
-                    <LeagueEdit id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} handleChange={this.handleChange} send={this.send} /> 
+                    <LeagueEdit id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} isAdmin={this.state.isAdmin} handleChange={this.handleChange} send={this.send} /> 
                 :
-                    <LeagueDisplay id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
+                    <LeagueDisplay id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} isAdmin={this.state.isAdmin} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="UserList">
-                    <UserList/>    
+                    <UserList id={this.state.id} isAdmin={this.state.isAdmin}/>    
                 </div>
             </div>
         )

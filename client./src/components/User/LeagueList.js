@@ -31,7 +31,11 @@ export class LeagueList extends React.Component {
                     <ListGroupItem key={league.league.id} >
                         {league.isAdmin?<span className="glyphicon glyphicon-asterisk"></span> : <span className="glyphicon glyphicon-user"></span>} 
                         <a onClick={() => this.selectLeague(league)}>{league.league.name}</a>
-                        {<Button className="glyphicon glyphicon-remove" onClick = {() => this.leaveLeague(league)}/>} 
+                        {localStorage.getItem("id") === this.props.id?
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.leaveLeague(league)}/>
+                        :
+                            null 
+                        }
                     </ListGroupItem>
                 ))}
                 </ListGroup>

@@ -22,7 +22,7 @@ export class LeagueDisplay extends React.Component {
                     <p> Nom  : {this.props.name}</p>
                 }
                 <p className = 'leagueDescription'> Description : {this.props.desc}</p>
-                {this.props.id === localStorage.getItem('id')?              //This is quite stupid here : we show the button to edit the league if the logged user's id and the league's id are the same, for easier testing. Replace this test later : should be shown iff the logged user is an admin of the league
+                {this.props.isAdmin? // Can modify league if we are an admin of the league
                     <Button onClick={this.props.setEdittingMode} bsSize="large" type="submit">
                         Modifier ma ligue
                     </Button>
