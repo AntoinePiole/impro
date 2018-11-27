@@ -23,3 +23,12 @@
     color: blueviolet;
     border:none;
 }
+
+.MatchSuggestions div {
+    display:block;
+}
+
+Grid {
+    display:block;
+    color: red;
+}

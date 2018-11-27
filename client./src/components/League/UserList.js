@@ -9,6 +9,8 @@ export class UserList extends React.Component {
         }
         //isAdmin is true iff the corresponding user is an admin of list
         this.selectUser = this.selectUser.bind(this);
+        this.removeUser = this.removeUser.bind(this);
+        this.setRole = this.setRole.bind(this);
     }
 
     selectUser (user) {
