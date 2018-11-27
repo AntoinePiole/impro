@@ -1,11 +1,11 @@
 ########## Getters ##########
-getUser(String id)
+getUserById(String id)
   Gets a single user by its id
  
-getLeague(String id)
+getLeagueById(String id)
   Gets a single league (including its list of members and their rank in the league) by its id
   
-getMatch(String id)
+getMatchById(String id)
   Gets a single march (including both lists of members and their role in the match) by its id
   
 ########## Setters ##########
@@ -24,7 +24,13 @@ login(String email, String password)
 
 signup(String email, String password, ........)
   sign up with a lot of parameters
- 
+
+signout()
+  disconnect current user
+
+isAuth()
+  check if we are currently connected
+  
 ########## User in a match ##########  
 addToMatch(String userId, String matchId, String role)
   Role can be : "user1" (user in league1), "user2" (user in league2), "admin", "referee" or "MC"
@@ -52,13 +58,13 @@ setRoleInLeague(String userId, String leagueId, String role)
   Role can be : user or admin
   
 ########## Search ##########
-searchUser(String params)
+searchUser(String queryText)
   Search in the User database
   
-searchMatch(String params)
+searchMatch(String queryText)
   Search in the Match database
   
-searchLeague(String params)
+searchLeague(String queryText)
   Search in the League database
   
 ##########
