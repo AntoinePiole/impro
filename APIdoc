@@ -67,4 +67,14 @@ searchMatch(String queryText)
 searchLeague(String queryText)
   Search in the League database
   
-##########
+########## Match requests ##########
+postMatchRequest(String league1Id, String league2Id, Date date, String location)
+  Post a match request from league 1 to league 2. Store it as a proposition in league 2, and a suggestion in match 1
+  
+refuseMatchRequest(String league1Id, String league2Id, Date date, String location)
+  Refuse a match. Remove it from both the propositions of league 2 and the suggestions of league 1
+
+acceptMatchRequest(String league1Id, String league2Id, Date date, String location)
+  Accept a match. Remove it from propositions and suggestions, and create a new page for the match.
+
+########## ##########
