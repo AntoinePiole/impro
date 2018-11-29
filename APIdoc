@@ -17,6 +17,16 @@ setLeague(String id, ...)
   
 setMatch(String id, ...)
   Sets a single march (including both lists of members and their role in the match) by its id
+  
+########## Constructors ##########
+makeUser(String id, ...)
+  Creates a single user
+ 
+makeLeague(String id, ...)
+  Creates a single league (including its list of members and their rank in the league)
+  
+makeMatch(String id, ...)
+  Creates a single march (including both lists of members and their role in the match) 
  
 ########## Logging ###########
 login(String email, String password)
