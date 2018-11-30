@@ -1,0 +1,46 @@
+
+user : {
+    id: id,
+    mail: String,
+    password: String,
+    phone: int,
+    familyName: String,
+    firstName: String,
+    username: String,
+    birthday: Date,
+    creationDate: Date,
+    photoId: id
+}
+
+league : {
+    id: id,
+    mail: String,
+    photoId: id,
+    members: (id,boolean)[],  //boolean = isAdmin
+    receivedMatchRequestIds: String[],
+    sentMatchRequestIds: String[]
+
+}
+
+
+match : {
+    id: id,
+    name: String,
+    status: String,  //between [finished, waitingConfirmation, confirmed, canceled]
+    league1Id: id,
+    league2Id: id,
+    league1Members: id[],
+    league2Members: id[],
+    league1Members_propositions: id[],
+    league2Members_propositions: id[],
+    referee: id,
+    mc: id,
+    refereePropositions: id[],
+    mcPropositions: id[],
+    subscribers: id[],
+    description: String,
+    date: Date,
+    location: String,
+    score: (int,int)
+}
+
