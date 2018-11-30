@@ -9,13 +9,13 @@ getMatchById(String id)
   Gets a single march (including both lists of members and their role in the match) by its id
   
 ########## Setters ##########
-setUser(String id, ...)
+patchUser(String id, ...)
   Sets a single user by its id
  
-setLeague(String id, ...)
+patchLeague(String id, ...)
   Sets a single league (including its list of members and their rank in the league), found by its id
   
-setMatch(String id, ...)
+patchMatch(String id, ...)
   Sets a single march (including both lists of members and their role in the match) by its id
   
 ########## Constructors ##########
