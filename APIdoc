@@ -42,20 +42,12 @@ isAuth()
   check if we are currently connected
   
 ########## User in a match ##########  
-addToMatch(String userId, String matchId, String role)
-  Role can be : "user1" (user in league1), "user2" (user in league2), "admin", "referee" or "MC"
-  
-removeFromMatch(String userId, String matchId)
-  Removes an user from a match
-  
-addUserRoleInMatch(String userId, String matchId, String role)
-  Adds a role to the list of roles of an user in a match
-  
-removeUserRoleFromMatch(String userId, String matchId, String role)
-  Removes a role from the list of roles of an user in a match
+addToMatch(String userId, String matchId, String role, waiting)
+  Role can be : "participant1" (player for league1), "participant2"(player for league2), "admin", "referee" or "MC"
+  waiting : boolean true if to add in waitingList, false if to accept 
 
-setUserRoleInMatch(String userId, String matchId, String role)
-  Role can be : user1 (user in league1), user2 (user in league2), admin1 or admin2, referee, 
+removeFromMatch(String userId, String matchId, String role, waiting)
+  Removes an user from a match, same parameters as addToMatch
   
 ########## User in a league ##########
 addToLeague(String userId, String leagueId)

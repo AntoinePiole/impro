@@ -3,7 +3,7 @@ user : {
     id: id,
     mail: String,
     password: String,
-    phone: int,
+    phone: Phone,
     familyName: String,
     firstName: String,
     username: String,
@@ -14,9 +14,11 @@ user : {
 
 league : {
     id: id,
+    name: String,
+    username: String,
     mail: String,
     photoId: id,
-    members: (id,boolean)[],  //boolean = isAdmin
+    members: (id,boolean)[],  //members[i]={id: String, admin: boolean} 
     receivedMatchRequestIds: String[],
     sentMatchRequestIds: String[]
 
@@ -31,12 +33,13 @@ match : {
     league2Id: id,
     league1Members: id[],
     league2Members: id[],
-    league1Members_propositions: id[],
-    league2Members_propositions: id[],
+    league1MembersPropositions: id[],
+    league2MembersPropositions: id[],
     referee: id,
     mc: id,
     refereePropositions: id[],
     mcPropositions: id[],
+    admins: id[],
     subscribers: id[],
     description: String,
     date: Date,
