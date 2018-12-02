@@ -16,8 +16,8 @@ const fakeDB = {
         {name: 'Lolita', photo_id:'/Users/Moi/impro/client/ressources/lolita.png'}
     ],
     matchs : [
-        {name: 'Match WEI', league_1: 'hey', league_2: 'hey2'}, // ?Q? comment accéder à la liste leagues déf au-dessus ?
-        {name: 'Improvisades', league_1: 'hi', league_2: 'hi2'}
+        {name: 'Match WEI', league1: 'hey', league2: 'hey2'}, // ?Q? comment accéder à la liste leagues déf au-dessus ?
+        {name: 'Improvisades', league1: 'hi', league2: 'hi2'}
     ]
 };
 
@@ -58,7 +58,6 @@ export class SearchResultContainer extends React.Component{
 
     render(){
         let results = this.getResults(this.state.inputQuery,this.state.resultType); 
-        console.log(results);
         return (
             <div className='searchResult'>
                 <SearchField changeInput={this.changeInput} value={this.state.inputQuery}/>
