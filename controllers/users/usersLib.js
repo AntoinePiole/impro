@@ -186,7 +186,6 @@ function patchUserById(req, res) {
     }
 }
 
-//On exporte nos deux fonctions
 exports.patchUserById = patchUserById;
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;

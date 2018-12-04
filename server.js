@@ -35,6 +35,8 @@ app.use(function (req, res, next) {
 var router = express.Router();
 app.use('/users', router);
 require(__dirname + '/controllers/userController')(router);
+app.use('/leagues', router);
+require(__dirname + '/leagues/leagueController')(router);
 
 
 
