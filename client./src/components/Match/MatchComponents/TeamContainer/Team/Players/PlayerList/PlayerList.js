@@ -1,19 +1,15 @@
 import React from 'react';
-import { SearchResultItem } from './SearchResultItem/SearchResultItems';
 import {ListGroup, ListGroupItem} from 'react-bootstrap';
-
+import {PlayerResult} from './PlayerResult.js';
 /**
- * @property type {string} - type of the result (user, league or match)
  * @property results - list of objects of this type
  */
-export class ResultList extends React.Component {
-//?Q? mettre des params à resultList puis appeler la fonction avec comme params this.props.machin ou direct resultList()
+export class PlayerList extends React.Component {
 
 resultList(){ // returns the list of <searchResultItem /> components to render
         const results = this.props.results;
-        const type = this.props.type;
         const toRender = results.map (result => {
-            return <ListGroupItem><SearchResultItem result={result} type={type}/></ListGroupItem>})
+            return <ListGroupItem><PlayerResult user={result}/></ListGroupItem>})
         return (toRender);
     } 
 

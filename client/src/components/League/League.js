@@ -11,16 +11,19 @@ import './League.css';
 export class League extends React.Component {
     constructor(props){
         super(props);
-        this.state= {
-            id : localStorage.getItem('id'),
-            editting : false,
+        this.state= { //Should set id, name, nickname, desc, propositions and suggestions with parameters of the list from back
+            id : localStorage.getItem('id'), //
             name : "",
             nickname : "",
             desc : "",
+            propositions : [{sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 21:30"), location : "Chez moi ;)"}, // change name to sentMatchRequests
+                            {sendingLeagueId : "3", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 23:30"), location : "Chez toi :3"},
+                            {sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2018-10-10 00:00"), location : "Partout"}],
+            suggestions : [{sendingLeagueId : localStorage.getItem("id"), receivingLeagueId : "1", date : moment("2013-02-08 21:30"), location : "Chez moi ;)"},  //change name to receivedMatchRequests
+                            {sendingLeagueId : localStorage.getItem("id"), receivingLeagueId : "2", date:moment("2013-02-08 23:30"), location:"Chez toi :3"}], // CHANGE TYPE FROM TRIPLE TO REQUEST
+            editting : false,
             isAdmin : false,
             isMember : false,
-            propositions : [{leagueId:"1", date:moment("2013-02-08 21:30"), location:"Chez moi ;)"}, {leagueId:"1", date:moment("2013-02-08 23:30"), location:"Chez toi :3"},{leagueId:"2", date:moment("2018-10-10 00:00"), location:"Partout"}],
-            suggestions : [{leagueId:"3", date:moment("2013-02-08 21:30"), location:"Chez moi ;)"}, {leagueId:"3", date:moment("2013-02-08 23:30"), location:"Chez toi :3"}]
         }
     }
 
@@ -78,10 +81,12 @@ export class League extends React.Component {
                     null
                 }
                 {this.state.isMember?
-                    null
+                    <div className="MatchSuggester">
+                        <MatchSuggester receivingLeagueId={this.state.id}/>
+                    </div>
                 :  
                     <div className="MatchSuggester">
-                        <MatchSuggester />
+                        <MatchSuggester receivingLeagueId={this.state.id}/>
                     </div>
                 }
             </div>

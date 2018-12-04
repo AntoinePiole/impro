@@ -79,7 +79,7 @@ function login(req, res) {
                     "text": "Erreur interne"
                 })
             } else if (!user) {
-                res.status(401).json({
+                res.status(400).json({
                     "text": "L'utilisateur n'existe pas"
                 })
             } else {
@@ -101,17 +101,15 @@ function login(req, res) {
 }
 
 
-function getById(req, res) {
-    console.log("trying to find something")
+function getUserById(req, res) {
     try {
         _id = req.params.id
     } catch (err) {
-        res.status(500).json({
+        res.status(400).json({
             "text": "invalid request"
         })
     }
     var query = User.findOne({_id:_id});
-    
     query.exec(function(err, user){
         if (err) {
             res.status(500).json({
@@ -126,7 +124,71 @@ function getById(req, res) {
     })
 }
 
+function getUsers(req, res) {
+    User.find({}
+    , function (err, users) {
+        if (err) {
+            res.status(500).json({
+                "text": "Erreur interne"
+            })
+        } else if (!users) {
+            res.status(401).json({
+                "text": "Aucun utilisateur trouvé"
+            })
+        } else {
+            //console.log("logged in with " + user)
+            res.status(200).json({
+                "users": users,
+                "text": "Authentification réussi"
+            })
+        }
+    })
+}
+
+function patchUserById(req, res) {
+    if (!req.params.id || !req.body) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        var _id = req.params.id;
+        var findUser = new Promise(function (resolve, reject) {
+            User.findOneAndUpdate({  _id: _id }, req.body,
+                function (err, result) {
+                if (err) {
+                    reject(500);
+                } else {
+                    if (result) {
+                        resolve(true)
+                    } else {
+                        reject(500);
+                    }
+                }
+            })
+        })
+        findUser.then(function () {
+            User.findOne({_id:_id}
+                ,function (err, user) {
+                    if (err) {
+                        res.status(500).json({
+                            "text": "Erreur interne en essayant de créer le compte"
+                        })
+                    } else {
+                        res.status(200).json({
+                            "text": "Succès",
+                            "user": user,
+                        })
+                    }
+                }
+            )
+        })
+    }
+}
+
 //On exporte nos deux fonctions
-exports.getById = getById;
+exports.patchUserById = patchUserById;
+exports.getUsers = getUsers;
+exports.getUserById = getUserById;
 exports.login = login;
 exports.signup = signup;

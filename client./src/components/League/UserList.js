@@ -5,7 +5,7 @@ export class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            users : [{user : {name : "Leshran", id:"1"}, isAdmin : true}, {user : {name : "", first_name:"Roméo", last_name:"Sandoz", id:"2"}, isAdmin : false}]
+            users : [{user : {name : "Leshran", id:"1"}, isAdmin : true}, {user : {name : "", first_name:"Roméo", last_name:"Sandoz", id:"2"}, isAdmin : false}] // Later user will be given by its id, and should be retrieved
         }
         //isAdmin is true iff the corresponding user is an admin of list
         this.selectUser = this.selectUser.bind(this);
@@ -33,7 +33,7 @@ export class UserList extends React.Component {
                     Liste des joueurs
                 </h2>
                 <ListGroup>
-                {this.state.users.map((user) => (
+                {this.state.users.map((user) => 
                     <ListGroupItem key={user.user.id} >
                         {user.isAdmin?<span className="glyphicon glyphicon-asterisk"></span> : <span className="glyphicon glyphicon-user"></span>} 
                         <a onClick={() => this.selectUser(user)}>
@@ -49,7 +49,7 @@ export class UserList extends React.Component {
                             null    
                         }
                     </ListGroupItem>
-                ))}
+                )}
                 </ListGroup>
             </div>
         )

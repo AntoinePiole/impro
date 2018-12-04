@@ -13,13 +13,13 @@ export class MatchSuggestions extends React.Component {
 
     getLeagueNameById(id) {
         //TODO when the back is working : adapt this to 
-        if (id=="1") {
+        if (id==="1") {
             return "LDC"
         }
-        if (id=="2"){
+        if (id==="2"){
             return "La voiture"
         }
-        if (id=="3"){
+        if (id==="3"){
             return "Hey c'est nous"
         }
     }
@@ -73,19 +73,19 @@ export class MatchSuggestions extends React.Component {
                         </Col>
                     </Row>
                 {this.props.propositions.map((proposition) => (
-                    <Row display="block" className="grid">
+                    <Row key={proposition.date+proposition.sendingLeagueId} display="block" className="grid">
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.leagueId)}>
-                                {this.getLeagueNameById(proposition.leagueId)}                        
+                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
+                                {this.getLeagueNameById(proposition.sendingLeagueId)}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.leagueId)}>
+                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
                                 {moment(proposition.date).format("DD/MM/YY hh:mm")}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.leagueId)}>
+                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
                                 {proposition.location}                        
                             </a>
                         </Col>
@@ -125,19 +125,19 @@ export class MatchSuggestions extends React.Component {
                         </Col>
                 </Row>
                 {this.props.suggestions.map((suggestion) => (
-                    <Row display="block" className="grid">
+                    <Row display="block" key={suggestion.date+suggestion.receivingLeagueId} className="grid">
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.leagueId)}>
-                                {this.getLeagueNameById(suggestion.leagueId)}                        
+                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
+                                {this.getLeagueNameById(suggestion.receivingLeagueId)}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.leagueId)}>
+                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
                                 {moment(suggestion.date).format("DD/MM/YY hh:mm")}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.leagueId)}>
+                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
                                 {suggestion.location}                        
                             </a>
                         </Col>

@@ -1,7 +1,13 @@
-const account = require('./user/lib.js');
+const account = require('./users/usersLib.js');
 
 module.exports = function (app) {
-    app.post('/login', account.login);
+    //Getter
+    app.get('/', account.getUsers);  
+    app.get('/:id', account.getUserById);  
+    //Setter
+    app.patch('/patch/:id', account.patchUserById); 
+    //Constructor
     app.post('/signup', account.signup);
-    app.get('/user/:id', account.getById);  //il marche pas :(
+    //Logging
+    app.post('/login', account.login);
 }

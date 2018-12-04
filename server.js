@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 
 //Définition du routeur
 var router = express.Router();
-app.use('/user', router);
+app.use('/users', router);
 require(__dirname + '/controllers/userController')(router);
 
 

@@ -6,7 +6,7 @@ const burl = "http://localhost:8000"
 
 export default {
     login : function(email,password) {
-        return axios.post(burl + '/user/login',{
+        return axios.post(burl + '/users/login',{
             'email' : email,
             'password' : password
         },{
@@ -14,7 +14,7 @@ export default {
         })
     },
     signup : function(send){
-        return axios.post(burl + '/user/signup',send,{headers: headers})
+        return axios.post(burl + '/users/signup',send,{headers: headers})
     },
     
     isAuth : function() {
@@ -24,7 +24,7 @@ export default {
         localStorage.clear();
     },
     getUserById : function(id) {
-        console.log(burl + '/user/'+id)
-        return axios.get(burl + '/user/'+id)
+        console.log(burl + '/users/'+id)
+        return axios.get(burl + '/users/'+id)
     },
 }

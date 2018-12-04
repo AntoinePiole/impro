@@ -32,3 +32,8 @@ Grid {
     display:block;
     color: red;
 }
+
+#MatchSuggester {
+    display:block;
+    margin : 100px
+}
