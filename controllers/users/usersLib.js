@@ -10,7 +10,13 @@ function signup(req, res) {
     } else {
         var user = {
             email: req.body.email,
-            password: passwordHash.generate(req.body.password)
+            password: passwordHash.generate(req.body.password),
+            phone: req.body.phone,
+            familyName: req.body.familyName,
+            firstName: req.body.firstName,
+            username: req.body.firstName,
+            birthday: req.body.birthday,
+            photoId: req.body.photoId,
         }
         var findUser = new Promise(function (resolve, reject) {
             User.findOne({
@@ -172,7 +178,7 @@ function patchUserById(req, res) {
                 ,function (err, user) {
                     if (err) {
                         res.status(500).json({
-                            "text": "Erreur interne en essayant de créer le compte"
+                            "text": "Erreur interne en modifiant le compte"
                         })
                     } else {
                         res.status(200).json({

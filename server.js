@@ -32,11 +32,12 @@ app.use(function (req, res, next) {
 });
 
 //Définition du routeur
-var router = express.Router();
-app.use('/users', router);
-require(__dirname + '/controllers/userController')(router);
-app.use('/leagues', router);
-require(__dirname + '/leagues/leagueController')(router);
+var usersRouter = require(__dirname + '/controllers/userController');
+app.use('/users', usersRouter);
+
+var leaguesRouter = require(__dirname + '/controllers/leagueController');
+app.use('/leagues', leaguesRouter);
+
 
 
 
