@@ -15,7 +15,8 @@ user : {
 league : {
     id: id, //In the database, it is _id, which is given by mongoose
     name: String,
-    username: String,
+    nickname: String,
+    desc: String,
     mail: String,
     photoId: id,
     members: (id,boolean)[],  //members[i]={id: String, admin: boolean} 
