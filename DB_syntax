@@ -17,11 +17,11 @@ league : {
     name: String,
     nickname: String,
     desc: String,
-    mail: String,
+    email: String,
     photoId: id,
     members: [{id:String,isAdmin:boolean}],  
     receivedMatchRequestIds: [String],
-    sentMatchRequestIds: [String]s
+    sentMatchRequestIds: [String]
 
 }
 
