@@ -1,9 +1,9 @@
 
 user : {
-    id: id,
-    mail: String,
+    id: id, //In the database, it is _id, which is given by mongoose
+    email: String,
     password: String,
-    phone: Phone,
+    phone: String,
     familyName: String,
     firstName: String,
     username: String,
@@ -13,7 +13,7 @@ user : {
 }
 
 league : {
-    id: id,
+    id: id, //In the database, it is _id, which is given by mongoose
     name: String,
     username: String,
     mail: String,
@@ -26,7 +26,7 @@ league : {
 
 
 match : {
-    id: id,
+    id: id, //In the database, it is _id, which is given by mongoose
     name: String,
     status: String,  //between [finished, waitingConfirmation, confirmed, canceled]
     league1Id: id,
