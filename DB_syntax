@@ -1,6 +1,6 @@
 
 user : {
-    id: id, //In the database, it is _id, which is given by mongoose
+    id: id, //In the database, it is _id, which is given by mongoose, and is thus not shown in the model
     email: String,
     password: String,
     phone: String,
@@ -13,29 +13,29 @@ user : {
 }
 
 league : {
-    id: id, //In the database, it is _id, which is given by mongoose
+    id: id, //In the database, it is _id, which is given by mongoose, and is thus not shown in the model
     name: String,
     nickname: String,
     desc: String,
     mail: String,
     photoId: id,
-    members: (id,boolean)[],  //members[i]={id: String, admin: boolean} 
-    receivedMatchRequestIds: String[],
-    sentMatchRequestIds: String[]
+    members: [{id:String,isAdmin:boolean}],  
+    receivedMatchRequestIds: [String],
+    sentMatchRequestIds: [String]s
 
 }
 
 
 match : {
-    id: id, //In the database, it is _id, which is given by mongoose
+    id: id, //In the database, it is _id, which is given by mongoose, and is thus not shown in the model
     name: String,
     status: String,  //between [finished, waitingConfirmation, confirmed, canceled]
     league1Id: id,
     league2Id: id,
-    league1Members: id[],
-    league2Members: id[],
-    league1MembersPropositions: id[],
-    league2MembersPropositions: id[],
+    league1Members: [String],
+    league2Members: [String],
+    league1MembersPropositions: [String],
+    league2MembersPropositions: [String],
     referee: id,
     mc: id,
     refereePropositions: id[],
