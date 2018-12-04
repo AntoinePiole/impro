@@ -22,8 +22,8 @@ patchMatch(String id, ...)
 makeUser(String id, ...)
   Creates a single user
  
-makeLeague(String id, ...)
-  Creates a single league (including its list of members and their rank in the league)
+makeLeague(String id, String userId...)
+  Creates a single league, with one user as its admin
   
 //Users' constructor is signup 
 ########## Logging ###########
