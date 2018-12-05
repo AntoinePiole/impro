@@ -8,6 +8,10 @@ getLeagueById(String id)
 getMatchById(String id)
   Gets a single march (including both lists of members and their role in the match) by its id
   
+getLeaguesOfUser(String userId)
+  Returns the Ids of all the leagues an user is in
+    => Should then get their names and photos... Any way to get all that data at once ???
+  
 ########## Setters ##########
 patchUser(String id, ...)
   Sets a single user by its id
