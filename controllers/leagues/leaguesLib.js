@@ -226,7 +226,6 @@ function setRoleInLeague(req, res) {
     var query = League.findOneAndUpdate(
         { _id: leagueId }, 
         { $set: { "members.$.isAdmin" : req.body.role } },
-        console.log("yes")
     )
     query.exec(function(err, league){
         console.log(err)
