@@ -156,10 +156,92 @@ function makeLeague(req, res) {
 }
 
 function addToLeague(req, res) {
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOneAndUpdate(
+        { _id: leagueId }, 
+        { $push: { members: {id:userId, isAdmin:false} } }
+    )
+    query.exec(function(err, league){
+        if (err) {
+            res.status(500).json({
+                "text": "Erreur interne"
+            })
+        }
+        else {      
+            res.status(200).json({ 
+                "text" : "Success",
+                "league" : league
+            })
+        }
+    })
 }
+
 function removeFromLeague(req, res) {
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOneAndUpdate(
+        { _id: leagueId }, 
+        { $pull: { members: {id:userId} } }
+    )
+    query.exec(function(err, league){
+        if (err) {
+            res.status(500).json({
+                "text": "Erreur interne"
+            })
+        }
+        else {      
+            res.status(200).json({ 
+                "text" : "Success",
+                "league" : league
+            })
+        }
+    })
 }
 function setRoleInLeague(req, res) {
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    console.log("getting to the tough part");
+    var query = League.findOneAndUpdate(
+        { _id: leagueId }, 
+        { $set: { "members.$.isAdmin" : req.body.role } },
+        console.log("yes")
+    )
+    query.exec(function(err, league){
+        console.log(err)
+        if (err) {
+            res.status(500).json({
+                "text": "Erreur interne"
+            })
+        }
+        else {      
+            res.status(200).json({ 
+                "text" : "Success",
+                "league" : league
+            })
+        }
+    })
 }
 
 exports.getLeagues = getLeagues;
