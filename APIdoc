@@ -49,7 +49,7 @@ removeFromMatch(String userId, String matchId, String role, waiting)
   
 ########## User in a league ##########
 addToLeague(String userId, String leagueId)
-  Adds an user to a league with role "user"
+  Adds an user to a league with isAdmin=false
 
 removeFromLeague(String userId, String leagueId)
   Removes an user from a league
