@@ -13,7 +13,7 @@ getLeaguesOfUser(String userId)
     => Should then get their names and photos... Any way to get all that data at once ???
   
 ########## Setters ##########
-patchUser(String id, ...)
+(patch) patchUser(String id, ...)
   Sets a single user by its id
  
 patchLeague(String id, ...)
@@ -60,6 +60,11 @@ removeFromLeague(String userId, String leagueId)
 setRoleInLeague(String userId, String leagueId, String role)
   Role can be : user or admin
   
+getLeaguesOfUser(String userId, String leagueId)
+  Get all the leagues an user is in
+  
+getUsersOfLeague(String leagueId)
+  Get all the users in a league, and not just their id : all the objects.s
 ########## Search ##########
 searchUser(String queryText)
   Search in the User database
