@@ -28,13 +28,13 @@ export class MatchSuggestions extends React.Component {
         window.location = "/league/"+id;
     }
 
-    acceptRequest(proposition){
-        console.log("accept proposition " + proposition)
+    acceptRequest(matchRequest){
+        console.log("accept match request " + matchRequest)
         //Remove request from both leagues, create corresponding match, jump to its page
     }
 
-    removeRequest(proposition){
-        console.log("remove proposition " + proposition)
+    removeRequest(matchRequest){
+        console.log("remove match request " + matchRequest)
         //Remove it from both leagues, refresh the page
     }
 
@@ -72,28 +72,28 @@ export class MatchSuggestions extends React.Component {
                             </h3>
                         </Col>
                     </Row>
-                {this.props.propositions.map((proposition) => (
-                    <Row key={proposition.date+proposition.sendingLeagueId} display="block" className="grid">
+                {this.props.sentMatchRequestsIds.map((sentMatchRequest) => (
+                    <Row key={sentMatchRequest.date+sentMatchRequest.sendingLeagueId} display="block" className="grid">
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
-                                {this.getLeagueNameById(proposition.sendingLeagueId)}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.sendingLeagueId)}>
+                                {this.getLeagueNameById(sentMatchRequest.sendingLeagueId)}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
-                                {moment(proposition.date).format("DD/MM/YY hh:mm")}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.sendingLeagueId)}>
+                                {moment(sentMatchRequest.date).format("DD/MM/YY hh:mm")}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(proposition.sendingLeagueId)}>
-                                {proposition.location}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.sendingLeagueId)}>
+                                {sentMatchRequest.location}                        
                             </a>
                         </Col>
                         <Col xs={1} md={1} >
-                            <Button className="glyphicon glyphicon-ok" onClick = {() => this.acceptRequest(proposition)}/>
+                            <Button className="glyphicon glyphicon-ok" onClick = {() => this.acceptRequest(sentMatchRequest)}/>
                         </Col>
                         <Col xs={1} md={1} >
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(proposition)}/>
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(sentMatchRequest)}/>
                         </Col>
                     </Row>
                 ))}
@@ -124,25 +124,25 @@ export class MatchSuggestions extends React.Component {
                             </h3>
                         </Col>
                 </Row>
-                {this.props.suggestions.map((suggestion) => (
-                    <Row display="block" key={suggestion.date+suggestion.receivingLeagueId} className="grid">
+                {this.props.sentMatchRequestsIds.map((sentMatchRequest) => (
+                    <Row display="block" key={sentMatchRequest.date+sentMatchRequest.receivingLeagueId} className="grid">
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
-                                {this.getLeagueNameById(suggestion.receivingLeagueId)}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.receivingLeagueId)}>
+                                {this.getLeagueNameById(sentMatchRequest.receivingLeagueId)}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
-                                {moment(suggestion.date).format("DD/MM/YY hh:mm")}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.receivingLeagueId)}>
+                                {moment(sentMatchRequest.date).format("DD/MM/YY hh:mm")}                        
                             </a>
                         </Col>
                         <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(suggestion.receivingLeagueId)}>
-                                {suggestion.location}                        
+                            <a onClick={()=>this.selectLeague(sentMatchRequest.receivingLeagueId)}>
+                                {sentMatchRequest.location}                        
                             </a>
                         </Col>
                         <Col xs={2} md={2} >
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(suggestion)}/>
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(sentMatchRequest)}/>
                         </Col>
                     </Row>
                 ))}

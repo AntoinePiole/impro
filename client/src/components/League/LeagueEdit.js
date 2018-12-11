@@ -9,6 +9,7 @@ export class LeagueEdit extends React.Component {
         this.props.send();
     }
     render() {
+        //TODO : how to add photos ?
         return (
             <div className="LeagueEdit" >
 
@@ -21,6 +22,11 @@ export class LeagueEdit extends React.Component {
                 <ControlLabel>Nom usuel</ControlLabel>
                 <FormControl type="text" value={this.props.nickname} onChange={this.props.handleChange}/>
                 <HelpBlock> Laissez cette case vide si vos noms usuels et officiels sont les mêmes.</HelpBlock>
+                </FormGroup>
+
+                <FormGroup controlId="email">
+                <ControlLabel>Adresse email de contact</ControlLabel>
+                <FormControl type="email" value={this.props.email} onChange={this.props.handleChange}/>
                 </FormGroup>
 
                 <FormGroup controlId="desc">

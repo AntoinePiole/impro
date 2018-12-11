@@ -6,7 +6,7 @@ export class LeagueList extends React.Component {
         super(props);
         this.state = {
             leagues : [{league : {name : "Lit de Camp", id:"1"}, isAdmin : true}, {league : {name : "Lit deux Camps", id:"2"}, isAdmin : false}]
-        }
+        } //PB : comment les charger toutes ? Une par une ? Meh, et sinon je connais pas la syntaxe mongoose...
         this.selectLeague = this.selectLeague.bind(this);
     }
 

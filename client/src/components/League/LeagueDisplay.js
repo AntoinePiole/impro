@@ -4,11 +4,9 @@ import './League.css';
 
 
 export class LeagueDisplay extends React.Component {
-
     send = event => {
         this.props.send();
     }
-
     render() {
         return (
             <div className="LeagueDisplay">
@@ -17,6 +15,7 @@ export class LeagueDisplay extends React.Component {
                     <span>
                         <p> Nom officiel : {this.props.name}</p>
                         <p> Nom usuel : {this.props.nickname}</p>
+                        <p> Adresse mail de contact : {this.props.email}</p>
                     </span>
                 :
                     <p> Nom  : {this.props.name}</p>

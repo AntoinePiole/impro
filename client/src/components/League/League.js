@@ -6,17 +6,18 @@ import { MatchSuggestions } from './MatchSuggestions';
 import { MatchSuggester } from './MatchSuggester';
 import * as moment from 'moment';
 import './League.css';
+import API from '../../utils/API';
 
 
 export class League extends React.Component {
     constructor(props){
         super(props);
-        this.state= { //Should set id, name, nickname, desc, propositions and suggestions with parameters of the list from back
+        this.state= { //Should set id, name, nickname, desc, sentMatchRequestsIds and suggestions with parameters of the list from back
             id : localStorage.getItem('id'), //
             name : "",
             nickname : "",
             desc : "",
-            propositions : [{sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 21:30"), location : "Chez moi ;)"}, // change name to sentMatchRequests
+            sentMatchRequestsIds : [{sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 21:30"), location : "Chez moi ;)"}, // change name to sentMatchRequests
                             {sendingLeagueId : "3", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 23:30"), location : "Chez toi :3"},
                             {sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2018-10-10 00:00"), location : "Partout"}],
             suggestions : [{sendingLeagueId : localStorage.getItem("id"), receivingLeagueId : "1", date : moment("2013-02-08 21:30"), location : "Chez moi ;)"},  //change name to receivedMatchRequests
@@ -27,21 +28,33 @@ export class League extends React.Component {
         }
     }
 
-    componentDidMount () {
-        this.id=window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
-
+    async componentDidMount () {
+        
+        this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
+        var data = await API.getLeagueById(this.id);
+        console.log(data); //TODOOOO
+        var league = data.data.league;
         this.setState ({
-            id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
+            id : league._id,
+            name : league.name,
+            nickname : league.nickname,
+            desc : league.desc,
+            email : league.email,
+            photoId : league.photoId,
+            members : league.members,
+            receivedMatchRequestsIds : league.receivedMatchRequestsIds,
+            sentMatchRequestsIds : league.sentMatchRequestsIds,
             editting : false,
-            name : "Ligue d'Improvisation Théâtrale dédiée au truc",
-            nickname : "Lit de Camp",
-            desc : "Ligue d'impro de CentraleSupelec",
-        })
+        });
+        console.log(this.state);
+        console.log(this.state.members);
+        console.log(localStorage.getItem('id'));
         this.setState({
-            isAdmin : (window.location.toString().substr(window.location.toString().lastIndexOf("/")+1) === localStorage.getItem('id')), // this is stupid, change it so that we browse the league's users to find out whether the current user if an admin of the league
-            isMember : (window.location.toString().substr(window.location.toString().lastIndexOf("/")+1) === localStorage.getItem('id')) // same but only check if it is within the league
-        })
-        console.log(localStorage.getItem('id'))
+            //isAdmin : (this.state.members.some(e => (e.id === localStorage.getItem('id')) && e.isAdmin)), 
+            isAdmin : true,
+            isMember : (this.state.members.some(e => e.id === localStorage.getItem('id')))
+        });
+        console.log("and now, " , this.state);
     }
 
     setEdittingMode = event => {
@@ -56,9 +69,20 @@ export class League extends React.Component {
         });
     }
 
-    send = event => {
-        this.setState({
-            editting:false
+    send (_send) { //Need to test ya
+        if(_send.name === ""){
+            return;
+        }
+        API.makeLeague(_send).then(function(data){
+            if (data.status === 204) {
+                console.log("meh");
+            }
+            else {
+                window.location = "/league/"+data.data.id
+            }
+        },function(error){
+            console.log(error);
+            return;
         })
     }
 
@@ -66,24 +90,22 @@ export class League extends React.Component {
         return (
             <div>
                 {this.state.editting ?
-                    <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} isAdmin={this.state.isAdmin} handleChange={this.handleChange} send={this.send} /> 
+                    <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} isAdmin={this.state.isAdmin} handleChange={this.handleChange} send={this.send} /> 
                 :
-                    <LeagueDisplay className="LeagueDisplay "id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} isAdmin={this.state.isAdmin} setEdittingMode={this.setEdittingMode} />
+                    <LeagueDisplay className="LeagueDisplay" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} isAdmin={this.state.isAdmin} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="UserList">
                     <UserList id={this.state.id} isAdmin={this.state.isAdmin}/>    
                 </div>
-                {this.state.isAdmin?
+                {this.state.isAdmin? //Can see the matches the league suggested if you are an admin of the league
                     <div className="MatchSuggestions">
-                        <MatchSuggestions propositions={this.state.propositions} suggestions={this.state.suggestions}/>
+                        <MatchSuggestions sentMatchRequestsIds={this.state.sentMatchRequestsIds} suggestions={this.state.suggestions}/>
                     </div>
                 :
                     null
                 }
-                {this.state.isMember?
-                    <div className="MatchSuggester">
-                        <MatchSuggester receivingLeagueId={this.state.id}/>
-                    </div>
+                {this.state.isMember? //We can suggest a match only if we aren't members of the league
+                    null
                 :  
                     <div className="MatchSuggester">
                         <MatchSuggester receivingLeagueId={this.state.id}/>

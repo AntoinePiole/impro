@@ -5,17 +5,16 @@ function getLeagues(req, res) {
     ,function (err, leagues) {
         if (err) {
             res.status(500).json({
-                "text": "Erreur interne"
+                text: "Erreur interne"
             })
         } else if (!leagues) {
             res.status(401).json({
-                "text": "Aucun utilisateur trouvé"
+                text: "Aucune ligue trouvée"
             })
         } else {
             //console.log("logged in with " + league)
             res.status(200).json({
-                "leagues": leagues,
-                "text": "Authentification réussi"
+                leagues: leagues,
             })
         }
     })
@@ -26,19 +25,19 @@ function getLeagueById(req, res) {
         _id = req.params.id
     } catch (err) {
         res.status(400).json({
-            "text": "invalid request"
+            text: "invalid request"
         })
     }
     var query = League.findOne({_id:_id});
     query.exec(function(err, league){
         if (err) {
             res.status(500).json({
-                "text": "Erreur interne"
+                text: "Erreur interne"
             })
         }
         else {
         res.status(200).json({ 
-            "league" : league
+            league : league
         })
         }
     })
@@ -49,7 +48,7 @@ function patchLeagueById(req, res) {
     if (!req.params.id || !req.body) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
+            text: "Requête invalide"
         })
     } else {
         var _id = req.params.id;
@@ -72,12 +71,12 @@ function patchLeagueById(req, res) {
                 ,function (err, league) {
                     if (err) {
                         res.status(500).json({
-                            "text": "Erreur interne en essayant de créer le compte"
+                            text: "Erreur interne en essayant de créer le compte"
                         })
                     } else {
                         res.status(200).json({
-                            "text": "Succès",
-                            "league": league,
+                            text: "Succès",
+                            league: league,
                         })
                     }
                 }
@@ -91,7 +90,7 @@ function makeLeague(req, res) {
     if (!req.body.name) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
+            text: "Requête invalide"
         })
     } else {
         var league = {
@@ -114,23 +113,23 @@ function makeLeague(req, res) {
                     if (result) {
                         reject(204)
                     } else {
+                        console.log("zzzzzzzzzzz", result)
                         resolve(true)
                     }
                 }
             })
         })
-
         findLeague.then(function () {
             var _l = new League(league);
             _l.save(function (err, league) {
                 if (err) {
                     res.status(500).json({
-                        "text": "Erreur interne en essayant de créer la ligue"
+                        text: "Erreur interne en essayant de créer la ligue"
                     })
                 } else {
                     res.status(200).json({
-                        "text": "Succès",
-                        "id": league._id
+                        text: "Succès",
+                        id: league._id
                     })
                 }
             })
@@ -138,17 +137,17 @@ function makeLeague(req, res) {
             switch (error) {
                 case 500:
                     res.status(500).json({
-                        "text": "Erreur interne"
+                        text: "Erreur interne"
                     })
                     break;
                 case 204:
                     res.status(204).json({
-                        "text": "Une ligue du même nom existe déjà"
+                        text: "Une ligue du même nom existe déjà"
                     })
                     break;
                 default:
                     res.status(500).json({
-                        "text": "Erreur interne"
+                        text: "Erreur interne"
                     })
             }
         })
@@ -159,7 +158,7 @@ function addToLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
+            text: "Requête invalide"
         })
     } else {
         userId = req.params.userId,
@@ -167,18 +166,18 @@ function addToLeague(req, res) {
     }
     var query = League.findOneAndUpdate(
         { _id: leagueId }, 
-        { $push: { members: {id:userId, isAdmin:false} } }
+        { $push: { members: {_id:userId, isAdmin:false} } }
     )
     query.exec(function(err, league){
         if (err) {
             res.status(500).json({
-                "text": "Erreur interne"
+                text: "Erreur interne"
             })
         }
         else {      
             res.status(200).json({ 
-                "text" : "Success",
-                "league" : league
+                text : "Success",
+                league : league
             })
         }
     })
@@ -188,7 +187,7 @@ function removeFromLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
+            text: "Requête invalide"
         })
     } else {
         userId = req.params.userId,
@@ -196,52 +195,139 @@ function removeFromLeague(req, res) {
     }
     var query = League.findOneAndUpdate(
         { _id: leagueId }, 
-        { $pull: { members: {id:userId} } }
+        { $pull: { members: {_id:userId} } }
     )
     query.exec(function(err, league){
         if (err) {
             res.status(500).json({
-                "text": "Erreur interne"
+                text: "Erreur interne"
             })
         }
         else {      
             res.status(200).json({ 
-                "text" : "Success",
-                "league" : league
+                text : "Success",
             })
         }
     })
 }
+
 function setRoleInLeague(req, res) {
-    if (!req.params.userId || !req.params.leagueId) {
+    if (!req.params.userId || !req.params.leagueId ||req.body.role) {
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOneAndUpdate( {_id: leagueId, "members._id": userId},
+        {$set: { "members.$.isAdmin" : req.body.isAdmin } }
+    )
+    query.exec(function(err, league){
+        if (err) {
+            console.log(err)
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+        }
+        else {      
+            res.status(200).json({ 
+                text : "Success",
+                _id : league._id,
+            })
+        }
+    })
+}
+
+function patchLeagueById(req, res) {
+    if (!req.params.id || !req.body) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
+            text: "Requête invalide"
         })
     } else {
-        userId = req.params.userId,
-        leagueId = req.params.leagueId
+        var _id = req.params.id;
+        var findLeague = new Promise(function (resolve, reject) {
+            League.findOneAndUpdate({  _id: _id }, req.body,
+                function (err, result) {
+                if (err) {
+                    reject(500);
+                } else {
+                    if (result) {
+                        resolve(true)
+                    } else {
+                        reject(500);
+                    }
+                }
+            })
+        })
+        findLeague.then(function () {
+            League.findOne({_id:_id}
+                ,function (err, league) {
+                    if (err) {
+                        res.status(500).json({
+                            text: "Erreur interne en essayant de créer le compte"
+                        })
+                    } else {
+                        res.status(200).json({
+                            text: "Succès",
+                            league: league,
+                        })
+                    }
+                }
+            )
+        })
     }
-    console.log("getting to the tough part");
-    var query = League.findOneAndUpdate(
-        { _id: leagueId }, 
-        { $set: { "members.$.isAdmin" : req.body.role } },
-    )
-    query.exec(function(err, league){
-        console.log(err)
-        if (err) {
-            res.status(500).json({
-                "text": "Erreur interne"
-            })
-        }
-        else {      
-            res.status(200).json({ 
-                "text" : "Success",
-                "league" : league
-            })
-        }
-    })
 }
+
+
+function getLeaguesOfUser(req, res) {
+    if (!req.params.userId) {
+        //Le cas où l'email ou b{ien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        var userId = req.params.userId;
+        var findLeagues = new Promise(function (resolve, reject) {
+               League.find({ 
+                "members._id": userId
+            }, function (err, leagues) {
+                if (err) {
+                    reject(500);
+                } else {
+                    resolve(leagues)
+                }
+            })
+        })
+        findLeagues.then(function (leagues) {
+            res.status(200).json({
+                text: "Succès",
+                leagues : leagues
+            }),
+            function (error) {
+                switch (error) {
+                    case 500:
+                        res.status(500).json({
+                            text: "Erreur interne"
+                        })
+                        break;
+                    case 204:
+                        res.status(204).json({
+                            text: "Une ligue du même nom existe déjà"
+                        })
+                        break;
+                    default:
+                        res.status(500).json({
+                            text: "Erreur interne"
+                        })
+                }
+            }
+        })
+    }
+}
+
+
 
 exports.getLeagues = getLeagues;
 exports.getLeagueById = getLeagueById;
@@ -250,3 +336,4 @@ exports.makeLeague = makeLeague;
 exports.addToLeague = addToLeague;
 exports.removeFromLeague = removeFromLeague;
 exports.setRoleInLeague = setRoleInLeague;
+exports.getLeaguesOfUser = getLeaguesOfUser;

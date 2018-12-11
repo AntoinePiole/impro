@@ -7,7 +7,7 @@ const burl = "http://localhost:8000"
 export default {
      //########## Getters ##########
     
-    getUserById : function(id) {
+    getUserById : function(id) { //Works
         return axios.get(burl + '/users/'+id);
     },
     getLeagueById : function(id) {
@@ -30,19 +30,19 @@ export default {
     },
 
     // ########## Constructors ########## 
-    signup : function(send){
-        return axios.post(burl + '/users/signup',send, {headers: headers})
+    signup : function(send) {
+        return axios.post(burl + '/users/',send, {headers: headers})
     },
-    makeLeague : function(send){
+    makeLeague : function(send) {
         return axios.post(burl + '/leagues/',send, {headers: headers})
     },
-    makeMatch : function(send){
-        return axios.post(burl + '/matches/signup',send, {headers: headers})
+    makeMatch : function(send) {
+        return axios.post(burl + '/matches/',send, {headers: headers})
     },
 
     // ########## Logging ########## 
     login : function(email,password) {
-        return axios.post(burl + '/users/login',{
+        return axios.post(burl + '/users/login', {
             'email' : email,
             'password' : password
         },{
@@ -57,12 +57,13 @@ export default {
     },
     // ########## User in a league ########## 
     addToLeague : function(userId, leagueId) {
-        return axios.get(burl + '/leagues/add/'+leagueId+'/users/'+userId, {headers: headers})
+        return axios.post(burl + '/leagues/' + leagueId + '/users/' + userId, {headers: headers})
     },
     removeFromLeague : function(userId, leagueId) {
-        return axios.get(burl + '/leagues/remove/'+leagueId+'/users/'+userId, {headers: headers})
+        return axios.delete(burl + '/leagues/' + leagueId + '/users/'+userId, {headers: headers})
     },
     setRoleInLeague : function(userId, leagueId, send) {// DOES NOT YET WORK IN BACK, AND CANNOT THUS BE TESTED YET
-        return axios.post(burl + '/leagues/add/'+leagueId+'/users/'+userId, send, {headers: headers})
+        return axios.patch(burl + '/leagues/' + leagueId + '/users/' + userId, send, {headers: headers})
     }
+    //Others not implemented as I do not know exactly which parameters will be needed
 }

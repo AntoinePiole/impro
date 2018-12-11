@@ -6,10 +6,11 @@ var router = express.Router();
 router.get('/', account.getUsers);  
 router.get('/:id', account.getUserById);  
 //Setter
-router.patch('/patch/:id', account.patchUserById); 
+router.patch('/:id', account.patchUserById); 
 //Constructor
-router.post('/signup', account.signup);
+router.post('/', account.signup);
 //Logging
 router.post('/login', account.login);
-
+//User in a league
+router.get('/leagues/:leagueId', account.getUsersOfLeague); //Get the users (the object) of the league
 module.exports = router;

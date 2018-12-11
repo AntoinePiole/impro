@@ -12,14 +12,14 @@ export class UserEdit extends React.Component {
         return (
             <div className="User" id="User">
                 <div className="UserDisplay" >
-                    <FormGroup controlId="first_name">
+                    <FormGroup controlId="firstName">
                     <ControlLabel>Prénom</ControlLabel>
-                    <FormControl type="text" value={this.props.first_name} onChange={this.props.handleChange}/>
+                    <FormControl type="text" value={this.props.firstName} onChange={this.props.handleChange}/>
                     </FormGroup>
 
-                    <FormGroup controlId="last_name">
+                    <FormGroup controlId="familyName">
                     <ControlLabel>Nom de famille</ControlLabel>
-                    <FormControl type="text" value={this.props.last_name} onChange={this.props.handleChange}/>
+                    <FormControl type="text" value={this.props.familyName} onChange={this.props.handleChange}/>
                     </FormGroup>
 
                     <FormGroup controlId="username">

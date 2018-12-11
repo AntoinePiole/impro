@@ -11,12 +11,13 @@ export class UserDisplay extends React.Component {
     }
 
     render() {
+        console.log("DIsplaying a user with props:", this.props);
         const birthday = this.props.birthday===""? 'Non renseignée': moment(this.props.birthday).format('DD/MM/YYYY');
         return (
             <div className="User" id="User">
-                <h1>Page de {this.props.username? this.props.username : this.props.first_name + ' ' + this.props.last_name}</h1>
-                <p> Prénom : {this.props.first_name}</p>
-                <p> Nom de famille : {this.props.last_name}</p>
+                <h1>Page de {this.props.username? this.props.username : this.props.firstName + ' ' + this.props.familyName}</h1>
+                <p> Prénom : {this.props.firstName}</p>
+                <p> Nom de famille : {this.props.familyName}</p>
                 <p> Date de naissance : {birthday}</p>
                 <p> Pseudonyme : {this.props.username===""? 'Non renseigné' : this.props.username}</p>
                 <p> Tél. : {this.props.phone===""? 'Non renseigné': this.props.phone}</p>

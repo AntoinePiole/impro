@@ -12,8 +12,8 @@ router.patch('/:id', leagues.patchLeagueById);
 //Constructor
 router.post('/', leagues.makeLeague);
 //User in a league
-router.get('/add/:leagueId/users/:userId', leagues.addToLeague); //Get league Id with req.params.leagueId and userId with req.params.userId
-router.get('/remove/:leagueId/users/:userId', leagues.removeFromLeague); //same
-router.patch('/patch/:leagueId/users/:userId', leagues.setRoleInLeague); //same, new role will be in the body
-
+router.post('/:leagueId/users/:userId', leagues.addToLeague); //Get league Id with req.params.leagueId and userId with req.params.userId
+router.delete('/:leagueId/users/:userId', leagues.removeFromLeague); //same
+router.patch('/:leagueId/users/:userId', leagues.setRoleInLeague); //same, new role will be in the body
+router.get('/users/:userId/', leagues.getLeaguesOfUser); // Get all the leagues where corresponding user is, whatever their role
 module.exports = router;

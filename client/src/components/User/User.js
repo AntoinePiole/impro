@@ -4,6 +4,7 @@ import { LeagueList } from './LeagueList'
 import { UserEdit } from './UserEdit'
 import { UserDisplay } from './UserDisplay'
 import './User.css';
+import API from '../../utils/API';
 
 
 export class User extends React.Component {
@@ -13,28 +14,29 @@ export class User extends React.Component {
             id : localStorage.getItem('id'),
             editting : false,
             email : "",
-            first_name : "",
-            last_name : "",
+            firstName : "",
+            familyName : "",
             username : "",
-            birthday : null,
+            birthday : "",
             phone : "",
             desc : ""
         }
     }
 
-    componentDidMount () {
+    async componentDidMount () { // This is not working. Should it be placed somewhere else ?
         this.id=window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
-
+        var data = await API.getUserById(this.id);
+        var user=data.data.user;
         this.setState ({
             id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
             editting : false,
-            email : "antoine.piole@student.ecp.fr",
-            first_name : "Antoine",
-            last_name : "Piolé",
-            birthday : new Date(),
-            username : "",
-            phone : '06.52.78.03.66',
-            desc : 'Le meilleur improvisateur de toute la Nouvelle-Calédonie'
+            email : user.email,
+            firstName : user.firstName,
+            familyName : user.familyName,
+            birthday : user.birthday, //Need to make sure this works
+            username : user.username,
+            phone : user.phone,
+            desc : user.desc
         })
     }
 
@@ -56,13 +58,14 @@ export class User extends React.Component {
         })
     }
     render() {
+        console.log("Calling render in User, state is currently", this.state)
         const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
             <div className="User">
                 {this.state.editting ?
-                    <UserEdit id={this.state.id} email={this.state.email} first_name={this.state.first_name} last_name={this.state.last_name} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} send={this.send} /> 
+                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} send={this.send} /> 
                 :
-                    <UserDisplay id={this.state.id} email={this.state.email} first_name={this.state.first_name} last_name={this.state.last_name} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
+                    <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="LeagueList">
                     <LeagueList/>    
