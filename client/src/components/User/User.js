@@ -31,13 +31,14 @@ export class User extends React.Component {
             id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
             editting : false,
             email : user.email,
-            firstName : user.firstName,
-            familyName : user.familyName,
-            birthday : user.birthday, //Need to make sure this works
-            username : user.username,
-            phone : user.phone,
-            desc : user.desc
+            firstName : user.firstName || "Non renseigné",
+            familyName : user.familyName || "Non renseigné",
+            birthday : user.birthday || "Non renseignée", //Need to make sure this works
+            username : user.username || "Non renseigné",
+            phone : user.phone || "Non renseigné",
+            desc : user.desc || "Non renseigné"
         })
+        console.log(this.state);
     }
 
     setEdittingMode = event => {

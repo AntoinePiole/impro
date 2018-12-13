@@ -1,13 +1,24 @@
 import React from 'react';
 import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import './User.css';
+import API from '../../utils/API';
 
 
 export class UserEdit extends React.Component {
 
-    send = event => {
-        this.props.send();
+    send (firstName, familyName, username, phone, email, desc) {
+        var data = {
+            firstName : firstName,
+            familyName : familyName,
+            username: username, 
+            phone : phone,
+            email : email,
+            desc : desc
+        }
+        API.signup(data);
+        
     }
+
     render() {
         return (
             <div className="User" id="User">
@@ -42,7 +53,7 @@ export class UserEdit extends React.Component {
                     <FormControl type="text" value={this.props.desc} onChange={this.props.handleChange}/>
                     </FormGroup>
                     <p></p>
-                    <Button className="ValidationButton" onClick={this.send} bsSize="large"type="submit">
+                    <Button className="ValidationButton" onClick={this.send(this.props.firstName, this.props.familyName, this.props.username, this.props.email, this.props.phone, this.props.desc)} bsSize="large"type="submit">
                         Valider modifications
                     </Button>
                 </div>
