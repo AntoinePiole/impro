@@ -11,7 +11,6 @@ export class UserDisplay extends React.Component {
     }
 
     render() {
-        console.log("DIsplaying a user with props:", this.props);
         const birthday = this.props.birthday===""? 'Non renseignée': moment(this.props.birthday).format('DD/MM/YYYY');
         return (
             <div className="User" id="User">

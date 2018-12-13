@@ -42,7 +42,7 @@ export class MatchSuggestions extends React.Component {
         return (
             <div>
                 <h2>
-                    Propositions de matchs
+                    Les matchs qui vous sont proposés
                 </h2>
                 <Grid>
                 <Row display="block" className="grid">
@@ -99,7 +99,7 @@ export class MatchSuggestions extends React.Component {
                 ))}
                 </Grid>
                 <h2>
-                    Vos demandes de matchs
+                    Les matchs que vous avez proposés
                 </h2>
                 <Grid>
                 <Row display="block" className="grid">

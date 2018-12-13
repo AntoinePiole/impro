@@ -216,10 +216,15 @@ function getUsersOfLeague(req, res) {
         });
 
         findLeague.then(function (league) {
+            var userIds={}
+            for (var i=0; i < league.members.lgenth; i++) {
+                userIds.push(league.members[i].id);
+            }
+            console.log("the ids are now", userIds)
             var findUsers = new Promise(function (resolve, reject) {
                 console.log(league.members)
                 User.find({
-                    _id: {$in: league.members._id},
+                    _id: {$in: userIds}, //Seems not to work, don't know why
                 }, function (err, users) {
                     if (err) {
                         reject(500);

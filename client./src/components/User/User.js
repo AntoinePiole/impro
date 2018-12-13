@@ -58,7 +58,6 @@ export class User extends React.Component {
         })
     }
     render() {
-        console.log("Calling render in User, state is currently", this.state)
         const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
             <div className="User">

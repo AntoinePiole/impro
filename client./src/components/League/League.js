@@ -12,16 +12,13 @@ import API from '../../utils/API';
 export class League extends React.Component {
     constructor(props){
         super(props);
-        this.state= { //Should set id, name, nickname, desc, sentMatchRequestsIds and suggestions with parameters of the list from back
-            id : localStorage.getItem('id'), //
+        this.state= { 
+            id : "",
             name : "",
             nickname : "",
             desc : "",
-            sentMatchRequestsIds : [{sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 21:30"), location : "Chez moi ;)"}, // change name to sentMatchRequests
-                            {sendingLeagueId : "3", receivingLeagueId : localStorage.getItem("id"), date : moment("2013-02-08 23:30"), location : "Chez toi :3"},
-                            {sendingLeagueId : "1", receivingLeagueId : localStorage.getItem("id"), date : moment("2018-10-10 00:00"), location : "Partout"}],
-            suggestions : [{sendingLeagueId : localStorage.getItem("id"), receivingLeagueId : "1", date : moment("2013-02-08 21:30"), location : "Chez moi ;)"},  //change name to receivedMatchRequests
-                            {sendingLeagueId : localStorage.getItem("id"), receivingLeagueId : "2", date:moment("2013-02-08 23:30"), location:"Chez toi :3"}], // CHANGE TYPE FROM TRIPLE TO REQUEST
+            sentMatchRequestsIds : [],
+            receivedMatchRequestsIds : [], // CHANGE TYPE FROM TRIPLE TO MATCH, MAKE A BACKEND FUNCTION TO GET RECEIVED AND SENT FROM BACK BY CALLING WITH ID
             editting : false,
             isAdmin : false,
             isMember : false,
@@ -32,7 +29,6 @@ export class League extends React.Component {
         
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
         var data = await API.getLeagueById(this.id);
-        console.log(data); //TODOOOO
         var league = data.data.league;
         this.setState ({
             id : league._id,
@@ -46,15 +42,11 @@ export class League extends React.Component {
             sentMatchRequestsIds : league.sentMatchRequestsIds,
             editting : false,
         });
-        console.log(this.state);
-        console.log(this.state.members);
-        console.log(localStorage.getItem('id'));
         this.setState({
             //isAdmin : (this.state.members.some(e => (e.id === localStorage.getItem('id')) && e.isAdmin)), 
             isAdmin : true,
             isMember : (this.state.members.some(e => e.id === localStorage.getItem('id')))
         });
-        console.log("and now, " , this.state);
     }
 
     setEdittingMode = event => {
@@ -74,8 +66,7 @@ export class League extends React.Component {
             return;
         }
         API.makeLeague(_send).then(function(data){
-            if (data.status === 204) {
-                console.log("meh");
+            if (data.status != 200) {
             }
             else {
                 window.location = "/league/"+data.data.id
