@@ -4,8 +4,7 @@ const headers = {
 }
 
 export default {
-     //########## Getters ##########
-    
+    //########## Getters ##########
     getUserById : function(id) { //Works
         return axios.get('/users/'+id);
     },
@@ -17,7 +16,6 @@ export default {
     },
 
     // ########## Setters ##########
-
     patchUser : function(id, send) {
         return axios.patch('/users/'+id, send, {headers: headers});
     },
@@ -54,6 +52,7 @@ export default {
     logout : function() {
         localStorage.clear();
     },
+
     // ########## User in a league ########## 
     addToLeague : function(userId, leagueId) {
         return axios.post('/leagues/' + leagueId + '/users/' + userId, {headers: headers})
@@ -69,5 +68,10 @@ export default {
     },
     getLeaguesOfUser : function(userId) {
         return axios.get('/leagues/users/' + userId, {headers : headers})
+    },
+
+    // ########## Images ########## 
+    submitImage : function(image, path) {
+        return axios.post('/images/');
     }
 }

@@ -19,7 +19,8 @@ export class User extends React.Component {
             username : "",
             birthday : "",
             phone : "",
-            desc : ""
+            desc : "", 
+            photoId : ""
         }
         this.updateUser = this.updateUser.bind(this);
     }
@@ -37,7 +38,8 @@ export class User extends React.Component {
             birthday : user.birthday || "Non renseignée", //Need to make sure this works
             username : user.username || "Non renseigné",
             phone : user.phone || "Non renseigné",
-            desc : user.desc || "Non renseigné"
+            desc : user.desc || "Non renseigné",
+            photoId : user.photoId
         })
     }
 
@@ -65,9 +67,9 @@ export class User extends React.Component {
         return (
             <div className="User">
                 {this.state.editting ?
-                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} updateUser={this.updateUser} /> 
+                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} handleChange={this.handleChange} updateUser={this.updateUser} /> 
                 :
-                    <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
+                    <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="LeagueList">
                     <LeagueList id={this.state.id}/>    

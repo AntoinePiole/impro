@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
     render() {
         return(
             <div className="Dashboard">
-                <h1>Coucou Roméo !</h1>
+                <h1>Bienvenue sur notre site d'impro !</h1>
                 <ButtonGroup className="Button" bsSize="large">
                     <Button onClick={this.home}>Ecran d'acceuil</Button>
                     <Button onClick={this.user}>Mon profil</Button>

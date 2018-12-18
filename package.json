@@ -21,6 +21,7 @@
     "password-hash": "^1.2.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-images-upload": "^1.2.3",
     "url-parse": "^1.4.4"
   }
 }

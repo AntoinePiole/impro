@@ -12,36 +12,36 @@ var userModel = mongoose.Schema({
 		required: true
 	},
 	password: {
-        type: String,
-        required: true
+        	type: String,
+        	required: true
 	},
 	familyName: {        
 		type: String,
-        required: true
+        	required: true
 	},
 	firstName: {        
 		type: String,
-        required: true
+        	required: true
 	},
 	username: {        
 		type: String,
-        required: false
+        	required: false
 	},
 	birthday: {        
 		type: Date,
-        required: false
+        	required: false
 	},
 	phone: {        
 		type: String,
-        required: false
+        	required: false
 	},
 	created_at: {        
 		type: Date,
-        required: false
+        	required: false
 	},
 	photoId: {        
 		type: String,
-        required: false
+        	required: false
 	},
 	
 },{ timestamps: { createdAt: 'created_at' }})

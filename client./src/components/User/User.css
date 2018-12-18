@@ -1,10 +1,21 @@
 .User div {
     display: inline-block;
-    border-radius: 0.3px;
+/*    border-radius: 0.3px;
     border-color: black;
     border-style: solid;
-
+*/
 }
+
+.row {
+    width : 100%;
+    
+} 
+
+.col-md {
+    width : 55%;
+    padding : 0.5px;
+}
+
 .UserDisplay div {
     width: 100%;
     color:blue;
