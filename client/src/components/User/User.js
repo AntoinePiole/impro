@@ -11,7 +11,7 @@ export class User extends React.Component {
     constructor(props){
         super(props);
         this.state= {
-            id : localStorage.getItem('id'),
+            id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
             editting : false,
             email : "",
             firstName : "",
@@ -21,6 +21,7 @@ export class User extends React.Component {
             phone : "",
             desc : ""
         }
+        this.updateUser = this.updateUser.bind(this);
     }
 
     async componentDidMount () { // This is not working. Should it be placed somewhere else ?
@@ -38,7 +39,6 @@ export class User extends React.Component {
             phone : user.phone || "Non renseigné",
             desc : user.desc || "Non renseigné"
         })
-        console.log(this.state);
     }
 
     setEdittingMode = event => {
@@ -53,22 +53,24 @@ export class User extends React.Component {
         });
     }
 
-    send = event => {
-        this.setState({
-            editting:false
-        })
+    async updateUser (data) {
+        await API.patchUser(this.id, data). then (
+            this.setState({
+                editting : false
+            })
+        )
     }
     render() {
         const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
             <div className="User">
                 {this.state.editting ?
-                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} send={this.send} /> 
+                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} handleChange={this.handleChange} updateUser={this.updateUser} /> 
                 :
                     <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="LeagueList">
-                    <LeagueList/>    
+                    <LeagueList id={this.state.id}/>    
                 </div>
             </div>
         )

@@ -5,8 +5,7 @@ import API from '../../utils/API';
 
 
 export class UserEdit extends React.Component {
-
-    send (firstName, familyName, username, phone, email, desc) {
+    sendEdittedUser (firstName, familyName, username, phone, email, desc) {
         var data = {
             firstName : firstName,
             familyName : familyName,
@@ -15,8 +14,7 @@ export class UserEdit extends React.Component {
             email : email,
             desc : desc
         }
-        API.signup(data);
-        
+        this.props.updateUser(data);
     }
 
     render() {
@@ -29,7 +27,7 @@ export class UserEdit extends React.Component {
                     </FormGroup>
 
                     <FormGroup controlId="familyName">
-                    <ControlLabel>Nom de famille</ControlLabel>
+                    <ControlLabel>Nom</ControlLabel>
                     <FormControl type="text" value={this.props.familyName} onChange={this.props.handleChange}/>
                     </FormGroup>
 
@@ -52,8 +50,8 @@ export class UserEdit extends React.Component {
                     <ControlLabel>Bio</ControlLabel>
                     <FormControl type="text" value={this.props.desc} onChange={this.props.handleChange}/>
                     </FormGroup>
-                    <p></p>
-                    <Button className="ValidationButton" onClick={this.send(this.props.firstName, this.props.familyName, this.props.username, this.props.email, this.props.phone, this.props.desc)} bsSize="large"type="submit">
+
+                    <Button className="ValidationButton" onClick={() => this.sendEdittedUser(this.props.firstName, this.props.familyName, this.props.username, this.props.phone, this.props.email, this.props.desc)} bsSize="large"type="submit">
                         Valider modifications
                     </Button>
                 </div>

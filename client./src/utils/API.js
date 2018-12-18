@@ -13,7 +13,7 @@ export default {
         return axios.get('/leagues/'+id);
     },
     getMatchById : function(id) {
-        return axios.get('/matches/'+id);
+        return axios.get('/matches/'+id)
     },
 
     // ########## Setters ##########
@@ -66,5 +66,8 @@ export default {
     },
     getUsersOfLeague : function(leagueId) {
         return axios.get('/users/leagues/' + leagueId, {headers: headers})
+    },
+    getLeaguesOfUser : function(userId) {
+        return axios.get('/leagues/users/' + userId, {headers : headers})
     }
 }

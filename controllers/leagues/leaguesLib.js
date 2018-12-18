@@ -113,7 +113,6 @@ function makeLeague(req, res) {
                     if (result) {
                         reject(204)
                     } else {
-                        console.log("zzzzzzzzzzz", result)
                         resolve(true)
                     }
                 }
@@ -290,9 +289,10 @@ function getLeaguesOfUser(req, res) {
     } else {
         var userId = req.params.userId;
         var findLeagues = new Promise(function (resolve, reject) {
-               League.find({ 
+                League.find({ 
                 "members._id": userId
             }, function (err, leagues) {
+                console.log("######", err, "//////////", leagues)
                 if (err) {
                     reject(500);
                 } else {

@@ -5,8 +5,8 @@ import './League.css';
 
 export class LeagueEdit extends React.Component {
 
-    send = event => {
-        this.props.send();
+    updateLeague = event => {
+        this.props.updateLeague();
     }
     render() {
         //TODO : how to add photos ?

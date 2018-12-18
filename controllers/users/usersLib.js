@@ -15,7 +15,7 @@ function signup(req, res) {
             phone: req.body.phone,
             familyName: req.body.familyName,
             firstName: req.body.firstName,
-            username: req.body.firstName,
+            username: req.body.firstName + req.body.familyName,
             birthday: req.body.birthday,
             photoId: req.body.photoId,
         }
@@ -38,6 +38,8 @@ function signup(req, res) {
         findUser.then(function () {
             var _u = new User(user);
             _u.save(function (err, user) {
+                
+                console.log(err, user)
                 if (err) {
                     res.status(500).json({
                         "text": "Erreur interne en essayant de créer le compte"

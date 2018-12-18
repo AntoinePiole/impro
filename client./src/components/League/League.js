@@ -61,11 +61,11 @@ export class League extends React.Component {
         });
     }
 
-    send (_send) { //Need to test ya
-        if(_send.name === ""){
+    updateLeague (league) { //Need to test ya
+        if(league.name === ""){
             return;
         }
-        API.makeLeague(_send).then(function(data){
+        API.makeLeague(league).then(function(data){
             if (data.status != 200) {
             }
             else {
