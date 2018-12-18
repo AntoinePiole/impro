@@ -85,4 +85,6 @@ refuseMatchRequest(String league1Id, String league2Id, Date date, String locatio
 acceptMatchRequest(String league1Id, String league2Id, Date date, String location)
   Accept a match. Remove it from propositions and suggestions, and create a new page for the match.
 
-########## ##########
+########## Images ##########
+submitImage(Buffer image)
+  Uploads an image to the server
