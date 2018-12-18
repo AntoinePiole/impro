@@ -86,5 +86,5 @@ acceptMatchRequest(String league1Id, String league2Id, Date date, String locatio
   Accept a match. Remove it from propositions and suggestions, and create a new page for the match.
 
 ########## Images ##########
-submitImage(Buffer image)
+submitImage(File image)
   Uploads an image to the server
