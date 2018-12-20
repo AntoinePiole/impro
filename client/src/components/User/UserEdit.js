@@ -9,11 +9,11 @@ export class UserEdit extends React.Component {
     constructor(props){
         super(props);
         this.state= {
-            picture : null, 
+            selectedFile : null, 
             photoId : this.props.photoId
         }
         this.sendEdittedUser = this.sendEdittedUser.bind(this);
-        this.onDrop = this.onDrop.bind(this);
+        this.selectedFileHandler = this.selectedFileHandler.bind(this);
     }
 
     componentDidMount () {
@@ -21,8 +21,6 @@ export class UserEdit extends React.Component {
             photoId : this.props.photoId
         })
     }
-
-
 
     sendEdittedUser (firstName, familyName, username, phone, email, desc) {
         var data = {
@@ -40,17 +38,24 @@ export class UserEdit extends React.Component {
     Images aren't uploaded within sendEdittedUser : they are uploaded whenever an user tries to upload a file
     But until they click the "Valider Modifications" button, their photoId parameter isn't changed
 */
-    onDrop(picture) {
-        this.setState({
-            picture: picture
-        });
-        console.log(picture)
-        API.submitImage(this.state.picture).then(function(id) {
-            this.setState({
-                photoId : id
-            })
-        })
-    }
+
+    
+selectedFileHandler = event => {
+    var selectedFile = event.target.files[0]
+    const fd = new FormData();
+    fd.append('profileImage', selectedFile);
+    API.submitImage(this.state.selectedFile)
+        .then(res =>console.log(res));
+    /*
+    .then(res => res.json())
+    .then(images => {
+      this.setState({ 
+        uploading: false,
+        images
+      })
+    })
+    */
+}
 
     render() {
         return (
@@ -86,15 +91,9 @@ export class UserEdit extends React.Component {
                         <FormControl type="text" value={this.props.desc} onChange={this.props.handleChange}/>
                     </FormGroup>
 
-                    <FormGroup controlId="desc">
+                    <FormGroup controlId="profileImage">
                         <ControlLabel>Image de profil</ControlLabel>
-                        <ImageUploader
-                            withIcon={true}
-                            buttonText='Choisissez une image'
-                            onChange={this.onDrop}
-                            imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                            maxFileSize={5242880}
-                        />
+                        <input type='file' name="profileImage" id='fileUploaderEdit' onChange={this.selectedFileHandler} />
                     </FormGroup>
 
                     <Button className="ValidationButton" onClick={() => this.sendEdittedUser(this.props.firstName, this.props.familyName, this.props.username, this.props.phone, this.props.email, this.props.desc)} bsSize="large"type="submit">

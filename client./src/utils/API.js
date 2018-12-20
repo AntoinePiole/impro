@@ -71,7 +71,7 @@ export default {
     },
 
     // ########## Images ########## 
-    submitImage : function(image, path) {
-        return axios.post('/images/');
+    submitImage : function(form) {
+        return axios.post('/images/', form);
     }
 }

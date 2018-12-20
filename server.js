@@ -16,11 +16,8 @@ mongoose.connect('mongodb://localhost/db').then(() => {
 const app = express();
 
 //Body Parser
-var urlencodedParser = bodyParser.urlencoded({
-    extended: true
-});
-app.use(urlencodedParser);
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true, parameterLimit: 1000000}))
 
 //Définition des CORS
 app.use(function (req, res, next) {
@@ -37,6 +34,9 @@ app.use('/users', usersRouter);
 
 var leaguesRouter = require(__dirname + '/controllers/leagueController');
 app.use('/leagues', leaguesRouter);
+
+var imagesRouter = require(__dirname + '/controllers/imageController');
+app.use('/images', imagesRouter);
 
 
 
