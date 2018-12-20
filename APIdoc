@@ -66,8 +66,11 @@ getLeaguesOfUser(String userId, String leagueId)
 getUsersOfLeague(String leagueId)
   Get all the users in a league, and not just their id : all the objects
   
-isAdmin(String userId, League league)
+isAdminOfLeague(String userId, League league)
   Returns a boolean : true if the given user is an admin of the league
+  
+isMemberOfLeague(String userId, League league)
+  Returns a boolean : true if the given user is a member of the league
 ########## Search ##########
 searchUser(String queryText)
   Search in the User database
