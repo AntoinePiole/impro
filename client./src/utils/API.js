@@ -69,9 +69,23 @@ export default {
     getLeaguesOfUser : function(userId) {
         return axios.get('/leagues/users/' + userId, {headers : headers})
     },
+    isAdminOfLeague : function(userId, members) {
+        return members.some(e => (e._id === userId) && e.isAdmin)
+    },
+    isMemberOfLeague : function(userId, members) {
+        return members.some(e => e._id === userId)
+    },
 
     // ########## Images ########## 
-    submitImage : function(form) {
-        return axios.post('/images/', form);
+    /**
+     * Takes as argument the value of event
+     * Where event is the value sent by on onChange listener
+     * In a "file" type input
+     */
+    submitImage : function(event) { 
+        var selectedFile = event.target.files[0]
+        const fd = new FormData();
+        fd.append('profileImage', selectedFile);
+        return axios.post('/images/', fd);
     }
 }

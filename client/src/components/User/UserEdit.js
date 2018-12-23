@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import './User.css';
 import API from '../../utils/API';
-import ImageUploader from 'react-images-upload';
 
 
 export class UserEdit extends React.Component {
@@ -41,11 +40,15 @@ export class UserEdit extends React.Component {
 
     
 selectedFileHandler = event => {
-    var selectedFile = event.target.files[0]
-    const fd = new FormData();
-    fd.append('profileImage', selectedFile);
-    API.submitImage(this.state.selectedFile)
-        .then(res =>console.log(res));
+    API.submitImage(event)
+        .then(res => {
+            this.setState({
+                photoId : res.data.filename
+            })
+            return res    
+        })
+        .then(res => console.log(res, this.state))
+        .catch(err => console.log(err))
     /*
     .then(res => res.json())
     .then(images => {

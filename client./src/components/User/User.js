@@ -1,8 +1,8 @@
 import React from 'react';
 import * as moment from 'moment';
-import { LeagueList } from './LeagueList'
-import { UserEdit } from './UserEdit'
-import { UserDisplay } from './UserDisplay'
+import { LeagueList } from './LeagueList';
+import { UserEdit } from './UserEdit';
+import { UserDisplay } from './UserDisplay';
 import './User.css';
 import API from '../../utils/API';
 
@@ -26,9 +26,9 @@ export class User extends React.Component {
     }
 
     async componentDidMount () { // This is not working. Should it be placed somewhere else ?
-        this.id=window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
+        this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
         var data = await API.getUserById(this.id);
-        var user=data.data.user;
+        var user = data.data.user;
         this.setState ({
             id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
             editting : false,

@@ -4,7 +4,6 @@ import { LeagueDisplay } from './LeagueDisplay';
 import { LeagueEdit } from './LeagueEdit';
 import { MatchSuggestions } from './MatchSuggestions';
 import { MatchSuggester } from './MatchSuggester';
-import * as moment from 'moment';
 import './League.css';
 import API from '../../utils/API';
 
@@ -26,7 +25,6 @@ export class League extends React.Component {
     }
 
     async componentDidMount () {
-        
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
         var data = await API.getLeagueById(this.id);
         var league = data.data.league;
@@ -42,10 +40,12 @@ export class League extends React.Component {
             sentMatchRequestsIds : league.sentMatchRequestsIds,
             editting : false,
         });
+
         this.setState({
             //isAdmin : (this.state.members.some(e => (e.id === localStorage.getItem('id')) && e.isAdmin)), 
-            isAdmin : true,
-            isMember : (this.state.members.some(e => e.id === localStorage.getItem('id')))
+            isAdmin : API.isAdminOfLeague(localStorage.getItem("id"), league.members),
+            isMember : API.isAdminOfLeague(localStorage.getItem("id"), league.members),
+            //(this.state.members.some(e => e.id === localStorage.getItem('id')))
         });
     }
 

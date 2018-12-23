@@ -292,7 +292,6 @@ function getLeaguesOfUser(req, res) {
                 League.find({ 
                 "members._id": userId
             }, function (err, leagues) {
-                console.log("######", err, "//////////", leagues)
                 if (err) {
                     reject(500);
                 } else {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from "react-bootstrap";
 import './League.css';
+import { LeaguePhoto } from './LeaguePhoto';
 
 
 export class LeagueDisplay extends React.Component {
@@ -11,6 +12,7 @@ export class LeagueDisplay extends React.Component {
         return (
             <div className="LeagueDisplay">
                 <h1>{this.props.nickname? this.props.nickname:this.props.name}</h1>
+                <LeaguePhoto photoId={this.props.photoId} />
                 {this.props.nickname !== "" ?
                     <span>
                         <p> Nom officiel : {this.props.name}</p>

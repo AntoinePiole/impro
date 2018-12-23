@@ -2,6 +2,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
+var usersRouter = require(__dirname + '/controllers/userController');
+var leaguesRouter = require(__dirname + '/controllers/leagueController');
+var imagesRouter = require(__dirname + '/controllers/imageController');
 
 //Connexion à la base de donnée
 mongoose.connect('mongodb://localhost/db').then(() => {
@@ -29,17 +32,10 @@ app.use(function (req, res, next) {
 });
 
 //Définition du routeur
-var usersRouter = require(__dirname + '/controllers/userController');
+app.use(express.static(__dirname + '/public/uploads'));
 app.use('/users', usersRouter);
-
-var leaguesRouter = require(__dirname + '/controllers/leagueController');
 app.use('/leagues', leaguesRouter);
-
-var imagesRouter = require(__dirname + '/controllers/imageController');
 app.use('/images', imagesRouter);
-
-
-
 
 //Définition et mise en place du port d'écoute
 var port = 8000;
