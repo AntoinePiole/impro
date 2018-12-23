@@ -13,6 +13,8 @@ Make a page to make a new league, add a link to it in the dashboard
 Make a "home" page
 Add calendars
 Unify our way to handle dates
+Plein de CSS...
+Possibilité de remplacer toutes les balises par du React-bootstrap pour faciliter le CSS
 
  - Images :
 Actually get photos from the back
