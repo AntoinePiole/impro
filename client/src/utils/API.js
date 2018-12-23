@@ -69,5 +69,5 @@ export default {
     },
     getLeaguesOfUser : function(userId) {
         return axios.get('/leagues/users/' + userId, {headers : headers})
-    }
+    },
 }
