@@ -87,7 +87,7 @@ function patchLeagueById(req, res) {
 
 
 function makeLeague(req, res) {
-    if (!req.body.name) {
+    if (!req.body.name || !req.body.userId) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
@@ -97,9 +97,9 @@ function makeLeague(req, res) {
             name: req.body.name,
             nickname: req.body.nickname,
             desc: req.body.desc,
-            email: req.body.desc,
+            email: req.body.email,
             photoId: req.body.photoId,
-            members: [{id:req.body.userId, isAdmin:true}],
+            members: [{_id:req.body.userId, isAdmin:true}],
             receivedMatchRequestsIds: [],
             sentMatchRequestsIds: []
         }

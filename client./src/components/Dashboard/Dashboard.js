@@ -12,25 +12,25 @@ export class Dashboard extends React.Component {
         this.myLeagues.bind(this);
         this.search.bind(this);
     }
-    disconnect = event => {
-        API.logout();
-        window.location = "/login";
-    }
 
     home = event => {
         window.location = "/home";
     }
-
     user = event => {
         window.location = "/user/"+localStorage.getItem('id');
     }
-
     myLeagues = event => {
         window.location = "/myleagues/";
     }
-
+    makeLeague = event => {
+        window.location = "/newleague"
+    }
     search = event => {
         window.location = "/search";
+    }
+    disconnect = event => {
+        API.logout();
+        window.location = "/login";
     }
     render() {
         return(
@@ -40,6 +40,7 @@ export class Dashboard extends React.Component {
                     <Button onClick={this.home}>Ecran d'acceuil</Button>
                     <Button onClick={this.user}>Mon profil</Button>
                     <Button onClick={this.myLeagues}>Mes ligues</Button>
+                    <Button onClick={this.makeLeague}>Créer une ligue</Button>
                     <Button onClick={this.search}>Recherche</Button>
                     <Button onClick={this.disconnect}>Déconnexion</Button>
                 </ButtonGroup>
