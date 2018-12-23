@@ -25,7 +25,7 @@ export class PlayerListContainer extends React.Component {
 
     toRender(){ //bind?
         return (this.props.isModifying ? 
-            <PlayerListAdmin participantsList={this.props.participantsList} waitingList={this.props.participantsWaitingList} className='participantList' /> :
+            <PlayerListAdmin participantsList={this.props.participantsList} waitingList={this.props.participantsWaitingList} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} className='participantList' /> :
             <PlayerList results={this.props.participantsList} className='participantList' />
         );
     }

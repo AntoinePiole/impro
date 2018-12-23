@@ -14,7 +14,8 @@ export class PlayerResultAdmin extends React.Component{
 
     render(){
         const user = this.props.user;
-        return (
+        try {
+            return (
             <div>
                 <img src={user.photoId} alt={user.firstName} className='userPicture'/> {/* MODIFY : img src should appear differently than user.photo_id in DB */}
                 <h3 className='userName'>{user.firstName+' '+user.familyName}</h3> {/* Must be styled inline*/}
@@ -22,5 +23,9 @@ export class PlayerResultAdmin extends React.Component{
                 {this.props.waiting ? <Button onClick={this.props.addParticipant} className='accept'>Valider</Button> : null}  {/* NB IL FAUDRAIT QUE LE ONCLICK RE-RENDER LES LISTES DE PARTICIPANTS*/}
             </div>
         )
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 }

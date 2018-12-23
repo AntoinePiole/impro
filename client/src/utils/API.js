@@ -87,5 +87,18 @@ export default {
         const fd = new FormData();
         fd.append('profileImage', selectedFile);
         return axios.post('/images/', fd);
-    }
+    },
+
+    // ########## User in a match ##########
+    
+    addToMatch : function(userId, matchId, send){
+        return axios.patch(burl + '/matches/' + matchId + '/users/' + userId + '?add=true', send, {headers: headers})
+    },
+    removeFromMatch: function(userId, matchId, send){
+        return axios.patch(burl + '/matches/' + matchId + '/users/' + userId + '?add=false', send, {headers: headers})
+    },
+
+// ########## Search ##########
+
+//Others not implemented as I do not know exactly which parameters will be needed
 }

@@ -1,29 +1,28 @@
-Tâches à coder :
 
-- Commence par faire le front : interface, bouttons, etc.
-  - Page 1 : login
-      -> Antoine
-  - Page 2 : register
-      -> Roméo
-  - Page 3 : home
-      -> Roméo
-  - Page 4 : calendar
-      -> Après le back
-  - Page 5 : bannière
-      -> Antoine 
-  - Page 6 : create_league
-      -> Roméo
-  - Page 7 : user/id
-      -> Antoine
-  - Page 8 : match/id
-      -> Roméo
-    (Page 8bis : match/id (avec des trucs affichés en plus) )
-  - Page 9 : search/
-      -> Roméo
-  - Page 11: league/id
-      -> Antoine
-  - Page 12: suggest_match
-      -> Antoine
+TODO atm :
+ - Autorisation/authentification
+Check that JSONs have the right shape when entering the back (with AJV for instance)
+Implement passport
+When connecting while isAuth is false, redirect to login/submit or an error 404 page with login ad submit in dashboard
 
-- Back
-- Routing
+- Missing features :
+When viewing the page of a league we aren't in, add a button to request to join & handle those requests in the back and front
+Clean up the shape of some pages (ie, league and user)
+Handle match suggestions with back, with real matches with a special status & adapt get functions accordingly
+Make a page to make a new league, add a link to it in the dashboard
+Make a "home" page
+Add calendars
+Unify our way to handle dates
+Plein de CSS...
+Possibilité de remplacer toutes les balises par du React-bootstrap pour faciliter le CSS
+
+ - Images :
+Actually get photos from the back
+Have default images stored in the back
+Handle all images displays with components
+
+ - API :
+Split our API into userAPI, leagueAPI, matchAPI, imageAPI which each communicate with userController, leagueController, matchController, imageController
+Add GET functions for pictures ? Is it needed ?
+Add DELETE functions for pictures
+Delete someone's picture when uploading a new one

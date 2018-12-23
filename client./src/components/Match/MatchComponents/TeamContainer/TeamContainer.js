@@ -16,11 +16,10 @@ export class TeamContainer extends React.Component{
     /**
      * returns true if user is admin of this league
      * @param {} userId 
-     */id
+     */
     isAdmin(userId){
-        console.log(userId);
         const currentUser = this.props.league.members.find( 
-            user => user.id == userId //TODO à remplacer par un ===
+            user => user.id === userId 
         );
         if (currentUser) {return currentUser.admin}
         else {return false};

@@ -3,7 +3,7 @@ import { TeamContainer } from './MatchComponents/TeamContainer/TeamContainer.js'
 import {Description} from './MatchComponents/Description/Description';
 import { ModificationButton } from './MatchComponents/ModificationButton/ModificationButton';
 import {StaffContainer} from './MatchComponents/StaffContainer/StaffContainer';
-import {API} from '../../fakeDB'; //to replace with real API
+import {API} from '../../utils/API.js';
 
 import './MatchContainer.css';
 
@@ -32,7 +32,7 @@ export class MatchContainer extends React.Component{
      */
     addToLeague(userId,waiting,leagueNumber){
         const role = 'participant' + leagueNumber;
-        API.addToMatch(userId,this.props.matchId, role, waiting);
+        return API.addToMatch(userId,this.props.matchId, {role: role, waiting: waiting});
     }
     
     /**
@@ -41,18 +41,21 @@ export class MatchContainer extends React.Component{
      * @param {boolean} waiting - true if adding to the waiting list, false if to the definitive
      * @param {number} leagueNumber - 1 or 2, defines which team
      */
-    removeFromLeague(userId,waiting,leagueNumber){
+     removeFromLeague(userId,waiting,leagueNumber){
         const role = 'participant' + leagueNumber;
-        API.removeFromMatch(userId,this.props.match.matchId, role, waiting);
+        await API.removeFromMatch(userId,this.props.match.matchId, {role: role, waiting: waiting});
     }
 
     /**
      * converts a list of members' ids in a list of members
      * @param {id array} userIdList 
      */
-    findUsers(userIdList){
+    async findUsers(userIdList){
         return userIdList.map(
-            userId => API.getUserById(userId)
+            async function (userId) {
+                const user = await API.getUserById(userId);
+                return user;
+            }
         )
     }
     
@@ -61,11 +64,9 @@ export class MatchContainer extends React.Component{
      * @param {*} leagueId 
      * @param {*} userId 
      */
-    adminLeague(leagueId,userId){
-        const league = API.getLeagueById(leagueId);
-        console.log(league);
-        const userLeague = league.members.find ( user => user.id == userId ); //TO DO : change == to === find the (userId,isAdmin) couple 
-        console.log(userLeague);
+    async adminLeague(leagueId,userId){
+        const league = await API.getLeagueById(leagueId);
+        const userLeague = league.members.find ( user => user.id === userId ); 
         if (userLeague) { //if the user is in the league
             return userLeague.admin; // check if he's admin
         }
@@ -76,11 +77,10 @@ export class MatchContainer extends React.Component{
      * returns true if user is admin of the match or of one of the leagues playing
      * @property {id} userId
      */
-    isAdmin(userId){
-        console.log(userId);
+    async isAdmin(userId){
         const match = this.props.match;
-        const adminLeague1 =  this.adminLeague(match.league1Id, userId); //true if user is admin of league1
-        const adminLeague2 =  this.adminLeague(match.league2Id, userId); //true if user is admin of league1
+        const adminLeague1 = await this.adminLeague(match.league1Id, userId); //true if user is admin of league1
+        const adminLeague2 = await this.adminLeague(match.league2Id, userId); //true if user is admin of league2
         const adminMatch = (match.admins.indexOf(userId) != -1); //true if user is admin of the match
         return (adminMatch || adminLeague1 || adminLeague2);
     }
@@ -89,13 +89,12 @@ export class MatchContainer extends React.Component{
         this.setState({descriptionText: text});
     }
 
-    handleModify(event){
+    async handleModify(event){
         if(this.state.isModifying) {
             const text = this.state.descriptionText;
-            API.patchMatch(this.props.match.id,{description: text});
+            await API.patchMatch(this.props.match.id,{description: text});
             this.setState({isModifying: false});
-        }
-        else {
+        } else {
             if (this.isAdmin(localStorage.getItem('id'))){ //if current user has right to modify match
                 this.setState({isModifying: true});
             } 
@@ -105,24 +104,23 @@ export class MatchContainer extends React.Component{
     }
 
     render(){
-        const league1 = API.getLeagueById(this.props.match.league1Id);
-        const league2 = API.getLeagueById(this.props.match.league2Id);
-        const league1Members = this.findUsers(this.props.match.league1Members);
-        const league2Members = this.findUsers(this.props.match.league2Members);
-        const league1MembersPropositions = this.findUsers(this.props.match.league1MembersPropositions);
-        const league2MembersPropositions = this.findUsers(this.props.match.league2MembersPropositions);
-        const refereePropositions = this.findUsers(this.props.match.refereePropositions);
-        const mcPropositions = this.findUsers(this.props.match.mcPropositions);
-        console.log(this.isAdmin(localStorage.getItem('id')));
-        console.log(localStorage.getItem('id'));
+        const league1 = await API.getLeagueById(this.props.match.league1Id);
+        const league2 = await API.getLeagueById(this.props.match.league2Id);
+        const league1Members = await this.findUsers(this.props.match.league1Members);
+        const league2Members = await this.findUsers(this.props.match.league2Members);
+        const league1MembersPropositions = await this.findUsers(this.props.match.league1MembersPropositions);
+        const league2MembersPropositions = await this.findUsers(this.props.match.league2MembersPropositions);
+        const refereePropositions = await this.findUsers(this.props.match.refereePropositions);
+        const mcPropositions = await this.findUsers(this.props.match.mcPropositions);
+        const admin = await this.isAdmin(localStorage.getItem('id'));
         return(
             <div className='matchContainer'>
-                <TeamContainer className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=>this.addToLeague(x,y,1)} removeParticipant={(x,y)=>this.removeFromLeague(x,y,1)} />
+                <TeamContainer className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
                 <span className='VS'>VS</span>
-                <TeamContainer className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=>this.addToLeague(x,y,2)} removeParticipant={(x,y)=>this.removeFromLeague(x,y,1)} />
+                <TeamContainer className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
                 <Description descriptionText={this.state.descriptionText} isModifying={this.state.isModifying} setDescriptionText={this.setDescriptionText} />
                 <StaffContainer matchId={this.props.match.id} referee={this.props.referee} mc={this.props.mc} refereePropositions={refereePropositions} mcPropositions={mcPropositions} isModifying={this.state.isModifying}/>
-                {this.isAdmin(localStorage.getItem('id')) ? <ModificationButton onClick={this.handleModify} isModifying={this.state.isModifying}/> : null /* modification button, displayed only if current user is admin of the page */}
+                {admin ? <ModificationButton onClick={this.handleModify} isModifying={this.state.isModifying}/> : null /* modification button, displayed only if current user is admin of the page */}
             
             </div>
         )

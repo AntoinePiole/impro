@@ -64,7 +64,13 @@ getLeaguesOfUser(String userId, String leagueId)
   Get all the leagues an user is in
   
 getUsersOfLeague(String leagueId)
-  Get all the users in a league, and not just their id : all the objects.s
+  Get all the users in a league, and not just their id : all the objects
+  
+isAdminOfLeague(String userId, League league)
+  Returns a boolean : true if the given user is an admin of the league
+  
+isMemberOfLeague(String userId, League league)
+  Returns a boolean : true if the given user is a member of the league
 ########## Search ##########
 searchUser(String queryText)
   Search in the User database
@@ -85,4 +91,6 @@ refuseMatchRequest(String league1Id, String league2Id, Date date, String locatio
 acceptMatchRequest(String league1Id, String league2Id, Date date, String location)
   Accept a match. Remove it from propositions and suggestions, and create a new page for the match.
 
-########## ##########
+########## Images ##########
+submitImage(File image)
+  Uploads an image to the server
