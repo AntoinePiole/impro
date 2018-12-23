@@ -216,11 +216,11 @@ function getUsersOfLeague(req, res) {
                 }
             })
         });
-
         findLeague.then(function (league) {
-            var userIds={}
-            for (var i=0; i < league.members.lgenth; i++) {
-                userIds.push(league.members[i].id);
+            var userIds=[]
+            for (var i=0; i < league.members.length; i++) {
+                console.log(league.members[i])
+                userIds.push(league.members[i]._id);
             }
             console.log("the ids are now", userIds)
             var findUsers = new Promise(function (resolve, reject) {

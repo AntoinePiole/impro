@@ -44,7 +44,9 @@ export class UserList extends React.Component {
             {leagueId : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1)}
         );
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1); //The members of the list, bt with estra parameters
+        console.log(this.id)
         var data = await API.getUsersOfLeague(this.id);
+        console.log(data);
         this.setState({members : data.data.users});
     }
 

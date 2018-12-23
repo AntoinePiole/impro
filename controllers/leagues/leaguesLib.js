@@ -182,6 +182,55 @@ function addToLeague(req, res) {
     })
 }
 
+
+function addToLeague(req, res) {
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOne(
+        { _id: leagueId }, 
+    )
+    query.exec(function(err, league){
+        if (err) {
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+            return ; 
+        }
+        var members = league.members;
+        if (members.some(e => (e._id === userId))) {
+        }
+        else {
+            members.push({_id:userId, isAdmin:false})
+            var query = League.findOneAndUpdate(
+                { _id: leagueId }, 
+                {members: members}
+            )
+            query.exec(function(err, newLeague){
+                if (err) {
+                    res.status(500).json({
+                        text: "Erreur interne"
+                    })
+                }
+                else {
+                    league = newLeague
+                }
+            })
+        }
+        console.log(league);
+        res.json({
+            text : "Success",
+            league : league
+        })
+    })
+}
+
 function removeFromLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
