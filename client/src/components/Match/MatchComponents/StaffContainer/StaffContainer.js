@@ -2,7 +2,7 @@ import React from 'react';
 import {StaffResult} from './Staff/StaffResult';
 import {StaffList} from './Staff/StaffList';
 import {ParticipationButton} from './Staff/ParticipationButton';
-import {API} from '../../../../fakeDB'; //to replace with real API
+import {API} from '../../../../utils/API.js';
 
 /**
  * displays the mc and referee, and allows to modify them if admin
@@ -15,7 +15,6 @@ import {API} from '../../../../fakeDB'; //to replace with real API
  */
 export class StaffContainer extends React.Component{
 
-
     constructor(props){
         super(props);
         this.addReferee = this.addReferee.bind(this);
@@ -26,27 +25,26 @@ export class StaffContainer extends React.Component{
         this.postulateMc = this.postulateMc.bind(this);
         this.isPostulatingReferee = this.isPostulatingReferee.bind(this);
         this.isPostulatingMc = this.isPostulatingMc.bind(this);
-
     }
     addReferee(userId){
-        API.addToMatch(userId,this.props.matchId,'referee',false);
+        return API.addToMatch(userId,this.props.matchId,{role:'referee',waiting:false});
     }
     addMc(userId){
-        API.addToMatch(userId,this.props.matchId,'mc',false);
+        return API.addToMatch(userId,this.props.matchId,{role: 'mc',waiting: false});
     }
     removeReferee(userId){
-        API.removeFromMatch(userId,this.props.matchId,'referee',true);
+        return API.removeFromMatch(userId,this.props.matchId,{role:'referee',waiting:true});
     }
     removeMc(userId){
-        API.removeFromMatch(userId,this.props.matchId,'mc',true);
+        return API.removeFromMatch(userId,this.props.matchId,{role:'mc',waiting:true});
     }
     postulateReferee(){
         const userId = localStorage.getItem('id');
-        API.addToMatch(userId, this.props.matchId, 'referee', true)
+        return API.addToMatch(userId, this.props.matchId, {role:'referee', waiting:true})
     }
     postulateMc(){
         const userId = localStorage.getItem('id');
-        API.addToMatch(userId, this.props.matchId, 'mc', true)
+        return API.addToMatch(userId, this.props.matchId, {role:'mc', waiting:true})
     }
     isPostulatingReferee(){
         return this.props.refereeProposition.includes(localStorage.getItem('id'));
