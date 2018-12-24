@@ -80,6 +80,8 @@ searchMatch(String queryText)
   
 searchLeague(String queryText)
   Search in the League database
+
+search(String queryText, String type) //(type amongst 'match', 'user', 'league')
   
 ########## Match requests ##########
 postMatchRequest(String league1Id, String league2Id, Date date, String location)
