@@ -2,6 +2,7 @@ import React from 'react';
 import { SearchField } from './SearchField.js';
 import { SearchTypeForm } from './SearchTypeForm.js';
 import { ResultList } from './ResultList.js';
+import API from '../../utils/API';
 
 const fakeDB = {
     users: [
@@ -41,23 +42,13 @@ export class SearchResultContainer extends React.Component{
         this.setState ({resultType : newType});
     }
 
-    /**
-     * returns an array of results corresponding to the params
-     * @param {*} queryText : the text in the searchfield
-     * @param {*} type : type of results searched
-     */
-    getResults(queryText,type){  
-        const resultsKey = type+'s';
-        return (
-            fakeDB[resultsKey].filter (
-                elem => elem.name.toLowerCase().includes(queryText.toLowerCase())                        
-            ) //pour l'instant, recherche uniquement par name attribute  
-        );
-    }
-
-
     render(){
-        let results = this.getResults(this.state.inputQuery,this.state.resultType); 
+        let results = []
+        try {
+            results = API.search(this.state.inputQuery,this.state.resultType); 
+        } catch (error) {
+            console.log(error);
+        }
         return (
             <div className='searchResult'>
                 <SearchField changeInput={this.changeInput} value={this.state.inputQuery}/>

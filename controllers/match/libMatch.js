@@ -23,7 +23,35 @@ function getMatch(req, res){
     }
 }
 
-function patchMatch(req, res){ //TO ASK : Je vérifie manuellement que req.body est bien ?
+/**
+ * finds the list of matches which names contain the string req.params.queryText
+ */
+function searchMatch(req, res){
+    if (!req.params.queryText){
+        res.status(400).json({
+            text: "Requête invalide"
+        });
+        return ;
+    }
+    const name = req.params.queryText;
+    const condition = new RegExp("^.*"+name+".*$"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
+    const query = Match.find(
+        {name: condition} //TO DO : THIS PROBABLY DOES NOT WORK : how to use a variable in a regex
+    );
+    query.exec(function (err, results){
+        if(err){
+            res.status(500).json({
+                text: 'Erreur interne'
+            });
+            return;
+        }
+        res.status(200).json({
+            results: results
+        });
+    })
+}
+
+function patchMatch(req, res){ //TO ASK : Je vérifie manuellement que req.body est bien ? --> faire un middleware qui le vérifie (+secure), sinon géré par express
     if(!req.params.id ){
         res.status(400).json({
             text: 'Requête invalide'
@@ -46,49 +74,60 @@ function patchMatch(req, res){ //TO ASK : Je vérifie manuellement que req.body 
     }
 }
 
-function makeMatch(req, res){
+function isMatch(req,res,next){
+    if(!req.body.match){
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+        return;
+    }
     if (!req.body.match.name || !req.body.match.league1Id || !req.body.match.league2Id || !req.body.match.date || !req.body.match.location){ //NB : on peut ou considérer name obligatoire (le cas où le nom n'est pas indiqué doit être traité côté front), ou bien qu'il ne l'est pas (traiter le cas côté back), de même pour description (plus simple)
         //s'il manque une donnée 
         res.status(400).json({
             text: "Requête invalide"
         })
+        return;
     }
-    else {
-        const match = { 
-            name: req.body.match.name,
-            status: 'waitingConfirmation',  //between [finished, waitingConfirmation, confirmed, canceled]
-            league1Id: req.body.match.league1Id,
-            league2Id: req.body.match.league2Id,
-            league1Members: req.body.match.league1Members,
-            league2Members: req.body.match.league2Members,
-            league1MembersPropositions: [],
-            league2MembersPropositions: [],
-            referee: null,
-            mc: null,
-            refereePropositions: [],
-            mcPropositions: [],
-            admins: [],
-            subscribers: [],
-            description: req.body.match.description ? req.body.match.description : "",
-            date: req.body.match.date, //TO CHECK : how to manage dates request ?
-            location: req.body.match.location,
-            score: {score1: 0, score2: 0}
-        } ;
-        
-        const _m = new Match(match);
-        _m.save(function (err, match){
-            if(err){
-                res.status(500).json({
-                    text: "Erreur interne en essayant de créer le match"
-                })
-            } else {
-                res.status(200).json({
-                    text: "Succès",
-                    id: match._id
-                })
-            }
-        });
-    }
+    
+    next();
+
+}
+function makeMatch(req, res){
+
+    const match = { 
+        name: req.body.match.name,
+        status: 'waitingConfirmation',  //between [finished, waitingConfirmation, confirmed, canceled]
+        league1Id: req.body.match.league1Id,
+        league2Id: req.body.match.league2Id,
+        league1Members: req.body.match.league1Members,
+        league2Members: req.body.match.league2Members,
+        league1MembersPropositions: [],
+        league2MembersPropositions: [],
+        referee: null,
+        mc: null,
+        refereePropositions: [],
+        mcPropositions: [],
+        admins: [],
+        subscribers: [],
+        description: req.body.match.description ? req.body.match.description : "",
+        date: req.body.match.date, //TO CHECK : how to manage dates request ?
+        location: req.body.match.location,
+        score: {score1: 0, score2: 0}
+    } ;
+    
+    const _m = new Match(match);
+    _m.save( function (err, match){
+        if(err){
+            res.status(500).json({
+                text: "Erreur interne en essayant de créer le match"
+            })
+        } else {
+            res.status(200).json({
+                text: "Succès",
+                id: match._id
+            })
+        }
+    });
 }
 
 /**
@@ -200,3 +239,5 @@ exports.patchMatch = patchMatch;
 exports.makeMatch = makeMatch;
 exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
+exports.isMatch = isMatch;
+exports.searchMatch = searchMatch;
