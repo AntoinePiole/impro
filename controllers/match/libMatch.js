@@ -1,4 +1,4 @@
-const Match = require ('../../models/matchModel');
+const Match = require ('./matchModel');
 
 function getMatch(req, res){
     if(!req.params.id){
@@ -6,19 +6,25 @@ function getMatch(req, res){
             text: "Requête invalide"
         })
     } else {
-        const _id = req.params.id;
-        const query = Match.findOne({_id: _id});
+        const id = req.params.id;
+        const query = Match.findById(id);
 
         query.exec(function (err, match){
             if(err){
                 res.status(500).json({
                     text: "Erreur interne"
                 })
-            } else {
+                return;
+            }
+            if(match){
                 res.status(200).json({
                     match: match
-                })
+                });
+                return;
             }
+            res.status(404).json({
+                text: "No match found with this id"
+            })
         })
     }
 }

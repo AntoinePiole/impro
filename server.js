@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 var usersRouter = require(__dirname + '/controllers/userController');
 var leaguesRouter = require(__dirname + '/controllers/leagueController');
 var imagesRouter = require(__dirname + '/controllers/imageController');
+var matchesRouter = require(__dirname + '/controllers/match/matchController');
 
 //Connexion à la base de donnée
 mongoose.connect('mongodb://localhost/db').then(() => {
@@ -36,6 +37,7 @@ app.use(express.static(__dirname + '/public/uploads'));
 app.use('/users', usersRouter);
 app.use('/leagues', leaguesRouter);
 app.use('/images', imagesRouter);
+app.use('/matches',matchesRouter);
 
 //Définition et mise en place du port d'écoute
 var port = 8000;
