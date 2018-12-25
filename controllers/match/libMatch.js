@@ -1,6 +1,6 @@
 const Match = require ('./matchModel');
 
-function getMatch(req, res){
+function getMatch(req, res){ //works
     if(!req.params.id){
         res.status(400).json({
             text: "Requête invalide"
@@ -32,7 +32,7 @@ function getMatch(req, res){
 /**
  * finds the list of matches which names contain the string req.params.queryText
  */
-function searchMatch(req, res){
+function searchMatch(req, res){ //works
     if (!req.params.queryText){
         res.status(400).json({
             text: "Requête invalide"
@@ -57,10 +57,10 @@ function searchMatch(req, res){
     })
 }
 
-function patchMatch(req, res){ //TO ASK : Je vérifie manuellement que req.body est bien ? --> faire un middleware qui le vérifie (+secure), sinon géré par express
-    if(!req.params.id ){
+function patchMatch(req, res){ //works
+    if(!req.params.id || !req.body.match){ 
         res.status(400).json({
-            text: 'Requête invalide'
+            text: 'Missing parameters'
         })
     } else {
         const id = req.params.id;
@@ -80,7 +80,7 @@ function patchMatch(req, res){ //TO ASK : Je vérifie manuellement que req.body 
     }
 }
 
-function isMatch(req,res,next){
+function isMatch(req,res,next){ //works
     if(!req.body.match){
         res.status(400).json({
             text: "Requête invalide"
@@ -94,11 +94,10 @@ function isMatch(req,res,next){
         })
         return;
     }
-    
     next();
 
 }
-function makeMatch(req, res){
+function makeMatch(req, res){ //works
 
     const match = { 
         name: req.body.match.name,
@@ -140,43 +139,52 @@ function makeMatch(req, res){
  * 
  * ajoute un user au match, renvoie un objet {liste: newList} correspond au champ modifié dans l'objet match avec sa nouvelle valeur
  */
-function addToMatch(req,res){
+function addToMatch(req,res){ //works 
     const matchId = req.params.matchId;
     const userId = req.params.userId;
     const role = req.body.role;
     const waiting = req.body.waiting;
+    if(!matchId || !userId || !role || waiting===undefined){
+        res.status(400).json({
+            text: 'Missing parameters'
+        });
+        return;
+    }
     Match.findById(matchId).then( 
-        function (err, match){
+        function (match, err){
             if(err){
                 res.status(404).json({
-                    text: 'Match not found'
+                    text: 'Match not found',
+                    erreur: err
                 })
-            } else {
-                const field = match.findField(role,waiting);
-                const infosToUpdate = {};
-                if ((role==='referee' || role==='mc') && !waiting){ //only cases where field is not an array
-                    infosToUpdate[field.fieldName]=userId;
-                }
-                else { //for fields that are array, we just add the user to the list
-                    const newField = field.fieldValue;
-                    newField.push(userId);
-                    infosToUpdate[field.fieldName]=newField;
-                }
-
-                Match.findByIdAndUpdate(matchId,infosToUpdate).then(
-                    function (error, result){
-                        if(error){
-                            res.status(500).json({
-                                text: 'Erreur interne'
-                            })
-                        } else {
-                            res.status(200).json({
-                                updates: infosToUpdate
-                            })
-                        }
-                    }
-                )
+                return;
+             }  
+            const field = match.findField(role,waiting);
+            const infosToUpdate = {};
+            if ((role==='referee' || role==='mc') && !waiting){ //only cases where field is not an array
+                infosToUpdate[field.fieldName]=userId;
             }
+            else { //for fields that are array, we just add the user to the list
+                const newField = field.fieldValue;
+                newField.push(userId);
+                infosToUpdate[field.fieldName]=newField;
+            }
+
+            const modifyQuery=Match.findByIdAndUpdate(matchId,infosToUpdate);
+            modifyQuery.exec(
+                function (error, result){
+                    if(error){
+                        res.status(500).json({
+                            text: 'Erreur interne',
+                            erreur: error
+                        })
+                    } else {
+                        res.status(200).json({
+                            updates: infosToUpdate
+                        })
+                    }
+                }
+            )
         }
     )
 }
@@ -185,57 +193,61 @@ function addToMatch(req,res){
  * 
  * ajoute un user au match, renvoie un objet {liste: newList} correspond au champ modifié dans l'objet match avec sa nouvelle valeur
  */
-function removeFromMatch(req,res,next){
+function removeFromMatch(req,res){ //works
     const matchId = req.params.matchId;
     const userId = req.params.userId;
     const role = req.body.role;
     const waiting = req.body.waiting;
-    Match.findById(matchId).then( 
-        function (err, match){
+    if(!matchId || !userId || !role || waiting===undefined){
+        res.status(400).json({
+            text: 'Missing parameters'
+        });
+        return;
+    }
+    const findMatch=Match.findById(matchId)
+    findMatch.exec( function (err, match){
             if(err){
                 res.status(404).json({
                     text: 'Match not found'
-                })
-            } else {
-                var notInRole = true; //true if the user does not have the role we want to remove from him
-                const field = match.findField(role,waiting);
-                const infosToUpdate = {};
-                if ((role==='referee' || role==='mc') && !waiting && field.fieldValue===userId){ //only cases where field is not an array, we only remove if the user to remove from role is indeed the user in role
-                    infosToUpdate[field.fieldName]=[];
+                });
+                return;
+            }
+            var notInRole = true; //true if the user does not have the role we want to remove from him
+            const field = match.findField(role,waiting);
+            const infosToUpdate = {};
+            if ((role==='referee' || role==='mc') && !waiting && field.fieldValue===userId){ //only cases where field is not an array, we only remove if the user to remove from role is indeed the user in role
+                infosToUpdate[field.fieldName]=[];
+                notInRole = false;
+            }
+            else { //for fields that are array, we just remove the user from the list
+                const newField = field.fieldValue;
+                const idx = newField.indexOf(userId);
+                if (idx != -1){ //if we did not find the user in the list 
+                    newField.splice(idx,1);
+                    infosToUpdate[field.fieldName]=newField;
                     notInRole = false;
                 }
-                else { //for fields that are array, we just remove the user from the list
-                    const newField = field.fieldValue;
-                    const idx = fieldValue.indexOf(userId);
-                    if (idx === -1){ //if we did not find the user in the list 
-                        newField.splice(idx,1);
-                        infosToUpdate[field.fieldName]=newField;
-                    }
-                    else {
-                        notInRole = false;
-                    }
-                }
+            }
 
-                if(notInRole){
-                    res.status(404).json({
-                        text: 'User does not have this role'
+            if(notInRole){
+                res.status(404).json({
+                    text: 'User does not have this role',
+                })
+                return;
+            }
+
+            Match.findByIdAndUpdate(matchId,infosToUpdate).then(
+            function (result, error){
+                if(error){
+                    res.status(500).json({
+                        text: 'Erreur interne'
                     })
                 } else {
-                    Match.findByIdAndUpdate(matchId,infosToUpdate).then(
-                        function (error, result){
-                            if(error){
-                                res.status(500).json({
-                                    text: 'Erreur interne'
-                                })
-                            } else {
-                                res.status(200).json({
-                                    updates: infosToUpdate
-                                })
-                            }
-                        }
-                    )
+                    res.status(200).json({
+                        updates: infosToUpdate
+                    })
                 }
-            }
+            })
         }
     )
 }
