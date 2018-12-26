@@ -7,6 +7,7 @@ export class SearchField extends React.Component{
         super(props);
         this.state = {queryText:''};
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
@@ -23,7 +24,7 @@ export class SearchField extends React.Component{
     render(){ 
         return(
             <div>
-                <input type='text' placeholder='Search' className='searchField' onChange={this.handleChange} /> /* ?Q? pourquoi le form.value est pas égal tout seul à input.value ? */
+                <input type='text' placeholder='Search' className='searchField' onChange={this.handleChange} /> {/* ?Q? pourquoi le form.value est pas égal tout seul à input.value ? */}
                 <Button onClick={this.handleSubmit}>Valider</Button>
             </div>
         )

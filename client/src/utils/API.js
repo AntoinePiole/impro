@@ -99,6 +99,23 @@ export default {
     },
 
 // ########## Search ##########
+    search:function(queryText, type){
+        switch(type){
+            case 'user': return this.searchUser(queryText);
+            case 'league': return this.searchLeague(queryText);
+            case 'match': return this.searchMatch(queryText);
+            default: return new Error ('You should search user, league or match')
+        }
+    },
 
+    searchMatch: function(queryText){
+        return axios.get('/matches/search/'+queryText)
+    },
+    searchLeague: function(queryText){
+        return axios.get('/matches/search/'+queryText) //TO MODIFY to search leagues
+    },
+    searchUser: function(queryText){
+        return axios.get('/matches/search/'+queryText) //TO MODIFY to search users
+    }
 //Others not implemented as I do not know exactly which parameters will be needed
 }

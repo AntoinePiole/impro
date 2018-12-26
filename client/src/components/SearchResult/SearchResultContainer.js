@@ -29,6 +29,7 @@ export class SearchResultContainer extends React.Component{
         this.state = {
             resultType: 'user', //the result from the checkbox form : value in 
             inputQuery: '', //the input in the searchfield
+            results:[] //the case results: undefined is handled in <ResultList>
         }
         this.changeInput = this.changeInput.bind(this);
         this.changeType = this.changeType.bind(this);
@@ -36,6 +37,17 @@ export class SearchResultContainer extends React.Component{
 
     changeInput(newQuery){
         this.setState({inputQuery : newQuery}) ;
+        const self = this; //allows to use this inside callback of then
+        API.search(newQuery,this.state.resultType).then(
+            function (resultsData, err){
+                if(err){
+                    self.setState({results:[]});
+                    return;
+                }
+                const results = resultsData.data.results;
+                self.setState({results:results});
+            }
+        )
     }
 
     changeType(newType){
@@ -43,18 +55,12 @@ export class SearchResultContainer extends React.Component{
     }
 
     render(){
-        let results = []
-        try {
-            results = API.search(this.state.inputQuery,this.state.resultType); 
-        } catch (error) {
-            console.log(error);
-        }
         return (
             <div className='searchResult'>
                 <SearchField changeInput={this.changeInput} value={this.state.inputQuery}/>
                 <SearchTypeForm changeType={this.changeType} value={this.state.resultType}/>
-                <ResultList results={results} type={this.state.resultType} /> {/* type pourrait être récupéré dans la valeur de results ?*/}
+                <ResultList results={this.state.results} type={this.state.resultType} /> {/* type pourrait être récupéré dans la valeur de results ?*/}
             </div>
-        )
+        ) 
     }
 }
