@@ -59,15 +59,14 @@ removeFromLeague(String userId, String leagueId)
   
 setRoleInLeague(String userId, String leagueId, String role)
   Role can be : user or admin
-  
 
-requestToJoin(String userId, String leagueId)
+requestToJoinLeague(String userId, String leagueId)
   Add to the league's memberPropositions if he is not already a member
   
-acceptMember(String userId, String leagueId)
+acceptMemberPropositionOfLeague(String userId, String leagueId)
   Add the user to the league's members and remove it from its memberPropositions
   
-refuseMember(String userId, String leagueId)
+refuseMemberPropositionOfLeague(String userId, String leagueId)
   Remove the user from the league's memberPropositions
   
 getLeaguesOfUser(String userId, String leagueId)
