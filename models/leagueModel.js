@@ -8,6 +8,8 @@ var leagueModel = mongoose.Schema({
     members : [{id:String, isAdmin:Boolean}],
     receivedMatchRequestsIds : [String],
     sentMatchRequestsIds : [String],
+    memberPropositions : [String]
+
 	
 },{ timestamps: { createdAt: 'created_at' }})
 

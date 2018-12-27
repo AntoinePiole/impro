@@ -204,7 +204,7 @@ function addToLeague(req, res) {
             return ; 
         }
         var members = league.members;
-        if (members.some(e => (e._id === userId))) {
+        if (members.some(e => (e._id == userId))) {
         }
         else {
             members.push({_id:userId, isAdmin:false})
@@ -223,7 +223,6 @@ function addToLeague(req, res) {
                 }
             })
         }
-        console.log(league);
         res.json({
             text : "Success",
             league : league
@@ -286,6 +285,117 @@ function setRoleInLeague(req, res) {
         }
     })
 }
+
+function requestToJoin(req, res) {
+    console.log("requesting to join")
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOne(
+        { _id: leagueId }, 
+    )
+    query.exec(function(err, league){
+        if (err) {
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+            return ; 
+        }
+        var memberPropositions = league.memberPropositions;
+        var members = league.members;
+        if (memberPropositions.some(e => (e === userId)) || members.some(e => (e._id == userId))) {
+            console.log("should not do anything")
+        }
+        else {
+            memberPropositions.push({_id:userId, isAdmin:false})
+            var query = League.findOneAndUpdate(
+                { _id: leagueId }, 
+                {memberPropositions: memberPropositions}
+            )
+            query.exec(function(err, newLeague){
+                if (err) {
+                    res.status(500).json({
+                        text: "Erreur interne"
+                    })
+                }
+                else {
+                    league = newLeague
+                }
+            })
+        }
+        res.json({
+            text : "Success",
+            league : league
+        })
+    })
+}
+
+function acceptMember(req, res) {
+    console.log("accepting someone")
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOneAndUpdate(
+        { _id: leagueId }, 
+        { $pull: { memberPropositions: userId } }
+    )
+    query.exec(function(err, league){
+        if (err) {
+            console.log(err)
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+        }
+        else {  
+            addToLeague(req, res);
+        }
+    })
+}
+
+
+
+function refuseMember(req, res) {
+    console.log("refusing someone")
+    if (!req.params.userId || !req.params.leagueId) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        userId = req.params.userId,
+        leagueId = req.params.leagueId
+    }
+    var query = League.findOneAndUpdate(
+        { _id: leagueId }, 
+        { $pull: { memberPropositions: userId } }
+    )
+    query.exec(function(err, league){
+        if (err) {
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+        }
+        else {      
+            res.status(200).json({ 
+                text : "Success",
+            })
+        }
+    })
+}
+
+
 
 function patchLeagueById(req, res) {
     if (!req.params.id || !req.body) {
@@ -384,4 +494,7 @@ exports.makeLeague = makeLeague;
 exports.addToLeague = addToLeague;
 exports.removeFromLeague = removeFromLeague;
 exports.setRoleInLeague = setRoleInLeague;
+exports.requestToJoin = requestToJoin;
+exports.acceptMember = acceptMember;
+exports.refuseMember = refuseMember;
 exports.getLeaguesOfUser = getLeaguesOfUser;

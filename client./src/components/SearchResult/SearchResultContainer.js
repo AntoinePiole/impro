@@ -2,6 +2,7 @@ import React from 'react';
 import { SearchField } from './SearchField.js';
 import { SearchTypeForm } from './SearchTypeForm.js';
 import { ResultList } from './ResultList.js';
+import API from '../../utils/API';
 
 const fakeDB = {
     users: [
@@ -28,6 +29,7 @@ export class SearchResultContainer extends React.Component{
         this.state = {
             resultType: 'user', //the result from the checkbox form : value in 
             inputQuery: '', //the input in the searchfield
+            results:[] //the case results: undefined is handled in <ResultList>
         }
         this.changeInput = this.changeInput.bind(this);
         this.changeType = this.changeType.bind(this);
@@ -35,35 +37,30 @@ export class SearchResultContainer extends React.Component{
 
     changeInput(newQuery){
         this.setState({inputQuery : newQuery}) ;
+        const self = this; //allows to use this inside callback of then
+        API.search(newQuery,this.state.resultType).then(
+            function (resultsData, err){
+                if(err){
+                    self.setState({results:[]});
+                    return;
+                }
+                const results = resultsData.data.results;
+                self.setState({results:results});
+            }
+        )
     }
 
     changeType(newType){
         this.setState ({resultType : newType});
     }
 
-    /**
-     * returns an array of results corresponding to the params
-     * @param {*} queryText : the text in the searchfield
-     * @param {*} type : type of results searched
-     */
-    getResults(queryText,type){  
-        const resultsKey = type+'s';
-        return (
-            fakeDB[resultsKey].filter (
-                elem => elem.name.toLowerCase().includes(queryText.toLowerCase())                        
-            ) //pour l'instant, recherche uniquement par name attribute  
-        );
-    }
-
-
     render(){
-        let results = this.getResults(this.state.inputQuery,this.state.resultType); 
         return (
             <div className='searchResult'>
                 <SearchField changeInput={this.changeInput} value={this.state.inputQuery}/>
                 <SearchTypeForm changeType={this.changeType} value={this.state.resultType}/>
-                <ResultList results={results} type={this.state.resultType} /> {/* type pourrait être récupéré dans la valeur de results ?*/}
+                <ResultList results={this.state.results} type={this.state.resultType} /> {/* type pourrait être récupéré dans la valeur de results ?*/}
             </div>
-        )
+        ) 
     }
 }
