@@ -25,7 +25,7 @@ export class LeagueMaker extends React.Component {
         }
         API.makeLeague(_send)
             .then(res=> {
-                console.log(res);
+                //console.log(res);
                 window.location = "/league/"+ res.data.id;
             })
             .catch(err => console.log(err))

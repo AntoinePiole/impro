@@ -12,7 +12,6 @@ function getLeagues(req, res) {
                 text: "Aucune ligue trouvée"
             })
         } else {
-            //console.log("logged in with " + league)
             res.status(200).json({
                 leagues: leagues,
             })
@@ -46,7 +45,6 @@ function getLeagueById(req, res) {
 
 function patchLeagueById(req, res) {
     if (!req.params.id || !req.body) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -88,7 +86,6 @@ function patchLeagueById(req, res) {
 
 function makeLeague(req, res) {
     if (!req.body.name || !req.body.userId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -155,7 +152,6 @@ function makeLeague(req, res) {
 
 function addToLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -185,7 +181,6 @@ function addToLeague(req, res) {
 
 function addToLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -204,7 +199,7 @@ function addToLeague(req, res) {
             return ; 
         }
         var members = league.members;
-        if (members.some(e => (e._id == userId))) {
+        if (members.some(e => (e._id == userId))) { //If the member already exists, it is not added
         }
         else {
             members.push({_id:userId, isAdmin:false})
@@ -232,7 +227,6 @@ function addToLeague(req, res) {
 
 function removeFromLeague(req, res) {
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -272,7 +266,6 @@ function setRoleInLeague(req, res) {
     )
     query.exec(function(err, league){
         if (err) {
-            console.log(err)
             res.status(500).json({
                 text: "Erreur interne"
             })
@@ -287,9 +280,7 @@ function setRoleInLeague(req, res) {
 }
 
 function requestToJoin(req, res) {
-    console.log("requesting to join")
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -310,7 +301,7 @@ function requestToJoin(req, res) {
         var memberPropositions = league.memberPropositions;
         var members = league.members;
         if (memberPropositions.some(e => (e === userId)) || members.some(e => (e._id == userId))) {
-            console.log("should not do anything")
+            
         }
         else {
             memberPropositions.push({_id:userId, isAdmin:false})
@@ -337,9 +328,7 @@ function requestToJoin(req, res) {
 }
 
 function acceptMember(req, res) {
-    console.log("accepting someone")
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -353,7 +342,6 @@ function acceptMember(req, res) {
     )
     query.exec(function(err, league){
         if (err) {
-            console.log(err)
             res.status(500).json({
                 text: "Erreur interne"
             })
@@ -367,9 +355,7 @@ function acceptMember(req, res) {
 
 
 function refuseMember(req, res) {
-    console.log("refusing someone")
     if (!req.params.userId || !req.params.leagueId) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -399,7 +385,6 @@ function refuseMember(req, res) {
 
 function patchLeagueById(req, res) {
     if (!req.params.id || !req.body) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -441,7 +426,6 @@ function patchLeagueById(req, res) {
 
 function getLeaguesOfUser(req, res) {
     if (!req.params.userId) {
-        //Le cas où l'email ou b{ien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })

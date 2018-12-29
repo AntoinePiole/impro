@@ -56,7 +56,7 @@ export class User extends React.Component {
     }
 
     async updateUser (data) {
-        await API.patchUser(this.id, data). then (
+        await API.patchUser(this.id, data).then (
             this.setState({
                 editting : false
             })

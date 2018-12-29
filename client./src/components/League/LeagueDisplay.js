@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from "react-bootstrap";
 import './League.css';
 import { LeaguePhoto } from './LeaguePhoto';
+import { LeagueJoinRequester } from './LeagueJoinRequester';
 
 
 export class LeagueDisplay extends React.Component {
@@ -28,6 +29,12 @@ export class LeagueDisplay extends React.Component {
                         Modifier ma ligue
                     </Button>
                 : null}
+
+                {!this.props.isMember && !this.props.isLoading?
+                    <LeagueJoinRequester leagueId={this.props.id} userId={localStorage.getItem("id")} memberPropositions={this.props.memberPropositions}/>
+                :   
+                    null 
+                }
             </div>
         )
     }

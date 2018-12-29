@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import API from '../../utils/API';
-import * as moment from 'moment';
 
 export class Signup extends React.Component {
     constructor(props) {
@@ -63,7 +62,7 @@ export class Signup extends React.Component {
             <div className="Login">
                 <FormGroup controlId="email" bsSize="large">
                 <ControlLabel>Email</ControlLabel>
-                <FormControl type="email" value={this.state.email} onChange={this.handleChange} type="email"/>
+                <FormControl value={this.state.email} onChange={this.handleChange} type="email"/>
                 </FormGroup>
                 <FormGroup controlId="password" bsSize="large">
                 <ControlLabel>Password</ControlLabel>

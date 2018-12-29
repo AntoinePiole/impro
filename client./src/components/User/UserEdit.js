@@ -47,7 +47,7 @@ selectedFileHandler = event => {
             })
             return res    
         })
-        .then(res => console.log(res, this.state))
+        //.then(res => console.log(res, this.state))
         .catch(err => console.log(err))
     /*
     .then(res => res.json())

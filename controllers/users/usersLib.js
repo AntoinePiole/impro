@@ -196,6 +196,12 @@ function patchUserById(req, res) {
     }
 }
 
+
+/**
+ * 
+ * Returns a list of members, where each member has all the parameters of a normal user
+ * 
+ */
 function getUsersOfLeague(req, res) {
     if (!req.params.leagueId ) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
@@ -219,14 +225,11 @@ function getUsersOfLeague(req, res) {
         findLeague.then(function (league) {
             var userIds=[]
             for (var i=0; i < league.members.length; i++) {
-                console.log(league.members[i])
                 userIds.push(league.members[i]._id);
             }
-            console.log("the ids are now", userIds)
             var findUsers = new Promise(function (resolve, reject) {
-                console.log(league.members)
                 User.find({
-                    _id: {$in: userIds}, //Seems not to work, don't know why
+                    _id: {$in: userIds}, 
                 }, function (err, users) {
                     if (err) {
                         reject(500);

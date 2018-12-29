@@ -18,9 +18,11 @@ export class League extends React.Component {
             desc : "",
             sentMatchRequestsIds : [],
             receivedMatchRequestsIds : [], // CHANGE TYPE FROM TRIPLE TO MATCH, MAKE A BACKEND FUNCTION TO GET RECEIVED AND SENT FROM BACK BY CALLING WITH ID
+            memberPropositions : [],
             editting : false,
             isAdmin : false,
             isMember : false,
+            isLoading : true
         }
     }
 
@@ -28,8 +30,8 @@ export class League extends React.Component {
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
         var data = await API.getLeagueById(this.id);
         var league = data.data.league;
-        this.setState ({
-            id : league._id,
+        await this.setState ({
+            id : this.id,
             name : league.name,
             nickname : league.nickname,
             desc : league.desc,
@@ -38,14 +40,13 @@ export class League extends React.Component {
             members : league.members,
             receivedMatchRequestsIds : league.receivedMatchRequestsIds,
             sentMatchRequestsIds : league.sentMatchRequestsIds,
+            memberPropositions: league.memberPropositions,
             editting : false,
         });
-
-        this.setState({
-            //isAdmin : (this.state.members.some(e => (e.id === localStorage.getItem('id')) && e.isAdmin)), 
-            isAdmin : API.isAdminOfLeague(localStorage.getItem("id"), league.members),
-            isMember : API.isAdminOfLeague(localStorage.getItem("id"), league.members),
-            //(this.state.members.some(e => e.id === localStorage.getItem('id')))
+        await this.setState({
+            isAdmin : API.isAdminOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is an admin of this league
+            isMember : API.isMemberOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is a member of this league
+            isLoading : false
         });
     }
 
@@ -61,12 +62,12 @@ export class League extends React.Component {
         });
     }
 
-    updateLeague (league) { //Need to test ya
+    updateLeague (league) {
         if(league.name === ""){
             return;
         }
         API.makeLeague(league).then(function(data){
-            if (data.status != 200) {
+            if (data.status !== 200) {
             }
             else {
                 window.location = "/league/"+data.data.id
@@ -81,12 +82,12 @@ export class League extends React.Component {
         return (
             <div>
                 {this.state.editting ?
-                    <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} isAdmin={this.state.isAdmin} handleChange={this.handleChange} send={this.send} /> 
+                    <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} handleChange={this.handleChange} send={this.send} /> 
                 :
-                    <LeagueDisplay className="LeagueDisplay" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} isAdmin={this.state.isAdmin} setEdittingMode={this.setEdittingMode} />
+                    <LeagueDisplay className="LeagueDisplay" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} isLoading={this.state.isLoading} setEdittingMode={this.setEdittingMode} />
                 }
                 <div className="UserList">
-                    <UserList id={this.state.id} isAdmin={this.state.isAdmin}/>    
+                    <UserList id={this.state.id} members={this.state.members} isAdmin={this.state.isAdmin}/>    
                 </div>
                 {this.state.isAdmin? //Can see the matches the league suggested if you are an admin of the league
                     <div className="MatchSuggestions">

@@ -7,8 +7,7 @@ export class UserList extends React.Component {
         super(props);
         this.state = {
             members : [], // Later member will be given by its id, and should be retrieved
-            leagueId:"",
-            users : [], // List of the members, with additionnal parameters.
+            leagueId:""
         }
         //isAdmin is true iff the corresponding member is an admin of list. THIS MUST STILL BE DONE
         this.selectUser = this.selectUser.bind(this);
@@ -20,7 +19,7 @@ export class UserList extends React.Component {
   * Called upon selecting an an user
   */
     selectUser (member) {
-        window.location="/member/" + member.id
+        window.location="/user/" + member._id
     }
 
     removeUser (member) {
@@ -35,8 +34,8 @@ export class UserList extends React.Component {
      * @param {*} userId 
      */
 
-    isAnAdmin(userId) {
-        return this.state.members.find(obj => obj.id==userId).isAdmin
+    isAnAdmin(member) {
+        return API.isAdminOfLeague(member._id, this.state.members)
     }
 
     async componentDidMount () {
@@ -44,10 +43,8 @@ export class UserList extends React.Component {
             {leagueId : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1)}
         );
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1); //The members of the list, bt with estra parameters
-        console.log(this.id)
         var data = await API.getUsersOfLeague(this.id);
-        console.log(data);
-        this.setState({members : data.data.users});
+        await this.setState({members : data.data.users});
     }
 
 
@@ -59,20 +56,20 @@ export class UserList extends React.Component {
                 </h2>
                 <ListGroup>
                 {this.state.members.map((member) => 
-                    <ListGroupItem key={member.id} >
-                        {this.isAnAdmin(member.id)?  //If the user is an admin for the league, their icon is different
+                    <ListGroupItem key={member._id} >
+                        {this.isAnAdmin(member)?  //If the user is an admin for the league, their icon is different
                             <span className="glyphicon glyphicon-asterisk"></span> 
                         :
                             <span className="glyphicon glyphicon-member"></span>
                         } 
                         <a onClick={() => this.selectUser(member)}>
-                            {member.name? member.name : member.first_name + ' ' + member.last_name}
+                            {member.username? member.username : member.firstName + ' ' + member.familyName}
                         </a>
                         {this.props.idAdmin ? // Can remove people from the league if we're an admin for it.
                             <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(member.id)}/>
                         :null} 
                         {this.props.isAdmin?
-                            this.isAnAdmin(member.id)? //If we are an admin for the league, we can edit the role of the corresponding person.
+                            this.isAnAdmin(member)? //If we are an admin for the league, we can edit the role of the corresponding person.
                                 <Button className="glyphicon glyphicon-member" onClick = {() => this.setRole(member.id, this.props.id, "member")}/>
                             :
                                 <Button className="glyphicon glyphicon-asterisk" onClick = {() => this.setRole(member.id, this.props.id, "admin")}/>

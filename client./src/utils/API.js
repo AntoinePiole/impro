@@ -60,8 +60,17 @@ export default {
     removeFromLeague : function(userId, leagueId) {
         return axios.delete('/leagues/' + leagueId + '/users/'+userId, {headers: headers})
     },
-    setRoleInLeague : function(userId, leagueId, send) {// DOES NOT YET WORK IN BACK, AND CANNOT THUS BE TESTED YET
+    setRoleInLeague : function(userId, leagueId, send) {
         return axios.patch('/leagues/' + leagueId + '/users/' + userId, send, {headers: headers})
+    },
+    requestToJoinLeague : function(userId, leagueId) {
+        return axios.post('/leagues/join/' + leagueId + '/users/' + userId, {headers: headers})
+    },
+    acceptMemberPropositionOfLeague : function(userId, leagueId) {
+        return axios.patch('/leagues/join/' + leagueId + '/users/' + userId, {headers: headers})
+    },
+    refuseMemberPropositionOfLeague : function(userId, leagueId) {
+        return axios.delete('/leagues/join/' + leagueId + '/users/' + userId, {headers: headers})
     },
     getUsersOfLeague : function(leagueId) {
         return axios.get('/users/leagues/' + leagueId, {headers: headers})

@@ -28,9 +28,8 @@ export class LeagueList extends React.Component {
 
     async rerender() {
         var leagues = await API.getLeaguesOfUser(this.props.id);
-        leagues = leagues.data.leagues,
         await this.setState({
-            leagues : leagues
+            leagues : leagues.data.leagues
         })
     }
 
