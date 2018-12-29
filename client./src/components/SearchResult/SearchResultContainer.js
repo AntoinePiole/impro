@@ -4,24 +4,6 @@ import { SearchTypeForm } from './SearchTypeForm.js';
 import { ResultList } from './ResultList.js';
 import API from '../../utils/API';
 
-const fakeDB = {
-    users: [
-        {first_name: 'Antoine', last_name: 'Piolé', photo_id: '/Users/impro/client/ressources/antoine piole.png', 
-        get name() {return this.first_name+' '+this.last_name} },
-        {first_name: 'Romeo', last_name: 'Sandoz', photo_id: '/Users/impro/client/ressources/romeo sandoz.png',
-        get name() {return (this.first_name+' '+this.last_name)} }
-    ],
-    leagues : [
-        {name: 'Lit de Camp', photo_id: 'https://cdn.viarezo.fr/static/image/137762a9dda440027011d47e5c60c5f0cbc23de102830f09c637e8236dcf4e27.jpg'},
-        {name: "ESPCI'OH", photo_id: "/Users/Moi/impro/client/ressources/espci'oh.png"},
-        {name: 'Lolita', photo_id:'/Users/Moi/impro/client/ressources/lolita.png'}
-    ],
-    matchs : [
-        {name: 'Match WEI', league1: 'hey', league2: 'hey2'}, // ?Q? comment accéder à la liste leagues déf au-dessus ?
-        {name: 'Improvisades', league1: 'hi', league2: 'hi2'}
-    ]
-};
-
 export class SearchResultContainer extends React.Component{
 
     constructor(props){
@@ -35,6 +17,10 @@ export class SearchResultContainer extends React.Component{
         this.changeType = this.changeType.bind(this);
     }
 
+    /**
+     * called when new search text is submitted
+     * @param {*} newQuery 
+     */
     changeInput(newQuery){
         this.setState({inputQuery : newQuery}) ;
         const self = this; //allows to use this inside callback of then
@@ -50,8 +36,23 @@ export class SearchResultContainer extends React.Component{
         )
     }
 
+    /**
+     * called when new type of results is selected
+     * @param {*} newType 
+     */
     changeType(newType){
         this.setState ({resultType : newType});
+        const self = this; //allows to use this inside callback of then
+        API.search(this.state.inputQuery, newType).then(
+            function (resultsData, err){
+                if(err){
+                    self.setState({results:[]});
+                    return;
+                }
+                const results = resultsData.data.results;
+                self.setState({results:results});
+            }
+        )
     }
 
     render(){

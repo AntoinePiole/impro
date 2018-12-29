@@ -19,4 +19,6 @@ router.post('/join/:leagueId/users/:userId', leagues.requestToJoin);
 router.patch('/join/:leagueId/users/:userId', leagues.acceptMember);
 router.delete('/join/:leagueId/users/:userId', leagues.refuseMember);
 router.get('/users/:userId/', leagues.getLeaguesOfUser); // Get all the leagues where corresponding user is, whatever their role
+//Search league
+router.get('/search/:queryText', leagues.searchLeague);
 module.exports = router;

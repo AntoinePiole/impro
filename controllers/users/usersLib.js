@@ -274,9 +274,38 @@ function getUsersOfLeague(req, res) {
     }
 }
 
+/**
+ * finds the list of users which names contain the string req.params.queryText
+ */
+function searchUser(req, res){
+    if (!req.params.queryText){
+        res.status(400).json({
+            text: "Requête invalide"
+        });
+        return ;
+    }
+    const name = req.params.queryText;
+    const condition = new RegExp("^.*"+name+".*$","i"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
+    const query = User.find(
+        {name: condition}
+    );
+    query.exec(function (err, results){
+        if(err){
+            res.status(500).json({
+                text: 'Erreur interne'
+            });
+            return;
+        }
+        res.status(200).json({
+            results: results
+        });
+    })
+}
+
 exports.patchUserById = patchUserById;
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;
 exports.login = login;
 exports.signup = signup;
 exports.getUsersOfLeague = getUsersOfLeague;
+exports.searchUser = searchUser;

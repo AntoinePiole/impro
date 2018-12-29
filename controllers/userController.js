@@ -13,4 +13,6 @@ router.post('/', account.signup);
 router.post('/login', account.login);
 //User in a league
 router.get('/leagues/:leagueId', account.getUsersOfLeague); //Get the users (the object) of the league
+//Search a user
+router.get('/search/:queryText', account.searchUser);
 module.exports = router;

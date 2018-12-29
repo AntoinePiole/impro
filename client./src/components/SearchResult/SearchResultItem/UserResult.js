@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserPhoto } from "../../User/UserPhoto";
 
 export class UserResult extends React.Component{
     constructor (props){
@@ -14,7 +15,7 @@ export class UserResult extends React.Component{
         const user = this.props.user;
         return (
             <div className='userResult' onClick = {this.handleClick}>
-                <img src={user.photo_id} alt={user.name} className='userPicture'/> {/* MODIFY : img src should appear differently than user.photo_id in DB */}
+                <UserPhoto photoId={user.photoId} />
                 <h3 className='userName'>{user.name}</h3> {/* Must be styled inline*/}
             </div>
         )
