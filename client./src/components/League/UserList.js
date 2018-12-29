@@ -49,6 +49,7 @@ export class UserList extends React.Component {
 
 
     render() {
+        console.log(this.state.members)
         return (
             <div>
                 <h2>
@@ -69,12 +70,18 @@ export class UserList extends React.Component {
                             <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(member.id)}/>
                         :null} 
                         {this.props.isAdmin?
+
                             this.isAnAdmin(member)? //If we are an admin for the league, we can edit the role of the corresponding person.
                                 <Button className="glyphicon glyphicon-member" onClick = {() => this.setRole(member.id, this.props.id, "member")}/>
                             :
                                 <Button className="glyphicon glyphicon-asterisk" onClick = {() => this.setRole(member.id, this.props.id, "admin")}/>
-                        :
-                            null    
+
+                        :    
+
+                                this.isAnAdmin(member)? //If we are an admin for the league, we can edit the role of the corresponding person.
+                                <Button disabled className="glyphicon glyphicon-member"/>
+                            :
+                                <Button disabled className="glyphicon glyphicon-asterisk"/>
                         }
                     </ListGroupItem>
                 )}

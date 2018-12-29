@@ -71,9 +71,7 @@ export class User extends React.Component {
                 :
                     <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} setEdittingMode={this.setEdittingMode} />
                 }
-                <div className="LeagueList">
-                    <LeagueList id={this.state.id}/>    
-                </div>
+                <LeagueList id={this.state.id}/>  
             </div>
         )
     }

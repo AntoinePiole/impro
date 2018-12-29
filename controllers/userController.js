@@ -12,6 +12,7 @@ router.post('/', account.signup);
 //Logging
 router.post('/login', account.login);
 //User in a league
+router.get('/leagues/join/:leagueId', account.getDetailedMemberPropositionsOfLeague); //Get the member propositions of the league
 router.get('/leagues/:leagueId', account.getUsersOfLeague); //Get the users (the object) of the league
 //Search a user
 router.get('/search/:queryText', account.searchUser);

@@ -1,11 +1,13 @@
 import React from 'react';
+import { Row, Col } from "react-bootstrap";
+import './League.css';
+import API from '../../utils/API';
 import { UserList } from './UserList';
 import { LeagueDisplay } from './LeagueDisplay';
 import { LeagueEdit } from './LeagueEdit';
 import { MatchSuggestions } from './MatchSuggestions';
 import { MatchSuggester } from './MatchSuggester';
-import './League.css';
-import API from '../../utils/API';
+import { LeagueJoinRequests } from './LeagueJoinRequests';
 
 
 export class League extends React.Component {
@@ -81,14 +83,26 @@ export class League extends React.Component {
     render() {
         return (
             <div>
-                {this.state.editting ?
-                    <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} handleChange={this.handleChange} send={this.send} /> 
-                :
-                    <LeagueDisplay className="LeagueDisplay" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} isLoading={this.state.isLoading} setEdittingMode={this.setEdittingMode} />
-                }
-                <div className="UserList">
-                    <UserList id={this.state.id} members={this.state.members} isAdmin={this.state.isAdmin}/>    
-                </div>
+                <Row>
+                    <Col>
+                    {this.state.editting ?
+                        <LeagueEdit className="LeagueEdit" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} handleChange={this.handleChange} send={this.send} /> 
+                    :
+                        <LeagueDisplay className="LeagueDisplay" id={this.state.id} name={this.state.name} nickname={this.state.nickname} desc={this.state.desc} email={this.state.email} photoId={this.state.photoId} memberPropositions={this.state.memberPropositions} isAdmin={this.state.isAdmin} isMember={this.state.isMember} isLoading={this.state.isLoading} setEdittingMode={this.setEdittingMode} />
+                    }
+                    </Col>
+                    <Col>
+                    <div className="UserList">
+                        <UserList id={this.state.id} members={this.state.members} isAdmin={this.state.isAdmin}/>    
+                    </div>
+                    </Col>
+                    {this.state.isAdmin?
+                        <Col>
+                            <LeagueJoinRequests/>
+                        </Col>
+                        :null}
+                </Row>
+                <Row>
                 {this.state.isAdmin? //Can see the matches the league suggested if you are an admin of the league
                     <div className="MatchSuggestions">
                         <MatchSuggestions sentMatchRequestsIds={this.state.sentMatchRequestsIds} suggestions={this.state.suggestions}/>
@@ -103,6 +117,7 @@ export class League extends React.Component {
                         <MatchSuggester receivingLeagueId={this.state.id}/>
                     </div>
                 }
+                </Row>
             </div>
         )
     }

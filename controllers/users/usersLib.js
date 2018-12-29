@@ -274,6 +274,75 @@ function getUsersOfLeague(req, res) {
     }
 }
 
+
+function getDetailedMemberPropositionsOfLeague(req, res) {
+    if (!req.params.leagueId ) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        var findLeague = new Promise(function (resolve, reject) {
+            League.findOne({
+                _id: req.params.leagueId
+            }, function (err, league) {
+                if (err) {
+                    reject(500);
+                } else if (!league) {
+                    reject(404)
+                } else {
+                    resolve(league)
+                }
+            })
+        });
+        findLeague.then(function (league) {
+            var userIds=league.memberPropositions
+            var findUsers = new Promise(function (resolve, reject) {
+                User.find({
+                    _id: {$in: userIds}, 
+                }, function (err, users) {
+                    if (err) {
+                        reject(500);
+                    } 
+                    else {
+                        resolve(users)
+                    }
+                })
+            });
+            findUsers.then(function(users) {
+                res.status(200).json({
+                    "text": "Success",
+                    users : users
+                })
+            }, function(err, users) {
+                if(err) {
+                    res.status(500).json({
+                        text : "Erreur interne en récupérant les utilisateurs"
+                    })
+                }
+            })
+        }
+        , function (error) {
+            switch (error) {
+                case 500:
+                    res.status(500).json({
+                        text: "Erreur interne"
+                    })
+                    break;
+                case 404:
+                    res.status(404).json({
+                        text: "No league found"
+                    })
+                    break;
+                default:
+                    res.status(500).json({
+                        text: "Erreur interne"
+                    })
+            }
+        })
+    }
+}
+
 /**
  * finds the list of users which names contain the string req.params.queryText
  */
@@ -308,4 +377,5 @@ exports.getUserById = getUserById;
 exports.login = login;
 exports.signup = signup;
 exports.getUsersOfLeague = getUsersOfLeague;
+exports.getDetailedMemberPropositionsOfLeague = getDetailedMemberPropositionsOfLeague;
 exports.searchUser = searchUser;

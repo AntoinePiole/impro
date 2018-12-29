@@ -75,6 +75,9 @@ export default {
     getUsersOfLeague : function(leagueId) {
         return axios.get('/users/leagues/' + leagueId, {headers: headers})
     },
+    getDetailedMemberPropositionsOfLeague : function(leagueId) {
+        return axios.get('/users/leagues/join/' + leagueId, {headers: headers})
+    },
     getLeaguesOfUser : function(userId) {
         return axios.get('/leagues/users/' + userId, {headers : headers})
     },
