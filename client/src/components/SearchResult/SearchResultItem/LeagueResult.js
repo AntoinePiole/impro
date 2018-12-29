@@ -1,4 +1,5 @@
 import React from 'react';
+import { LeaguePhoto } from "../../League/LeaguePhoto";
 
 export class LeagueResult extends React.Component{
     constructor (props){
@@ -14,7 +15,7 @@ export class LeagueResult extends React.Component{
         const league = this.props.league;
         return (
             <div className='leagueResult' onClick = {this.handleClick}>
-                <img src={league.photo_id} alt='League' className='leaguePicture'/> {/* MODIFY : img src should appear differently than user.photo_id in DB */}
+                <LeaguePhoto photoId={league.photoId} />
                 <h3 className='userName'>{league.name}</h3> {/* Must be styled inline*/}
             </div>
         )

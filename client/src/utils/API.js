@@ -112,10 +112,10 @@ export default {
         return axios.get('/matches/search/'+queryText)
     },
     searchLeague: function(queryText){
-        return axios.get('/matches/search/'+queryText) //TO MODIFY to search leagues
+        return axios.get('/leagues/search/'+queryText)
     },
     searchUser: function(queryText){
-        return axios.get('/matches/search/'+queryText) //TO MODIFY to search users
+        return axios.get('/users/search/'+queryText)
     }
 //Others not implemented as I do not know exactly which parameters will be needed
 }

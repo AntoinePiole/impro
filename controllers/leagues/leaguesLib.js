@@ -375,7 +375,33 @@ function getLeaguesOfUser(req, res) {
     }
 }
 
-
+/**
+ * finds the list of leagues which names contain the string req.params.queryText
+ */
+function searchLeague(req, res){
+    if (!req.params.queryText){
+        res.status(400).json({
+            text: "Requête invalide"
+        });
+        return ;
+    }
+    const name = req.params.queryText;
+    const condition = new RegExp("^.*"+name+".*$","i"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
+    const query = League.find(
+        {name: condition}
+    );
+    query.exec(function (err, results){
+        if(err){
+            res.status(500).json({
+                text: 'Erreur interne'
+            });
+            return;
+        }
+        res.status(200).json({
+            results: results
+        });
+    })
+}
 
 exports.getLeagues = getLeagues;
 exports.getLeagueById = getLeagueById;
@@ -385,3 +411,4 @@ exports.addToLeague = addToLeague;
 exports.removeFromLeague = removeFromLeague;
 exports.setRoleInLeague = setRoleInLeague;
 exports.getLeaguesOfUser = getLeaguesOfUser;
+exports.searchLeague = searchLeague;

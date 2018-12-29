@@ -40,7 +40,7 @@ function searchMatch(req, res){ //works
         return ;
     }
     const name = req.params.queryText;
-    const condition = new RegExp("^.*"+name+".*$"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
+    const condition = new RegExp("^.*"+name+".*$","i"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
     const query = Match.find(
         {name: condition} //TO DO : THIS PROBABLY DOES NOT WORK : how to use a variable in a regex
     );
