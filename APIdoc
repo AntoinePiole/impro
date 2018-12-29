@@ -75,6 +75,9 @@ getLeaguesOfUser(String userId, String leagueId)
 getUsersOfLeague(String leagueId)
   Get all the users in a league, and not just their id : all the objects
   
+getDetailedMemberPropositionsOfLeague(String leagueId)
+   Same but with memberPropositions
+  
 isAdminOfLeague(String userId, League league)
   Returns a boolean : true if the given user is an admin of the league
   
