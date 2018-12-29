@@ -26,3 +26,5 @@ Split our API into userAPI, leagueAPI, matchAPI, imageAPI which each communicate
 Add GET functions for pictures ? Is it needed ?
 Add DELETE functions for pictures
 Delete someone's picture when uploading a new one
+
+ - Prevent people from accessing pages they aren't authorized to access, for instance when not logged in, create an Error 404 page when trying to display the page of an user/a league/ a match that doesn't existe
