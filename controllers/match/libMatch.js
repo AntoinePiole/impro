@@ -1,77 +1,57 @@
 const Validator = require('./matchValidator');
 const Match = require ('./matchModel');
 
-function validate(req, res, next){
-    const match = req.body.match;
-    const result = Validator.validate(match,false);
-    if(result.error){ //should be a promise syntax, but didn't work
-        res.status(400).json({
-            text: "Unfit parameters",
-            errorDetail: {name: result.error.name, message: result.error.details[0].message},
-            value: result.value
-        })
-        return;
-    }
-    next(); //else pass to next middleware
-}
-
-function validateRequired(req, res, next){
-    const match = req.body.match;
-    const result = Validator.validate(match,true);
-    if(result.error){ //should be a promise syntax, but didn't work
-        res.status(400).json({
-            text: "Unfit parameters",
-            errorDetail: {name: result.error.name, message: result.error.details[0].message},
-            value: result.value
-        })
-        return;
-    }
-    next(); //else pass to next middleware
-}
-
-function getMatch(req, res){ //works
-    if(!req.params.id){
-        res.status(400).json({
-            text: "Requête invalide"
-        })
-    } else {
-        const id = req.params.id;
-        const query = Match.findById(id);
-
-        query.exec(function (err, match){
-            if(err){
-                res.status(500).json({
-                    text: "Erreur interne"
-                })
-                return;
-            }
-            if(match){
-                res.status(200).json({
-                    match: match
-                });
-                return;
-            }
-            res.status(404).json({
-                text: "No match found with this id"
+function getAllMatches(req, res){
+    Match.find({}, function(err, matches){
+        if(err){
+            res.status(500).json({
+                text: "Erreur interne"
             })
+            return;
+        }
+        res.status(200).json({
+            matches:matches
         })
-    }
+    })
+}
+
+function getMatch(req, res){ 
+
+    const id = req.params.id;
+    const query = Match.findById(id);
+
+    query.exec(function (err, match){
+        if(err){
+            res.status(500).json({
+                text: "Erreur interne"
+            })
+            return;
+        }
+        if(match){
+            res.status(200).json({
+                match: match
+            });
+            return;
+        }
+        res.status(404).json({
+            text: "No match found with this id"
+        })
+    })
 }
 
 /**
  * finds the list of matches which names contain the string req.params.queryText
  */
-function searchMatch(req, res){ //works
+function searchMatch(req, res){ 
     if (!req.params.queryText){
-        res.status(400).json({
-            text: "Requête invalide"
-        });
-        return ;
+        res.status(200).json({
+            results: []
+        })
     }
     const name = req.params.queryText;
     const condition = new RegExp("^.*"+name+".*$","i"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
     const query = Match.find(
-        {name: condition} //TO DO : THIS PROBABLY DOES NOT WORK : how to use a variable in a regex
+        {name: condition}
     );
     query.exec(function (err, results){
         if(err){
@@ -86,48 +66,25 @@ function searchMatch(req, res){ //works
     })
 }
 
-function patchMatch(req, res){ //works
-    if(!req.params.id || !req.body.match){ 
-        res.status(400).json({
-            text: 'Missing parameters'
-        })
-    } else {
-        const id = req.params.id;
-        const query = Match.findByIdAndUpdate(id, req.body.match, {new:true}); //new true allows to return the modified document
+function patchMatch(req, res){ 
 
-        query.exec(function (err, match){
-            if (err) {
-                res.status(500).json({
-                    text: 'Erreur interne'
-                })
-            } else {
-                res.status(200).json({
-                    match: match
-                })
-            }
-        })
-    }
+    const id = req.params.id;
+    const query = Match.findByIdAndUpdate(id, req.body.match, {new:true}); //new true allows to return the modified document
+
+    query.exec(function (err, match){
+        if (err) {
+            res.status(500).json({
+                text: 'Erreur interne'
+            })
+        } else {
+            res.status(200).json({
+                match: match
+            })
+        }
+    })
 }
 
-function isMatch(req,res,next){ //works
-    if(!req.body.match){
-        res.status(400).json({
-            text: "Requête invalide"
-        })
-        return;
-    }
-    if (!req.body.match.name || !req.body.match.league1Id || !req.body.match.league2Id || !req.body.match.date || !req.body.match.location){ //NB : on peut ou considérer name obligatoire (le cas où le nom n'est pas indiqué doit être traité côté front), ou bien qu'il ne l'est pas (traiter le cas côté back), de même pour description (plus simple)
-        //s'il manque une donnée 
-        res.status(400).json({
-            text: "Requête invalide"
-        })
-        return;
-    }
-    next();
-
-}
-function makeMatch(req, res){ //works
-
+function makeMatch(req, res){ 
     const match = { 
         name: req.body.match.name,
         status: 'waitingConfirmation',  //between [finished, waitingConfirmation, confirmed, canceled]
@@ -164,16 +121,20 @@ function makeMatch(req, res){ //works
     });
 }
 
+//------ USER IN MATCH ------
+
+
+
 /**
  * 
  * ajoute un user au match, renvoie un objet {liste: newList} correspond au champ modifié dans l'objet match avec sa nouvelle valeur
  */
-function addToMatch(req,res){ //works 
+function addToMatch(req,res){  
     const matchId = req.params.matchId;
     const userId = req.params.userId;
     const role = req.body.role;
     const waiting = req.body.waiting;
-    if(!matchId || !userId || !role || waiting===undefined){
+    if(!matchId || !userId){
         res.status(400).json({
             text: 'Missing parameters'
         });
@@ -222,12 +183,12 @@ function addToMatch(req,res){ //works
  * 
  * ajoute un user au match, renvoie un objet {liste: newList} correspond au champ modifié dans l'objet match avec sa nouvelle valeur
  */
-function removeFromMatch(req,res){ //works
+function removeFromMatch(req,res){ 
     const matchId = req.params.matchId;
     const userId = req.params.userId;
     const role = req.body.role;
     const waiting = req.body.waiting;
-    if(!matchId || !userId || !role || waiting===undefined){
+    if(!matchId || !userId){
         res.status(400).json({
             text: 'Missing parameters'
         });
@@ -281,12 +242,100 @@ function removeFromMatch(req,res){ //works
     )
 }
 
+//-----VALIDATION-----
+
+function validateMatch(req, res, next){
+    const match = req.body.match;
+    const result = Validator.validate(match,false);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateMatchRequired(req, res, next){
+    const match = req.body.match;
+    const result = Validator.validate(match,true);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateParamsId(req, res, next){
+    
+    const result = Validator.validateId(req.params.id);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateBodyUser(req, res, next){
+    const body = req.body;
+    const result = Validator.validateUser(body);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateParamsUser(req, res, next){
+    const matchResult = Validator.validateId(req.params.matchId);
+    const userResult = Validator.validateId(req.params.userId);
+    if(matchResult.error){
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: matchResult.error.name, message: matchResult.error.details[0].message},
+            value: matchResult.value
+        })
+        return;
+    }
+
+    if(userResult.error){ 
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: userResult.error.name, message: userResult.error.details[0].message},
+            value: userResult.value
+        })
+        return;
+    }
+
+    next();
+}
+
+//-----MIDDLEWARES-----
+exports.getAllMatches = getAllMatches;
 exports.getMatch = getMatch;
 exports.patchMatch = patchMatch;
 exports.makeMatch = makeMatch;
 exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
-exports.isMatch = isMatch;
 exports.searchMatch = searchMatch;
-exports.validate = validate;
-exports.validateRequired = validateRequired;
+
+//-----VALIDATON-----
+exports.validateMatch = validateMatch;
+exports.validateMatchRequired = validateMatchRequired;
+exports.validateParamsId = validateParamsId;
+exports.validateBodyUser = validateBodyUser;
+exports.validateParamsUser = validateParamsUser;

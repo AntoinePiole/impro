@@ -2,11 +2,12 @@ const express = require ('express');
 const match = require('./libMatch.js');
 const router = express.Router();
 
-router.get('/:id', match.getMatch);
+router.get('/', match.getAllMatches);
+router.get('/:id', match.validateParamsId, match.getMatch);
 router.get('/search/:queryText', match.searchMatch);
-router.post('/', match.validateRequired, match.makeMatch);
-router.patch('/:id', match.patchMatch);
-router.patch('/:matchId/user/:userId/add=true', match.addToMatch);
-router.patch('/:matchId/user/:userId/add=false', match.removeFromMatch);
+router.post('/', match.validateMatchRequired, match.makeMatch);
+router.patch('/:id', match.validateParamsId, match.validateMatch, match.patchMatch);
+router.patch('/:matchId/user/:userId/add=true', match.validateParamsUser, match.validateBodyUser, match.addToMatch);
+router.patch('/:matchId/user/:userId/add=false', match.validateParamsUser, match.validateBodyUser, match.removeFromMatch);
 
 module.exports = router;

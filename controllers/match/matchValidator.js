@@ -62,5 +62,24 @@ function validate(match, required){
     return (required ? joi.validate(match, matchJoiSchemaRequired) : joi.validate(match, matchJoiSchema));
 }
 
+function validateId(id){
+    return joi.validate(id, idSchema);
+}
+
+
+//for user in a match (add/remove)
+const matchJoiSchemaUser = { 
+    role: joi.string().valid(['referee','mc','participant1','participant2']).required(),
+    waiting: joi.boolean().required()
+}
+
+function validateUser (body){
+    return joi.validate(body, matchJoiSchemaUser);
+}
+
+
+
 exports.validate = validate;
+exports.validateId = validateId;
+exports.validateUser = validateUser;
 
