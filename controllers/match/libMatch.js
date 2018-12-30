@@ -1,4 +1,33 @@
+const Validator = require('./matchValidator');
 const Match = require ('./matchModel');
+
+function validate(req, res, next){
+    const match = req.body.match;
+    const result = Validator.validate(match,false);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateRequired(req, res, next){
+    const match = req.body.match;
+    const result = Validator.validate(match,true);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
 
 function getMatch(req, res){ //works
     if(!req.params.id){
@@ -259,3 +288,5 @@ exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
 exports.isMatch = isMatch;
 exports.searchMatch = searchMatch;
+exports.validate = validate;
+exports.validateRequired = validateRequired;

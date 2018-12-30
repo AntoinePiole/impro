@@ -1,6 +1,6 @@
 const mongoose = require ('mongoose');
 
-var matchModel = mongoose.Schema({
+const matchModel = mongoose.Schema({
     name: String,
     status: String,  //between [finished, waitingConfirmation, confirmed, canceled]
     league1Id: String,
