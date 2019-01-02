@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import './League.css';
 import { LeaguePhoto } from './LeaguePhoto';
 import { LeagueJoinRequester } from './LeagueJoinRequester';
+import { LeagueNotFound } from './LeagueNotFound'
 
 
 export class LeagueDisplay extends React.Component {

@@ -49,6 +49,7 @@ function patchLeagueById(req, res) {
             text: "Requête invalide"
         })
     } else {
+        console.log(req.body)
         var _id = req.params.id;
         var findLeague = new Promise(function (resolve, reject) {
             League.findOneAndUpdate({  _id: _id }, req.body,
@@ -74,7 +75,7 @@ function patchLeagueById(req, res) {
                     } else {
                         res.status(200).json({
                             text: "Succès",
-                            league: league,
+                            league: league
                         })
                     }
                 }
