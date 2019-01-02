@@ -5,6 +5,7 @@ var leagueModel = mongoose.Schema({
     nickname : String,
     desc : String,
     photoId : String,
+    email : String,
     members : [{id:String, isAdmin:Boolean}],
     receivedMatchRequestsIds : [String],
     sentMatchRequestsIds : [String],

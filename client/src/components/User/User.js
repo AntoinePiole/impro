@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { LeagueList } from './LeagueList';
 import { UserEdit } from './UserEdit';
 import { UserDisplay } from './UserDisplay';
+import { UserNotFound } from './UserNotFound';
 import './User.css';
 import API from '../../utils/API';
 
@@ -20,26 +21,41 @@ export class User extends React.Component {
             birthday : "",
             phone : "",
             desc : "", 
-            photoId : ""
+            photoId : "",
+            userNotFound : null
         }
         this.updateUser = this.updateUser.bind(this);
     }
 
     async componentDidMount () { // This is not working. Should it be placed somewhere else ?
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
-        var data = await API.getUserById(this.id);
-        var user = data.data.user;
-        this.setState ({
-            id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
-            editting : false,
-            email : user.email,
-            firstName : user.firstName || "Non renseigné",
-            familyName : user.familyName || "Non renseigné",
-            birthday : user.birthday || "Non renseignée", //Need to make sure this works
-            username : user.username || "Non renseigné",
-            phone : user.phone || "Non renseigné",
-            desc : user.desc || "Non renseigné",
-            photoId : user.photoId
+        API.getUserById(this.id)
+        .then (data => {
+            var user = data.data.user;
+            if (!user) {
+                this.setState ({
+                    userNotFound : true
+                })
+                return;
+            }
+            this.setState ({
+                id : window.location.toString().substr(window.location.toString().lastIndexOf("/")+1),
+                editting : false,
+                email : user.email,
+                firstName : user.firstName || "Non renseigné",
+                familyName : user.familyName || "Non renseigné",
+                birthday : user.birthday || "Non renseignée",
+                username : user.username || "Non renseigné",
+                phone : user.phone || "Non renseigné",
+                desc : user.desc || "Non renseigné",
+                photoId : user.photoId,
+                userNotFound : false
+            })
+        })
+        .catch (err => {
+            this.setState ({
+                userNotFound : true
+            })
         })
     }
 
@@ -63,6 +79,9 @@ export class User extends React.Component {
         )
     }
     render() {
+        if(this.state.userNotFound) {
+            return <UserNotFound />
+        }
         const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
             <div className="User">

@@ -6,15 +6,15 @@ export class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            members : [], // Later member will be given by its id, and should be retrieved
+            members : [], 
             leagueId:""
         }
-        //isAdmin is true iff the corresponding member is an admin of list. THIS MUST STILL BE DONE
         this.selectUser = this.selectUser.bind(this);
         this.removeUser = this.removeUser.bind(this);
         this.setRole = this.setRole.bind(this);
         this.isAnAdmin = this.isAnAdmin.bind(this);
     }
+
  /**
   * Called upon selecting an an user
   */
@@ -22,8 +22,26 @@ export class UserList extends React.Component {
         window.location="/user/" + member._id
     }
 
-    removeUser (member) {
-        console.log("remove the member", member)
+    removeUser (userId) {
+        if (this.state.members.length == 1) {
+            alert("Cette ligue n'a qu'un membre, on ne peut pas l'en retirer.");
+            return;
+        }
+
+        var answer = window.confirm("Voulez-vous vraiment retirer cet utilisateur de la ligue ?");
+        if (!answer)
+            {
+                return;
+            }
+        API.removeFromLeague(userId, this.state.leagueId)
+            .then(
+                this.setState({
+                    members: this.state.members.filter(member => member._id !== userId)
+                })
+            )
+            .catch( err => 
+                alert(err)
+            )
     }
 
     setRole (memberId, leagueId, role) {
@@ -49,7 +67,6 @@ export class UserList extends React.Component {
 
 
     render() {
-        console.log(this.state.members)
         return (
             <div>
                 <h2>
@@ -66,19 +83,16 @@ export class UserList extends React.Component {
                         <a onClick={() => this.selectUser(member)}>
                             {member.username? member.username : member.firstName + ' ' + member.familyName}
                         </a>
-                        {this.props.idAdmin ? // Can remove people from the league if we're an admin for it.
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(member.id)}/>
+                        {this.props.isAdmin ? // Can remove people from the league if we're an admin for it.
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(member._id)}/>
                         :null} 
                         {this.props.isAdmin?
-
                             this.isAnAdmin(member)? //If we are an admin for the league, we can edit the role of the corresponding person.
-                                <Button className="glyphicon glyphicon-member" onClick = {() => this.setRole(member.id, this.props.id, "member")}/>
+                                <Button className="glyphicon glyphicon-member" onClick = {() => this.setRole(member._id, this.props.id, "member")}/>
                             :
-                                <Button className="glyphicon glyphicon-asterisk" onClick = {() => this.setRole(member.id, this.props.id, "admin")}/>
-
+                                <Button className="glyphicon glyphicon-asterisk" onClick = {() => this.setRole(member._id, this.props.id, "admin")}/>
                         :    
-
-                                this.isAnAdmin(member)? //If we are an admin for the league, we can edit the role of the corresponding person.
+                                this.isAnAdmin(member)? //Else, we can't edit them
                                 <Button disabled className="glyphicon glyphicon-member"/>
                             :
                                 <Button disabled className="glyphicon glyphicon-asterisk"/>

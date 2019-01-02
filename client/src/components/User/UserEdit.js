@@ -42,8 +42,9 @@ export class UserEdit extends React.Component {
 selectedFileHandler = event => {
     API.submitImage(event)
         .then(res => {
+            console.log(res)
             this.setState({
-                photoId : res.data.filename
+                photoId : res.data.path
             })
             return res    
         })

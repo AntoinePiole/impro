@@ -5,7 +5,7 @@ const headers = {
 
 export default {
     //########## Getters ##########
-    getUserById : function(id) { //Works
+    getUserById : function(id) { 
         return axios.get('/users/'+id);
     },
     getLeagueById : function(id) {
