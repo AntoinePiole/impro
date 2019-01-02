@@ -1,17 +1,62 @@
 const User = require('../../models/userModel.js');
 const League = require('../../models/leagueModel.js');
 const passwordHash = require("password-hash");
+var passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy; //passport strategy, TO MODIFY if needed
 
-function signup(req, res) {
-    if (!req.body.email || !req.body.password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
-        res.status(400).json({
-            "text": "Requête invalide"
-        })
-    } else {
+//function called when need there's a request (?) : adds req.user containing logged user object
+passport.serializeUser(function(user, done) { //let go of the user object and stores only id
+    done(null, user._id);
+  });
+  
+passport.deserializeUser(function(id, done) { //opposite : finds the user object to add to req
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+  });
+  
+passport.use('login',new LocalStrategy(
+    {usernameField:'email'},
+    function(email, password, done) {
+    User.findOne({ email: email }, function (err, user) {
+        if (err) { console.log('passport error'); return done(err); }
+        if (!user) {
+            console.log('username pb'); 
+            return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (!user.verifyPassword(password)) {
+            console.log('mdp pb');
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+        console.log('np'); 
+        return done(null, user);
+        });
+    }
+));
+
+passport.use('signup', new LocalStrategy({
+    usernameField: 'email',
+    passReqToCallback : true
+  },
+  function(req, email, password, done) {
+    findOrCreateUser = function(){
+      // find a user in Mongo with provided username
+      User.findOne({email:email},function(err, user) {
+        // In case of any error return
+        if (err){
+          console.log('Error in SignUp: '+err);
+          return done(err);
+        }
+        // if user already exists
+        if (user) {
+          console.log('User already exists');
+          return done(null, false);
+        }
+        // if there is no user with that email
+        // create the user
         var user = {
             email: req.body.email,
-            password: passwordHash.generate(req.body.password),
+            password: passwordHash.generate(password),
             phone: req.body.phone,
             familyName: req.body.familyName,
             firstName: req.body.firstName,
@@ -19,94 +64,33 @@ function signup(req, res) {
             birthday: req.body.birthday,
             photoId: req.body.photoId,
         }
-        var findUser = new Promise(function (resolve, reject) {
-            User.findOne({
-                email: user.email
-            }, function (err, result) {
-                if (err) {
-                    reject(500);
-                } else {
-                    if (result) {
-                        reject(204)
-                    } else {
-                        resolve(true)
-                    }
-                }
-            })
-        })
+        var newUser = new User(user);
 
-        findUser.then(function () {
-            var _u = new User(user);
-            _u.save(function (err, user) {
-                
-                console.log(err, user)
-                if (err) {
-                    res.status(500).json({
-                        "text": "Erreur interne en essayant de créer le compte"
-                    })
-                } else {
-                    res.status(200).json({
-                        "text": "Succès",
-                        "token": user.getToken(),
-                        "id": user._id
-                    })
-                }
-            })
-        }, function (error) {
-            switch (error) {
-                case 500:
-                    res.status(500).json({
-                        "text": "Erreur interne"
-                    })
-                    break;
-                case 204:
-                    res.status(204).json({
-                        "text": "L'adresse email existe déjà"
-                    })
-                    break;
-                default:
-                    res.status(500).json({
-                        "text": "Erreur interne"
-                    })
-            }
-        })
-    }
+        // save the user
+        newUser.save(function(err) {
+        if (err){
+            console.log('Error in Saving user: '+err);  
+            throw err;  
+        }
+        console.log('User Registration succesful');    
+        return done(null, newUser);
+        });
+    })
+}
+    // Delay the execution of findOrCreateUser and execute 
+    // the method in the next tick of the event loop
+    process.nextTick(findOrCreateUser);
+}))
+
+
+function login(req,res,next){ //MIGHT LEAD TO BUGS, if so go back to export passport and passport.authenticate('login') in controller
+    const middleware = passport.authenticate('login');
+    middleware(req,res,next);
 }
 
-function login(req, res) {
-    if (!req.body.email || !req.body.password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
-        res.status(400).json({
-            "text": "Requête invalide"
-        })
-    } else {
-        User.findOne({
-            email: req.body.email
-        }, function (err, user) {
-            if (err) {
-                res.status(500).json({
-                    text: "Erreur interne"
-                })
-            } else if (!user) {
-                res.status(400).json({
-                    text: "L'utilisateur n'existe pas"
-                })
-            } else {
-                if (user.authenticate(req.body.password)) {
-                    //console.log("logged in with " + user)
-                    res.status(200).json({
-                        token: user.getToken(),
-                        id: user._id,
-                        text: "Authentification réussi"
-                    })
-                } else {
-                    res.status(401).json({
-                        text: "Mot de passe incorrect"
-                    })
-                }
-            }
-        })
-    }
+function signup(req,res,next){
+    const middleware = passport.authenticate('signup');
+    middleware(req,res,next);
 }
 
 
@@ -309,3 +293,111 @@ exports.login = login;
 exports.signup = signup;
 exports.getUsersOfLeague = getUsersOfLeague;
 exports.searchUser = searchUser;
+/* OLD LOGGIN CODE
+
+function signup(req, res) {
+    if (!req.body.email || !req.body.password) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        var user = {
+            email: req.body.email,
+            password: passwordHash.generate(req.body.password),
+            phone: req.body.phone,
+            familyName: req.body.familyName,
+            firstName: req.body.firstName,
+            username: req.body.firstName + req.body.familyName,
+            birthday: req.body.birthday,
+            photoId: req.body.photoId,
+        }
+        var findUser = new Promise(function (resolve, reject) {
+            User.findOne({
+                email: user.email
+            }, function (err, result) {
+                if (err) {
+                    reject(500);
+                } else {
+                    if (result) {
+                        reject(204)
+                    } else {
+                        resolve(true)
+                    }
+                }
+            })
+        })
+
+        findUser.then(function () {
+            var _u = new User(user);
+            _u.save(function (err, user) {
+                
+                console.log(err, user)
+                if (err) {
+                    res.status(500).json({
+                        "text": "Erreur interne en essayant de créer le compte"
+                    })
+                } else {
+                    res.status(200).json({
+                        "text": "Succès",
+                        "token": user.getToken(),
+                        "id": user._id
+                    })
+                }
+            })
+        }, function (error) {
+            switch (error) {
+                case 500:
+                    res.status(500).json({
+                        "text": "Erreur interne"
+                    })
+                    break;
+                case 204:
+                    res.status(204).json({
+                        "text": "L'adresse email existe déjà"
+                    })
+                    break;
+                default:
+                    res.status(500).json({
+                        "text": "Erreur interne"
+                    })
+            }
+        })
+    }
+}
+function login(req, res) {
+    if (!req.body.email || !req.body.password) {
+        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
+        res.status(400).json({
+            "text": "Requête invalide"
+        })
+    } else {
+        User.findOne({
+            email: req.body.email
+        }, function (err, user) {
+            if (err) {
+                res.status(500).json({
+                    text: "Erreur interne"
+                })
+            } else if (!user) {
+                res.status(400).json({
+                    text: "L'utilisateur n'existe pas"
+                })
+            } else {
+                if (user.authenticate(req.body.password)) {
+                    //console.log("logged in with " + user)
+                    res.status(200).json({
+                        token: user.getToken(),
+                        id: user._id,
+                        text: "Authentification réussi"
+                    })
+                } else {
+                    res.status(401).json({
+                        text: "Mot de passe incorrect"
+                    })
+                }
+            }
+        })
+    }
+}
+*/
