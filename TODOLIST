@@ -1,15 +1,13 @@
 
 TODO atm :
  - Autorisation/authentification
-Check that JSONs have the right shape when entering the back (with AJV for instance)
+Add JOI to all the back ? 
 Implement passport
-When connecting while isAuth is false, redirect to login/submit or an error 404 page with login ad submit in dashboard
 
 - Missing features :
-When viewing the page of a league we aren't in, add a button to request to join & handle those requests in the back and front
 Clean up the shape of some pages (ie, league and user)
 Handle match suggestions with back, with real matches with a special status & adapt get functions accordingly
-Make a page to make a new league, add a link to it in the dashboard
+Understand why setNotEdittingMode doesn't work in LeagueEdit
 Make a "home" page
 Add calendars
 Unify our way to handle dates
@@ -22,9 +20,7 @@ Have default images stored in the back
 Handle all images displays with components
 
  - API :
-Split our API into userAPI, leagueAPI, matchAPI, imageAPI which each communicate with userController, leagueController, matchController, imageController
-Add GET functions for pictures ? Is it needed ?
 Add DELETE functions for pictures
 Delete someone's picture when uploading a new one
 
- - Prevent people from accessing pages they aren't authorized to access, for instance when not logged in, create an Error 404 page when trying to display the page of an user/a league/ a match that doesn't existe
+ - Prevent people from accessing pages they aren't authorized to access, for instance, create an Error 404 page when trying to display the page of an user/a league/ a match that doesn't existe
