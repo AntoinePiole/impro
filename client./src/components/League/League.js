@@ -118,7 +118,7 @@ export class League extends React.Component {
                 <Row>
                 {this.state.isAdmin? //Can see the matches the league suggested if you are an admin of the league
                     <div className="MatchSuggestions">
-                        <MatchSuggestions sentMatchRequestsIds={this.state.sentMatchRequestsIds} suggestions={this.state.suggestions}/>
+                        <MatchSuggestions sentMatchRequestsIds={this.state.sentMatchRequestsIds} receivedMatchRequestsIds={this.state.receivedMatchRequestsIds}/>
                     </div>
                 :
                     null
@@ -127,7 +127,7 @@ export class League extends React.Component {
                     null
                 :  
                     <div className="MatchSuggester">
-                        <MatchSuggester receivingLeagueId={this.state.id}/>
+                        <MatchSuggester receivingLeagueId={this.state.id} receivingLeagueName={this.state.nickname || this.state.name} sentMatchRequestsIds={this.state.sentMatchRequestsIds} />
                     </div>
                 }
                 </Row>

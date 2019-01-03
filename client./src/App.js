@@ -18,14 +18,14 @@ class App extends Component {
             <Route component = {Dashboard}/>
                 <div className="App-content">
                     <Switch>  
-                        <Route exact path="/login" component={Login}/>
-                        <Route exact path ="/signup" component={Signup}/>
-                        <Route path ="/user/:id" component={User}/>
-                        <Route path ="/league/:id" component={League}/>
-                        <Route path ="/myleagues" component={MyLeagues}/>
-                        <Route path ="/newleague" component={LeagueMaker}/>
-                        <Route path ="/search" component={SearchResultContainer} />
-                        <Route component = {NotFound}/>
+                        <Route exact path="/login" component = { Login } />
+                        <Route exact path ="/signup" component = { Signup } />
+                        <Route path ="/user/:id" component = { User } />
+                        <Route path ="/league/:id" component = { League }/>
+                        <Route path ="/myleagues" component = { MyLeagues }/>
+                        <Route path ="/newleague" component = { LeagueMaker }/>
+                        <Route path ="/search" component = { SearchResultContainer } />
+                        <Route component = { NotFound } />
                     </Switch>
                 </div>
             </div>

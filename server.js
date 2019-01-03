@@ -37,7 +37,7 @@ app.use(express.static(__dirname + '/public/uploads'));
 app.use('/users', usersRouter);
 app.use('/leagues', leaguesRouter);
 app.use('/images', imagesRouter);
-app.use('/matches',matchesRouter);
+app.use('/matches', matchesRouter);
 
 //Définition et mise en place du port d'écoute
 var port = 8000;

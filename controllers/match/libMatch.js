@@ -85,6 +85,7 @@ function patchMatch(req, res){
 }
 
 function makeMatch(req, res){ 
+    console.log(req.body)
     const match = { 
         name: req.body.match.name,
         status: 'waitingConfirmation',  //between [finished, waitingConfirmation, confirmed, canceled]
@@ -242,6 +243,45 @@ function removeFromMatch(req,res){
     )
 }
 
+/**
+ * 
+ * Renvoie la liste des matchs dont l'id appartient à req.params.
+ */
+function getMatchesList(req, res) {
+    if (!req.params.matchesIds) {
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        var matchesIds = req.params.matchesIds;
+        console.log(Array(matchesIds))
+        var findMatches = new Promise(function (resolve, reject) {
+            Match.find({
+                _id: {$in: matchesIds}, 
+            }, function (err, matches) {
+                if (err) {
+                    reject(500);
+                } 
+                else {
+                    resolve(matches)
+                }
+            })
+        });
+        findMatches
+            .then(matches => {
+                res.status(200).json({
+                    "text": "Success",
+                    matches : matches
+                })
+            })
+            .catch(err =>{
+                res.status(500).json({
+                    text : "Erreur interne en récupérant les matchs"
+                })
+            })
+    }
+}
+    
 //-----VALIDATION-----
 
 function validateMatch(req, res, next){
@@ -324,6 +364,21 @@ function validateParamsUser(req, res, next){
     next();
 }
 
+function validateParamsMatchesList(req, res, next){
+    const params = req.params;
+    const result = Validator.validateMatchesIds(params);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+
 //-----MIDDLEWARES-----
 exports.getAllMatches = getAllMatches;
 exports.getMatch = getMatch;
@@ -332,6 +387,7 @@ exports.makeMatch = makeMatch;
 exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
 exports.searchMatch = searchMatch;
+exports.getMatchesList = getMatchesList;
 
 //-----VALIDATON-----
 exports.validateMatch = validateMatch;
@@ -339,3 +395,4 @@ exports.validateMatchRequired = validateMatchRequired;
 exports.validateParamsId = validateParamsId;
 exports.validateBodyUser = validateBodyUser;
 exports.validateParamsUser = validateParamsUser;
+exports.validateParamsMatchesList = validateParamsMatchesList

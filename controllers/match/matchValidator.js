@@ -53,6 +53,8 @@ const matchJoiSchemaRequired = { //TO DO : is it possible to define only one sch
     })
 }
 
+
+
 /**
  * returns a promise : resolved iif match corresponds to matchJoiSchema
  * @param {match Object} match
@@ -78,8 +80,19 @@ function validateUser (body){
 }
 
 
+/**
+ * When validating the shape of a request to get a list of matches by their ids
+ */
+const matchesListSchema = { 
+    matchesIds: joi.array().items(idSchema).required(),
+}
+function validateMatchesIds (params){
+    return joi.validate(params, matchesListSchema);
+}
+
+
 
 exports.validate = validate;
 exports.validateId = validateId;
 exports.validateUser = validateUser;
-
+exports.validateMatchesIds = validateMatchesIds

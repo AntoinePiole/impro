@@ -6,6 +6,11 @@ import './League.css';
 export class MatchSuggestions extends React.Component {
     constructor(props) {
         super(props);
+        this.state={
+            leagues : [],
+            receivedMatches : [],
+            sentMatches : []
+        }
         this.getLeagueNameById = this.getLeagueNameById.bind(this);
         this.acceptRequest = this.acceptRequest.bind(this);
         this.removeRequest = this.removeRequest.bind(this);
@@ -45,37 +50,17 @@ export class MatchSuggestions extends React.Component {
                     Les matchs qui vous sont proposés
                 </h2>
                 <Grid>
-                <Row display="block" className="grid">
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Avec
-                            </h3>
-                        </Col>
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Date
-                            </h3>
-                        </Col>
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Endroit
-                            </h3>
-                        </Col>
-                        <Col xs={1} md={1} >
-                            <h3>
-                                Accepter
-                            </h3>
-                        </Col>
-                        <Col xs={1} md={1} >
-                            <h3>
-                                Refuser
-                            </h3>
-                        </Col>
+                    <Row display="block" className="grid">
+                        <Col xs={3} md={3} > <h3>  Avec  </h3>  </Col>
+                        <Col xs={3} md={3} > <h3>  Date  </h3>  </Col>
+                        <Col xs={3} md={3} > <h3>  Endroit  </h3>  </Col>
+                        <Col xs={2} md={1} > <h3>  Accepter  </h3>  </Col>
+                        <Col xs={2} md={1} > <h3>  Refuser  </h3>  </Col>
                     </Row>
                 {this.props.sentMatchRequestsIds.map((sentMatchRequest) => (
                     <Row key={sentMatchRequest.date+sentMatchRequest.sendingLeagueId} display="block" className="grid">
-                        <Col xs={3} md={3} >
-                            <a onClick={()=>this.selectLeague(sentMatchRequest.sendingLeagueId)}>
+                        <Col xs={3} md={3} > 
+                            <a onClick={ () => this.selectLeague(sentMatchRequest.sendingLeagueId)}>
                                 {this.getLeagueNameById(sentMatchRequest.sendingLeagueId)}                        
                             </a>
                         </Col>
@@ -89,11 +74,11 @@ export class MatchSuggestions extends React.Component {
                                 {sentMatchRequest.location}                        
                             </a>
                         </Col>
-                        <Col xs={1} md={1} >
+                        <Col xs={2} md={1} >
                             <Button className="glyphicon glyphicon-ok" onClick = {() => this.acceptRequest(sentMatchRequest)}/>
                         </Col>
-                        <Col xs={1} md={1} >
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(sentMatchRequest)}/>
+                        <Col xs={2} md={1} >
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeRequest(sentMatchRequest)}/>
                         </Col>
                     </Row>
                 ))}
@@ -102,28 +87,12 @@ export class MatchSuggestions extends React.Component {
                     Les matchs que vous avez proposés
                 </h2>
                 <Grid>
-                <Row display="block" className="grid">
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Avec
-                            </h3>
-                        </Col>
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Date
-                            </h3>
-                        </Col>
-                        <Col xs={3} md={3} >
-                            <h3>
-                                Endroit
-                            </h3>
-                        </Col>
-                        <Col xs={2} md={2} >
-                            <h3>
-                                Annuler
-                            </h3>
-                        </Col>
-                </Row>
+                    <Row display="block" className="grid">
+                        <Col xs={3} md={3} > <h3>  Avec  </h3>  </Col>
+                        <Col xs={3} md={3} > <h3>  Date  </h3>  </Col>
+                        <Col xs={3} md={3} > <h3>  Endroit  </h3>  </Col>
+                        <Col xs={2} md={2} > <h3>  Annuler  </h3>  </Col>
+                    </Row>
                 {this.props.sentMatchRequestsIds.map((sentMatchRequest) => (
                     <Row display="block" key={sentMatchRequest.date+sentMatchRequest.receivingLeagueId} className="grid">
                         <Col xs={3} md={3} >
@@ -142,7 +111,7 @@ export class MatchSuggestions extends React.Component {
                             </a>
                         </Col>
                         <Col xs={2} md={2} >
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.refuseRequest(sentMatchRequest)}/>
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeRequest(sentMatchRequest)}/>
                         </Col>
                     </Row>
                 ))}

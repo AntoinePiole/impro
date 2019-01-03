@@ -4,7 +4,6 @@ const passwordHash = require("password-hash");
 
 function signup(req, res) {
     if (!req.body.email || !req.body.password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             "text": "Requête invalide"
         })
@@ -75,7 +74,6 @@ function signup(req, res) {
 
 function login(req, res) {
     if (!req.body.email || !req.body.password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             "text": "Requête invalide"
         })
@@ -93,7 +91,6 @@ function login(req, res) {
                 })
             } else {
                 if (user.authenticate(req.body.password)) {
-                    //console.log("logged in with " + user)
                     res.status(200).json({
                         token: user.getToken(),
                         id: user._id,
@@ -156,7 +153,6 @@ function getUsers(req, res) {
 
 function patchUserById(req, res) {
     if (!req.params.id || !req.body) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -204,7 +200,6 @@ function patchUserById(req, res) {
  */
 function getUsersOfLeague(req, res) {
     if (!req.params.leagueId ) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
@@ -277,7 +272,6 @@ function getUsersOfLeague(req, res) {
 
 function getDetailedMemberPropositionsOfLeague(req, res) {
     if (!req.params.leagueId ) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: "Requête invalide"
         })
