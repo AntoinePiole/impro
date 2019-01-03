@@ -48,7 +48,7 @@ var userModel = mongoose.Schema({
 
 
 userModel.methods = {
-	authenticate: function (password) {
+	verifyPassword: function (password) {
 		return passwordHash.verify(password, this.password);
 	},
 	getToken: function () {

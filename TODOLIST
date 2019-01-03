@@ -5,22 +5,21 @@ Add JOI to all the back ?
 Implement passport
 
 - Missing features :
-Clean up the shape of some pages (ie, league and user)
 Handle match suggestions with back, with real matches with a special status & adapt get functions accordingly
+Access a league's matches
 Understand why setNotEdittingMode doesn't work in LeagueEdit
 Make a "home" page
 Add calendars
 Unify our way to handle dates
+
+ - Styling :
+Clean up the shape of some pages (ie, league and user)
+Possibilité de remplacer toutes les balises par du React-bootstrap pour faciliter le CSS avec un template
 Plein de CSS...
-Possibilité de remplacer toutes les balises par du React-bootstrap pour faciliter le CSS
 
  - Images :
 Actually get photos from the back
 Have default images stored in the back
 Handle all images displays with components
-
- - API :
 Add DELETE functions for pictures
 Delete someone's picture when uploading a new one
-
- - Prevent people from accessing pages they aren't authorized to access, for instance, create an Error 404 page when trying to display the page of an user/a league/ a match that doesn't existe

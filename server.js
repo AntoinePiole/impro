@@ -2,6 +2,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
+const passport = require('passport'); 
+const session = require('express-session'); 
 var usersRouter = require(__dirname + '/controllers/userController');
 var leaguesRouter = require(__dirname + '/controllers/leagueController');
 var imagesRouter = require(__dirname + '/controllers/imageController');
@@ -23,6 +25,12 @@ const app = express();
 app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true, parameterLimit: 1000000}))
 
+//NOUVEAU SYSTEME LOGIN
+app.use(express.static("public"));
+app.use(session({ secret: "L1T 2 C4MP"}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 //Définition des CORS
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -33,7 +41,7 @@ app.use(function (req, res, next) {
 });
 
 //Définition du routeur
-app.use(express.static(__dirname + '/public/uploads'));
+//app.use(express.static(__dirname + '/public/uploads'));
 app.use('/users', usersRouter);
 app.use('/leagues', leaguesRouter);
 app.use('/images', imagesRouter);
