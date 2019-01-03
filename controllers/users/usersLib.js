@@ -6,10 +6,12 @@ const LocalStrategy = require('passport-local').Strategy; //passport strategy, T
 
 //function called when need there's a request (?) : adds req.user containing logged user object
 passport.serializeUser(function(user, done) { //let go of the user object and stores only id
+    console.log('serializing');
     done(null, user._id);
   });
   
 passport.deserializeUser(function(id, done) { //opposite : finds the user object to add to req
+    console.log('deserializing');
     User.findById(id, function(err, user) {
         done(err, user);
     });
@@ -337,7 +339,7 @@ function searchUser(req, res){
     const name = req.params.queryText;
     const condition = new RegExp("^.*"+name+".*$","i"); //this is supposed to turn the name parameter into a regexp condition to find all results containing the request
     const query = User.find(
-        {name: condition}
+        {username: condition}
     );
     query.exec(function (err, results){
         if(err){
