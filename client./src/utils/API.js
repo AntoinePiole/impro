@@ -28,13 +28,13 @@ export default {
 
     // ########## Constructors ########## 
     signup : function(send) {
-        return axios.post('/users/',send, {headers: headers})
+        return axios.post('/users/', send, {headers: headers})
     },
     makeLeague : function(send) {
-        return axios.post('/leagues/',send, {headers: headers})
+        return axios.post('/leagues/', send, {headers: headers})
     },
     makeMatch : function(send) {
-        return axios.post('/matches/',send, {headers: headers})
+        return axios.post('/matches/', send, {headers: headers})
     },
 
     // ########## Logging ########## 
@@ -47,7 +47,7 @@ export default {
         })
     },    
     isAuth : function() {
-        return (localStorage.getItem('token') !== null);
+        return (localStorage.getItem('cookie') !== null);
     },
     logout : function() {
         localStorage.clear();

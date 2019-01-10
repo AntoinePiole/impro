@@ -41,8 +41,11 @@ export class Signup extends React.Component {
                 })
             }
             else {
-                localStorage.setItem('token', data.data.token);
-                localStorage.setItem('id', data.data.id)
+                console.log(data)
+                var id = data.data.session.passport.user;
+                var cookie = data.data.session.cookie;
+                localStorage.setItem('cookie', cookie);
+                localStorage.setItem('id', id)
                 window.location = "/home"
             }
         },function(error){

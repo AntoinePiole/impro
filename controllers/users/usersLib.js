@@ -85,7 +85,7 @@ passport.use('signup', new LocalStrategy({
 
 function login(req,res,next){ //MIGHT LEAD TO BUGS, if so go back to export passport and passport.authenticate('login') in controller
     const middleware = passport.authenticate('login');
-    middleware(req,res,next);
+    middleware(req,res,next)
 }
 
 function signup(req,res,next){
