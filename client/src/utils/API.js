@@ -129,5 +129,4 @@ export default {
     searchUser: function(queryText){
         return axios.get('/users/search/'+queryText)
     }
-//Others not implemented as I do not know exactly which parameters will be needed
 }
