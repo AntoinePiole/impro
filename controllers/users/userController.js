@@ -1,4 +1,4 @@
-const account = require('./users/usersLib.js');
+const account = require('./usersLib.js');
 var express = require('express');
 var router = express.Router();
 
