@@ -1,4 +1,5 @@
 const League = require('../../models/leagueModel.js');
+const Validator = require('./leagueValidator');
 
 function getLeagues(req, res) {
     League.find({}
@@ -538,6 +539,82 @@ function searchLeague(req, res){
     })
 }
 
+
+//-----VALIDATION-----
+
+function validateLeague(req, res, next){
+    const league = req.body;
+    const result = Validator.validate(league, false);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateLeagueRequired(req, res, next){
+    const league = req.body;
+    const result = Validator.validate(league, true);
+
+    if(result.error){ //should be a promise syntax, but didn't work
+        console.log(result.error)
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateParamsId(req, res, next){
+    
+    const result = Validator.validateId(req.params.id);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateParamsUserId(req, res, next){
+    
+    const result = Validator.validateId(req.params.userId);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+function validateParamsLeagueId(req, res, next){
+    
+    const result = Validator.validateId(req.params.leagueId);
+    if(result.error){ //should be a promise syntax, but didn't work
+        res.status(400).json({
+            text: "Unfit parameters",
+            errorDetail: {name: result.error.name, message: result.error.details[0].message},
+            value: result.value
+        })
+        return;
+    }
+    next(); //else pass to next middleware
+}
+
+//-----MIDDLEWARES-----
 exports.getLeagues = getLeagues;
 exports.getLeagueById = getLeagueById;
 exports.patchLeagueById = patchLeagueById;
@@ -551,3 +628,10 @@ exports.refuseMember = refuseMember;
 exports.addMatchRequest = addMatchRequest;
 exports.getLeaguesOfUser = getLeaguesOfUser;
 exports.searchLeague = searchLeague;
+
+//-----VALIDATON-----
+exports.validateLeague = validateLeague;
+exports.validateLeagueRequired = validateLeagueRequired;
+exports.validateParamsId = validateParamsId;
+exports.validateParamsUserId = validateParamsUserId;
+exports.validateParamsLeagueId = validateParamsLeagueId;
