@@ -7,9 +7,10 @@ import API from '../../utils/API';
 export class MatchSuggester extends React.Component {
     constructor(props) {
         super(props);
-        _isMounted:false;
+        _isMounted : false;
         this.state = {
             date: new Date().toISOString().slice(0, -1),
+            name : "",
             location : "",
             sendingLeagueId : "",
             receivingLeague : "",
@@ -29,33 +30,32 @@ export class MatchSuggester extends React.Component {
     }
 
     handleDropDownChange (event) {
-        var names = this.state.leagues.filter(league =>
+        var leagues = this.state.leagues.filter(league =>
             league._id == event)
-        var name=(names[0]).nickname || (names[0]).name
+        var leagueName=(leagues[0]).nickname || (leagues[0]).name
         this.setState({
             sendingLeagueId : event,
-            title : name
+            title : leagueName
         });
     }
 
 
     async sendRequest (event) {
         const match= {
+            name : this.state.name,
             date : this.state.date,
             location : this.state.location,
-            receivingLeagueId : this.props.receivingLeagueId,
-            sendingLeagueId : this.state.sendingLeagueId,
-            league1Id : this.props.sendingLeagueId,
-            league2Id : this.state.receivingLeagueId,
+            league1Id : this.state.sendingLeagueId,
+            league2Id : this.props.receivingLeagueId,
             league1Members : [localStorage.getItem("id")],
             league2Members: [],
         }
         try {
             var res = await API.makeMatch({match:match});
-            //TODO Make it not bug out :(
             var id = res.data.id;
             //Adding the request to both league's sentMatchRequestsIds and receivedMatchRequestsIds
-            var receivingLeague = await API.getLeagueById(this.props.receivingLeagueId)                
+            var data = await API.getLeagueById(this.props.receivingLeagueId)  
+            var receivingLeague = data.data.league        
             var receivedMatchRequestsIds = receivingLeague.receivedMatchRequestsIds.push(id)
             var sentMatchRequestsIds = this.props.sentMatchRequestsIds.push(id)
             API.patchLeague(this.props.receivingLeagueId,
@@ -88,9 +88,8 @@ export class MatchSuggester extends React.Component {
         })  
     }
 
-    
     componentWillUnmount() {
-        this._isMounted = false;
+        //this._isMounted = false;
     }
 
     render() {
@@ -110,6 +109,11 @@ export class MatchSuggester extends React.Component {
                 </DropdownButton>
 
                 <div className="UserDisplay" >
+                    <FormGroup controlId="name">
+                    <ControlLabel>Nom du match</ControlLabel>
+                    <FormControl type="text" value={this.state.name} onChange={this.handleChange}/>
+                    </FormGroup>
+
                     <FormGroup controlId="date">
                     <ControlLabel>Date</ControlLabel>      
                     <FormControl type="date" value={this.state.date} onChange={this.handleChange}/>

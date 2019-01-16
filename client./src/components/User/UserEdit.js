@@ -44,7 +44,7 @@ selectedFileHandler = event => {
         .then(res => {
             console.log("Image uploaded", res)
             this.setState({
-                photoId : res.data.path
+                photoId : res.data.filename
             })  
         })
         //.then(res => console.log(res, this.state))

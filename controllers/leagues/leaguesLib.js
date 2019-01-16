@@ -424,6 +424,46 @@ function patchLeagueById(req, res) {
     }
 }
 
+function addMatchRequest(req, res) {
+    if (!req.params.sendingId || !req.params.receivingId) {
+        res.status(400).json({
+            text: "Requête invalide"
+        })
+    } else {
+        league1Id = req.params.sendingId,
+        league2Id = req.params.receivingId
+    }
+    var findLeague1 = new Promise(function (resolve, reject) {
+        League.findOne({  _id: league1Id },
+            function (err, result) {
+            if (err) {
+                reject(500);
+            } else {
+                if (result) {
+                    resolve(true)
+                } else {
+                    reject(500);
+                }
+            }
+        })
+    })
+    var findLeague2 = new Promise(function (resolve, reject) {
+        League.findOne({  _id: league2Id },
+            function (err, result) {
+            if (err) {
+                reject(500);
+            } else {
+                if (result) {
+                    resolve(true)
+                } else {
+                    reject(500);
+                }
+            }
+        })
+    })
+    // TODO : PROMISE.ALL, GET ALL RESULTS
+}
+
 
 function getLeaguesOfUser(req, res) {
     if (!req.params.userId) {
@@ -508,5 +548,6 @@ exports.setRoleInLeague = setRoleInLeague;
 exports.requestToJoin = requestToJoin;
 exports.acceptMember = acceptMember;
 exports.refuseMember = refuseMember;
+exports.addMatchRequest = addMatchRequest;
 exports.getLeaguesOfUser = getLeaguesOfUser;
 exports.searchLeague = searchLeague;
