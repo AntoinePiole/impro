@@ -128,5 +128,10 @@ export default {
     },
     searchUser: function(queryText){
         return axios.get('/users/search/'+queryText)
+    },
+
+    // ########## Delete ##########
+    cancelMatch(matchId){
+        return axios.delete('/matches/'+matchId)
     }
 }
