@@ -12,9 +12,7 @@ passport.serializeUser(function(user, done) { //let go of the user object and st
   
 passport.deserializeUser(function(id, done) { //opposite : finds the user object to add to req
     console.log('deserializing');
-    User.findById(id, function(err, user) {
-        done(err, user);
-    });
+    User.findById(id, done);
   });
   
 passport.use('login',new LocalStrategy(

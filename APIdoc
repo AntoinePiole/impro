@@ -32,6 +32,11 @@ makeLeague(String id, String userId...)
   
 makeMatch(String id, String userId...)
   Creates a single match, with one user as its admin 
+
+
+########## Delete ###########
+cancelMatch(matchId)
+
 ########## Logging ###########
 login(String email, String password)
   login
@@ -49,6 +54,8 @@ addToMatch(String userId, String matchId, String role, waiting)
 
 removeFromMatch(String userId, String matchId, String role, waiting)
   Removes an user from a match, same parameters as addToMatch
+
+isAdminOfMatch(String userId, String matchId)
   
 ########## User in a league ##########
 addToLeague(String userId, String leagueId)

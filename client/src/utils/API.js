@@ -104,10 +104,10 @@ export default {
     // ########## User in a match ##########
     
     addToMatch : function(userId, matchId, send){
-        return axios.patch('/matches/' + matchId + '/users/' + userId + '?add=true', send, {headers: headers})
+        return axios.patch('/matches/' + matchId + '/user/' + userId + '/add=true', send, {headers: headers})
     },
     removeFromMatch: function(userId, matchId, send){
-        return axios.patch('/matches/' + matchId + '/users/' + userId + '?add=false', send, {headers: headers})
+        return axios.patch('/matches/' + matchId + '/user/' + userId + '/add=false', send, {headers: headers})
     },
 
 // ########## Search ##########

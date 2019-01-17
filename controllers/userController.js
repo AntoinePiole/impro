@@ -10,7 +10,7 @@ router.patch('/:id', account.patchUserById);
 //Constructor
 router.post('/', account.signup, function(req,res){res.status(200).json({hello:"hello"})});
 //Logging
-router.post('/login', account.login, function(req,res){res.status(200).json({session:req.session})});
+router.post('/login', account.login, function(req,res){res.status(200).json({user:req.user})});
 //User in a league
 router.get('/leagues/join/:leagueId', account.getDetailedMemberPropositionsOfLeague); //Get the member propositions of the league
 router.get('/leagues/:leagueId', account.getUsersOfLeague); //Get the users (the object) of the league

@@ -11,7 +11,7 @@ export class Login extends React.Component {
             retrieving: false
         }
         this.handleChange.bind(this);
-        this.send.bind(this);
+        this.send = this.send.bind(this);
     }
 
     componentDidMount () {
@@ -30,9 +30,8 @@ export class Login extends React.Component {
             return;
         }
         API.login(this.state.email, this.state.password).then(function(data){
-            localStorage.setItem('token', data.data.token);
-            localStorage.setItem('id', data.data.id)
-            window.location = "/home"
+            localStorage.setItem('id', data.data.user._id);
+            window.location='/home';//TO DO : stop using localStorage (?)
         },function(error){
             console.log(error);
             return;
