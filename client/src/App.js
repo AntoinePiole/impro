@@ -10,8 +10,32 @@ import { Signup } from './components/Signup/Signup.js';
 import { SearchResultContainer } from './components/SearchResult/SearchResultContainer.js';
 import { NotFound } from './components/NotFound/NotFound.js';
 import './App.css';
+import {MatchContainer} from './components/Match/MatchContainer';
+import API from './utils/API';
+import { MatchPageModifier } from './components/MatchNew/MatchPageModifier/MatchPageModifier';
+import { MatchPage } from './components/MatchNew/MatchPage/MatchPage';
+
+
 
 class App extends Component {
+
+    constructor(props){
+        super(props);
+        this.state={match:null};
+    }
+
+    componentDidMount(){
+        var self = this;
+        API.getMatchById('5c326661b6f4c91143a11d26').then(
+            function(val){
+                self.setState({
+                    match: val
+                })
+            }
+        ).catch(
+            function(err){console.log('err '+err)}
+        )
+    }
         render() {
             return (
             <div className="App">
@@ -25,8 +49,11 @@ class App extends Component {
                         <Route path ="/myleagues" component = { MyLeagues }/>
                         <Route path ="/newleague" component = { LeagueMaker }/>
                         <Route path ="/search" component = { SearchResultContainer } />
+                        <Route path ="/match/:id" component = { MatchPage } />
+                        <Route path ="/matchmodify/:id" component = {MatchPageModifier} />
                         <Route component = { NotFound } />
                     </Switch>
+                    {/*{this.state.match ? <MatchContainer match={this.state.match.data.match} /> : null}*/}
                 </div>
             </div>
         );
