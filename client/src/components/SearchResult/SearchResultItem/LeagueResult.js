@@ -8,7 +8,7 @@ export class LeagueResult extends React.Component{
     }
 
     handleClick () {
-        window.location = '/league/'+this.props.league.id;
+        window.location = '/league/'+this.props.league._id;
     }
 
     render(){

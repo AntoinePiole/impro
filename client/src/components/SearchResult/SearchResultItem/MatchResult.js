@@ -11,7 +11,7 @@ export class MatchResult extends React.Component{
     }
 
     handleClick () {
-        window.location = '/match/'+this.props.match.id;
+        window.location = '/match/'+this.props.match._id;
     }
 
     componentDidMount(){ //to initialize values of league1, league2

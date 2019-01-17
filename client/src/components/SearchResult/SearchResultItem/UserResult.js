@@ -8,7 +8,7 @@ export class UserResult extends React.Component{
     }
 
     handleClick () {
-        window.location = '/user/'+this.props.user.id;
+        window.location = '/user/'+this.props.user._id;
     }
     
     render(){
