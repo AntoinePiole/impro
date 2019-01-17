@@ -102,7 +102,6 @@ export default {
     },
 
     // ########## User in a match ##########
-    
     addToMatch : function(userId, matchId, send){
         return axios.patch('/matches/' + matchId + '/users/' + userId + '?add=true', send, {headers: headers})
     },

@@ -22,14 +22,28 @@ export class LeagueJoinRequests extends React.Component {
         window.location="/user/" + user._id
     }
 
-    acceptUser (userId, leagueId) {
-        console.log("accept the member", userId, this.state.leagueId)
+    acceptUser (userId) {
+        console.log(userId)
+        API.acceptMemberPropositionOfLeague(userId, this.state.leagueId)
+            .then(res => {
+                this.render()
+            })
+            .catch(err =>{
+                alert(err)
+            })
+        console.log("accepted the member", userId, this.state.leagueId)
     }
 
-    removeUser (userId, leagueId) {
-        console.log("remove the member", userId, this.state.leagueId)
+    removeUser (userId) {
+        API.refuseMemberPropositionOfLeague(userId, this.state.leagueId)
+            .then(res => {
+                this.render()
+            })
+            .catch(err =>{
+                alert(err)
+            })
+        console.log("refused the member", userId, this.state.leagueId)
     }
-
 
 
     async componentDidMount () {
@@ -57,8 +71,8 @@ export class LeagueJoinRequests extends React.Component {
                             <a onClick={() => this.selectUser(user)}>
                                 {user.username? user.username : user.firstName + ' ' + user.familyName}
                             </a>
-                            <Button className="glyphicon glyphicon-ok" onClick = {() => this.acceptUser(user.id)}/>
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(user.id)}/>
+                            <Button className="glyphicon glyphicon-ok" onClick = {() => this.acceptUser(user._id)}/>
+                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.removeUser(user._id)}/>
                         </Row>
                     </ListGroupItem>
                 )}
