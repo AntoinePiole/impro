@@ -13,11 +13,21 @@ export class UserResult extends React.Component{
     
     render(){
         const user = this.props.user;
-        return (
-            <div className='userResult' onClick = {this.handleClick}>
-                <UserPhoto photoId={user.photoId} />
-                <h3 className='userName'>{user.name}</h3> {/* Must be styled inline*/}
-            </div>
-        )
+        if(user){
+            return (
+                <div className='userResult' onClick = {this.handleClick}>
+                    <UserPhoto photoId={user.photoId} />
+                    <h3 className='userName'>{user.username}</h3>
+                </div>
+            )
+        }
+        else {
+            return(
+                <div>
+                    <UserPhoto photoId={null} />
+                    <h3 className='userName'>User 404</h3>
+                </div>
+                )
+        }
     }
 }

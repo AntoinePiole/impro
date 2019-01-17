@@ -1,7 +1,7 @@
 import React from 'react';
-import { PlayerResultAdmin } from './PlayerResultAdmin';
+import { PlayerResultModifier } from './PlayerResultModifier';
 import {ListGroup, ListGroupItem} from 'react-bootstrap';
-import './PlayerListAdmin.css';
+
 /**
  * displays the list of players of the team for an admin of the league
  * @property {memberObject array} participantsList
@@ -9,17 +9,17 @@ import './PlayerListAdmin.css';
  * @property {function} addParticipant (userId:String, waiting:boolean) - add a participant for this league, in waiting list or definitive list
  * @property {function} removeParticipant -  (userId:String, waiting:boolean) - removes a participant for this league, in waiting list or definitive list 
  */
-export class PlayerListAdmin extends React.Component{
+export class PlayerListModifier extends React.Component{
     
     participantsList (){
         return this.props.participantsList.map(
-            participant => <ListGroupItem><PlayerResultAdmin user={participant} waiting={false} removeParticipant={()=>this.props.removeParticipant(participant._id,false)} /></ListGroupItem>
+            participant => <ListGroupItem><PlayerResultModifier user={participant} waiting={false} removeParticipant={()=>this.props.removeParticipant(participant._id,false)} /></ListGroupItem>
         )
     }
 
     waitingList (){
         return this.props.waitingList.map(
-            waiter => <ListGroupItem><PlayerResultAdmin user={waiter} waiting={true} acceptParticipant={()=>this.props.addParticipant(waiter._id,false)} removeParticipant={()=>this.props.removeParticipant(waiter._id,true)}/></ListGroupItem>
+            waiter => <ListGroupItem><PlayerResultModifier user={waiter} waiting={true} acceptParticipant={()=>this.props.addParticipant(waiter._id,false)} removeParticipant={()=>this.props.removeParticipant(waiter._id,true)}/></ListGroupItem>
         )
     }
 

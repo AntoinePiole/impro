@@ -13,7 +13,7 @@ export class ResultList extends React.Component {
 
         const results = this.props.results;
         if(results.length===0){ //if there are no results
-            return (<ListGroupItem>Cette recherche ne correspond à rien de connu</ListGroupItem>) 
+            return (<ListGroupItem>Aucun résultat</ListGroupItem>) 
         }
         const type = this.props.type;
         const toRender = results.map (result => {

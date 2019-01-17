@@ -1,21 +1,18 @@
 import React from 'react';
-import { TeamContainer } from './MatchComponents/TeamContainer/TeamContainer.js';
-import {Description} from './MatchComponents/Description/Description';
-import { ModificationButton } from './MatchComponents/ModificationButton/ModificationButton';
-import {StaffContainer} from './MatchComponents/StaffContainer/StaffContainer';
-import API from '../../utils/API.js';
-
-import './MatchContainer.css';
+import { TeamContainerModifier } from './MatchComponentsModifier/Team/TeamContainerModifier';
+import { StaffContainerModifier } from './MatchComponentsModifier/Staff/StaffContainerModifier';
+import { ModificationButtonModifier } from './MatchComponentsModifier/ModificationButton/ModificationButtonModifier';
+import { DeleteButton } from './MatchComponentsModifier/DeleteButton/DeleteButton';
+import { DescriptionModifier } from './MatchComponentsModifier/Description/DescriptionModifier.js';
+import API from '../../../utils/API.js';
 
 /**
  * @property {match Object} - json object representing the match
  */
-export class MatchContainer extends React.Component{
+export class MatchContainerModifier extends React.Component{
     constructor(props){
         super(props);
         this.state = { //TO DO : replace {} by null ??
-            isModifying: false, //true if page in modification (to display the 'admin page')
-            descriptionText: this.props.match.description,
             league1 : {},
             league2 : {},
             league1Members : [],
@@ -26,12 +23,12 @@ export class MatchContainer extends React.Component{
             mc: null,
             refereePropositions : [],
             mcPropositions : [],
-            admin : false
+            admin : false,
+            descriptionText: ''
         }; 
-        this.setDescriptionText = this.setDescriptionText.bind(this);
         this.addToLeague = this.addToLeague.bind(this);
         this.removeFromLeague = this.removeFromLeague.bind(this);
-        this.handleModify = this.handleModify.bind(this);
+        this.setDescriptionText = this.setDescriptionText.bind(this);
 
     }
     /**
@@ -103,28 +100,7 @@ export class MatchContainer extends React.Component{
     }
 
     setDescriptionText(text){
-        this.setState({descriptionText: text});
-    }
-
-    handleModify(event){
-        if(this.state.isModifying) {
-            const text = this.state.descriptionText;
-            const self = this;
-            API.patchMatch(this.props.match._id,{description: text}).then(
-                function (result,err){
-                    if(err){
-                        console.log(err);
-                        return;
-                    }
-                    self.setState({isModifying: false}); //TO CHECK : this is bind?
-                }
-            );
-        } else {
-            if (this.isAdmin(localStorage.getItem('id'))){ //if current user has right to modify match TO MODIFY : not very secure admin
-                this.setState({isModifying: true});
-            } 
-            else {console.log("Vous n'avez pas les droits pour modifier ce match");}
-        }   
+        this.setState({descriptionText:text})
     }
 
     componentDidMount(){        
@@ -154,7 +130,8 @@ export class MatchContainer extends React.Component{
                     mc : result[7].data.user,
                     refereePropositions : result[8].map(userData => userData.data.user),
                     mcPropositions : result[9].map(userData => userData.data.user),
-                    admin : result[10]
+                    admin : result[10],
+                    descriptionText: this.props.match.description
             })
         }
         ).catch(
@@ -167,6 +144,7 @@ export class MatchContainer extends React.Component{
     //componentDidUpdate : condition est ce que mon nouveau state est le même que l'ancien ? ==> boucle plus
 
     render(){
+        //local info
         const league1 = this.state.league1;
         const league2 = this.state.league2;
         const league1Members = this.state.league1Members;
@@ -177,16 +155,16 @@ export class MatchContainer extends React.Component{
         const referee = this.state.referee;
         const mc = this.state.mc;
         const mcPropositions = this.state.mcPropositions;
-        const admin = this.state.admin;
+
         return(
             <div className='matchContainer'>
-                <TeamContainer className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
+                <TeamContainerModifier className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
                 <span className='VS'>VS</span>
-                <TeamContainer className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
-                <Description descriptionText={this.state.descriptionText} isModifying={this.state.isModifying} setDescriptionText={this.setDescriptionText} />
-                <StaffContainer matchId={this.props.match._id} referee={referee} mc={mc} refereePropositions={refereePropositions} mcPropositions={mcPropositions} isModifying={this.state.isModifying}/>
-                {admin ? <ModificationButton onClick={this.handleModify} isModifying={this.state.isModifying}/> : null /* modification button, displayed only if current user is admin of the page */}
-            
+                <TeamContainerModifier className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
+                <DescriptionModifier descriptionText={this.state.descriptionText} setDescriptionText={this.setDescriptionText} />
+                <StaffContainerModifier matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={refereePropositions} waitingMc={mcPropositions} />
+                <ModificationButtonModifier matchId = {this.props.match._id} descriptionText={this.state.descriptionText}/>
+                <DeleteButton matchId={this.props.match._id} />   
             </div>
         )
     }

@@ -3,16 +3,21 @@ import { Button } from 'react-bootstrap';
 import { match } from '../../../../../fakeDB';
 
 /**
- * @property {id array} participantsList - id of the users participating with this league
- * @property {id array} waitingList - id of the users waiting to play with this league
- * @property {league Object} league 
+ * @property {boolean} isParticipating
+ * @property {boolean} isWaiting
+ * @property {function} addParticipant - (userId, waiting) => Promise
+ * @property {function} removeParticipant - (userId, waiting) => Promise
  * @property {function} update - the render method of its parent (TeamContainer)
  */
-export class TeamJoiningButton extends React.Component{
+export class JoiningButton extends React.Component{
 
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            isParticipating: false,
+            isWaiting: false
+        }
     }
 
     handleClick(event){

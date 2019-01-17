@@ -1,11 +1,8 @@
 import React from 'react';
-import { TeamContainer } from './MatchComponents/TeamContainer/TeamContainer.js';
-import {Description} from './MatchComponents/Description/Description';
+import { TeamContainer } from './MatchComponents/Team/TeamContainer';
 import { ModificationButton } from './MatchComponents/ModificationButton/ModificationButton';
-import {StaffContainer} from './MatchComponents/StaffContainer/StaffContainer';
-import API from '../../utils/API.js';
-
-import './MatchContainer.css';
+import {StaffContainer} from './MatchComponents/Staff/StaffContainer';
+import API from '../../../utils/API.js';
 
 /**
  * @property {match Object} - json object representing the match
@@ -14,24 +11,16 @@ export class MatchContainer extends React.Component{
     constructor(props){
         super(props);
         this.state = { //TO DO : replace {} by null ??
-            isModifying: false, //true if page in modification (to display the 'admin page')
-            descriptionText: this.props.match.description,
             league1 : {},
             league2 : {},
             league1Members : [],
             league2Members : [],
-            league1MembersPropositions : [],
-            league2MembersPropositions : [],
             referee: null,
             mc: null,
-            refereePropositions : [],
-            mcPropositions : [],
             admin : false
         }; 
-        this.setDescriptionText = this.setDescriptionText.bind(this);
         this.addToLeague = this.addToLeague.bind(this);
         this.removeFromLeague = this.removeFromLeague.bind(this);
-        this.handleModify = this.handleModify.bind(this);
 
     }
     /**
@@ -72,7 +61,7 @@ export class MatchContainer extends React.Component{
         );
         return Promise.all(promises); //TO DO : if one of users bug, everything crashes, other way to do it ?
     }
-    
+
     /**
      * true if user is admin of the league
      * @param {*} leagueId 
@@ -102,59 +91,26 @@ export class MatchContainer extends React.Component{
     
     }
 
-    setDescriptionText(text){
-        this.setState({descriptionText: text});
-    }
-
-    handleModify(event){
-        if(this.state.isModifying) {
-            const text = this.state.descriptionText;
-            const self = this;
-            API.patchMatch(this.props.match._id,{description: text}).then(
-                function (result,err){
-                    if(err){
-                        console.log(err);
-                        return;
-                    }
-                    self.setState({isModifying: false}); //TO CHECK : this is bind?
-                }
-            );
-        } else {
-            if (this.isAdmin(localStorage.getItem('id'))){ //if current user has right to modify match TO MODIFY : not very secure admin
-                this.setState({isModifying: true});
-            } 
-            else {console.log("Vous n'avez pas les droits pour modifier ce match");}
-        }   
-    }
-
     componentDidMount(){        
         //those const are promises
         const league1 = API.getLeagueById(this.props.match.league1Id);
         const league2 = API.getLeagueById(this.props.match.league2Id);
         const league1Members = this.findUsers(this.props.match.league1Members);
         const league2Members = this.findUsers(this.props.match.league2Members);
-        const league1MembersPropositions = this.findUsers(this.props.match.league1MembersPropositions);
-        const league2MembersPropositions = this.findUsers(this.props.match.league2MembersPropositions);
         const referee = this.props.match.referee ? API.getUserById(this.props.match.referee) : Promise.resolve({data:{user:null}}); //TO CHECK : to make it work even if no referee
-        const mc = this.props.mc ? API.getUserById(this.props.mc) : Promise.resolve({data:{user:null}});
-        const refereePropositions = this.findUsers(this.props.match.refereePropositions);
-        const mcPropositions = this.findUsers(this.props.match.mcPropositions);
+        const mc = this.props.match.mc ? API.getUserById(this.props.match.mc) : Promise.resolve({data:{user:null}});
         const admin = this.isAdmin(localStorage.getItem('id'));
         const self = this;
-        Promise.all([league1,league2,league1Members,league2Members,league1MembersPropositions,league2MembersPropositions,referee,mc,refereePropositions,mcPropositions, admin]).then(
+        Promise.all([league1,league2,league1Members,league2Members,referee,mc, admin]).then(
             function(result){
                 self.setState({
                     league1 : result[0].data.league,
                     league2 : result[1].data.league,
                     league1Members : result[2].map(userData => userData.data.user),
                     league2Members : result[3].map(userData => userData.data.user),
-                    league1MembersPropositions : result[4].map(userData => userData.data.user),
-                    league2MembersPropositions : result[5].map(userData => userData.data.user),
-                    referee : result[6].data.user,
-                    mc : result[7].data.user,
-                    refereePropositions : result[8].map(userData => userData.data.user),
-                    mcPropositions : result[9].map(userData => userData.data.user),
-                    admin : result[10]
+                    referee : result[4].data.user,
+                    mc : result[5].data.user,
+                    admin : result[6]
             })
         }
         ).catch(
@@ -167,26 +123,33 @@ export class MatchContainer extends React.Component{
     //componentDidUpdate : condition est ce que mon nouveau state est le même que l'ancien ? ==> boucle plus
 
     render(){
+        //local info
+        const userId = localStorage.getItem('id');
+        const match = this.props.match;
+        
+        //infos about the match that were fetched from DB
         const league1 = this.state.league1;
         const league2 = this.state.league2;
         const league1Members = this.state.league1Members;
         const league2Members = this.state.league2Members;
-        const league1MembersPropositions = this.state.league1MembersPropositions;
-        const league2MembersPropositions = this.state.league2MembersPropositions;
-        const refereePropositions = this.state.refereePropositions;
         const referee = this.state.referee;
         const mc = this.state.mc;
-        const mcPropositions = this.state.mcPropositions;
+
+        //true if current user is waiting for the role
+        const waitingLeague1 = match.league1MembersPropositions.includes(userId);
+        const waitingLeague2 = match.league2MembersPropositions.includes(userId);
+        const waitingReferee = match.refereePropositions.includes(userId);
+        const waitingMc = match.mcPropositions.includes(userId);
         const admin = this.state.admin;
+
         return(
             <div className='matchContainer'>
-                <TeamContainer className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
+                <TeamContainer className='league1' league={league1} participants={league1Members} waiting={waitingLeague1} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
                 <span className='VS'>VS</span>
-                <TeamContainer className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} isModifying={this.state.isModifying} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
-                <Description descriptionText={this.state.descriptionText} isModifying={this.state.isModifying} setDescriptionText={this.setDescriptionText} />
-                <StaffContainer matchId={this.props.match._id} referee={referee} mc={mc} refereePropositions={refereePropositions} mcPropositions={mcPropositions} isModifying={this.state.isModifying}/>
-                {admin ? <ModificationButton onClick={this.handleModify} isModifying={this.state.isModifying}/> : null /* modification button, displayed only if current user is admin of the page */}
-            
+                <TeamContainer className='league2' league={league2} participants={league2Members} waiting={waitingLeague2} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
+                <p className='description'>{this.props.match.description}</p>
+                <StaffContainer matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={waitingReferee} waitingMc={waitingMc} />
+                {admin ? <ModificationButton matchId={this.props.match._id} /> : null /* modification button, displayed only if current user is admin of the page */}          
             </div>
         )
     }

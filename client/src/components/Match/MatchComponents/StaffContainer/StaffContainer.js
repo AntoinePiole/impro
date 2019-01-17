@@ -2,7 +2,7 @@ import React from 'react';
 import {StaffResult} from './Staff/StaffResult';
 import {StaffList} from './Staff/StaffList';
 import {ParticipationButton} from './Staff/ParticipationButton';
-import {API} from '../../../../utils/API.js';
+import API from '../../../../utils/API.js';
 
 /**
  * displays the mc and referee, and allows to modify them if admin

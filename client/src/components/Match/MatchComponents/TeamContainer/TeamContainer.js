@@ -19,10 +19,30 @@ export class TeamContainer extends React.Component{
      */
     isAdmin(userId){
         const currentUser = this.props.league.members.find( 
-            user => user.id === userId 
+            user => user._id === userId 
         );
-        if (currentUser) {return currentUser.admin}
+        if (currentUser) {return currentUser.isAdmin}
         else {return false};
+    }
+
+    /**
+     * checks if a user is already participating with this league
+     * @param {number} userId
+     * @returns {boolean}
+     */
+    isParticipating(userId){
+        return (this.props.participants.some(
+            user => user._id === userId)) //if one prticipants has same id
+    }
+
+     /**
+     * true if user is on the waiting list to play
+     * @param {String} userId 
+     */
+    isWaiting(userId){
+        return (this.props.participantsPropositions.indexOf(
+            user => user._id === userId
+        ) !== -1) ; //supposed to check if one of the elements in array satisfies cb
     }
 
     isModifying(userId){
@@ -30,11 +50,13 @@ export class TeamContainer extends React.Component{
     }
 
     render(){
+        const participating = this.isParticipating(localStorage.getItem("id"));
+        const waiting = this.isWaiting(localStorage.getItem("id"));
         return(
             <div className='teamContainer'>
                 <LeagueInfo league={this.props.league} />
                 <PlayerListContainer participantsList={this.props.participants} participantsWaitingList={this.props.participantsPropositions} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} isModifying={this.isModifying(localStorage.getItem('id'))}/>
-                <TeamJoiningButton league={this.props.league} participantsList={this.props.participants} waitingList={this.props.participantsPropositions} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant}/>
+                <TeamJoiningButton isParticipating={participating} isWaiting={waiting} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} update={this.render.bind(this)}/>
             </div>
         )
     }

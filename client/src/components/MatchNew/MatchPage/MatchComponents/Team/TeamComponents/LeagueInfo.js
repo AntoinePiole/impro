@@ -1,6 +1,5 @@
 import React from 'react';
-import './LeagueInfo.css';
-import {LeaguePhoto} from '../../../../League/LeaguePhoto';
+import {LeaguePhoto} from '../../../../../League/LeaguePhoto';
 
 /**
  * @property {object} league - the league object this describes
