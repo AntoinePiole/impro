@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const passport = require('passport'); 
 const session = require('express-session'); 
-var usersRouter = require(__dirname + '/controllers/userController');
-var leaguesRouter = require(__dirname + '/controllers/leagueController');
+var usersRouter = require(__dirname + '/controllers/users/userController');
+var leaguesRouter = require(__dirname + '/controllers/leagues/leagueController');
 var imagesRouter = require(__dirname + '/controllers/imageController');
 var matchesRouter = require(__dirname + '/controllers/match/matchController');
 

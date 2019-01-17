@@ -1,4 +1,4 @@
-const leagues = require('./leagues/leaguesLib.js');
+const leagues = require('./leaguesLib.js');
 
 
 var express = require('express');

@@ -19,6 +19,7 @@ export class League extends React.Component {
             name : "",
             nickname : "",
             email: "",
+            photoId: "",
             desc : "",
             sentMatchRequestsIds : [],
             receivedMatchRequestsIds : [], // CHANGE TYPE FROM TRIPLE TO MATCH, MAKE A BACKEND FUNCTION TO GET RECEIVED AND SENT FROM BACK BY CALLING WITH ID
@@ -38,31 +39,33 @@ export class League extends React.Component {
         this.id = window.location.toString().substr(window.location.toString().lastIndexOf("/")+1);
         API.getLeagueById(this.id)
             .then(data => {
-            var league = data.data.league;
-            if (!league) {
+                console.log(data)
+                var league = data.data.league;
+                if (!league) {
+                    this.setState ({
+                        leagueNotFound : true
+                    })
+                    return ;
+                    }
                 this.setState ({
-                    leagueNotFound : true
-                })
-                return ;
+                    id : this.id,
+                    name : league.name,
+                    nickname : league.nickname || "",
+                    desc : league.desc || "",
+                    email : league.email || "",
+                    photoId : league.photoId || "",
+                    members : league.members || [],
+                    sentMatchRequestsIds : league.sentMatchRequestsIds|| [],
+                    receivedMatchRequestsIds : league.receivedMatchRequestsIds|| [],
+                    memberPropositions: league.memberPropositions|| [],
+                    editting : false,
+                    isAdmin : API.isAdminOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is an admin of this league
+                    isMember : API.isMemberOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is a member of this league
+                    isLoading : false,
+                    leagueNotFound : false
+                });
             }
-            this.setState ({
-                id : this.id,
-                name : league.name,
-                nickname : league.nickname || "",
-                desc : league.desc || "",
-                email : league.email || "",
-                photoId : league.photoId || "",
-                members : league.members || [],
-                sentMatchRequestsIds : league.sentMatchRequestsIds|| [],
-                receivedMatchRequestsIds : league.receivedMatchRequestsIds|| [],
-                memberPropositions: league.memberPropositions|| [],
-                editting : false,
-                isAdmin : API.isAdminOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is an admin of this league
-                isMember : API.isMemberOfLeague(localStorage.getItem("id"), league.members), //true if the connected user is a member of this league
-                isLoading : false,
-                leagueNotFound : false
-            });
-        })
+        )
         .catch (err => {
             this.setState ({
                 leagueNotFound : true
@@ -105,9 +108,9 @@ export class League extends React.Component {
                     }
                     </Col>
                     <Col>
-                    <div className="UserList">
-                        <UserList id={this.state.id} members={this.state.members} isAdmin={this.state.isAdmin}/>    
-                    </div>
+                        <div className="UserList">
+                            <UserList id={this.state.id} members={this.state.members} isAdmin={this.state.isAdmin}/>    
+                        </div>
                     </Col>
                     {this.state.isAdmin?
                         <Col>

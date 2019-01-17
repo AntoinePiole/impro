@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, ButtonGroup } from "react-bootstrap";
-
+import { Button, ButtonGroup, Row, Col } from "react-bootstrap";
+import { Title } from "./Title"
 import API from '../../utils/API';
 
 export class Dashboard extends React.Component {
@@ -35,31 +35,42 @@ export class Dashboard extends React.Component {
     login = event => {
         window.location = "/login";
     }
+
     render() {
         if (API.isAuth()) {
             return(
                 <div className="Dashboard">
-                    <h1>Bienvenue sur notre site d'impro !</h1>
-                    <ButtonGroup className="Button" bsSize="large">
-                        <Button onClick={this.home}>Ecran d'acceuil</Button>
-                        <Button onClick={this.user}>Mon profil</Button>
-                        <Button onClick={this.myLeagues}>Mes ligues</Button>
-                        <Button onClick={this.makeLeague}>Créer une ligue</Button>
-                        <Button onClick={this.search}>Recherche</Button>
-                        <Button onClick={this.disconnect}>Déconnexion</Button>
-                    </ButtonGroup>
+                    <Title/>
+                    <Row>
+                        <Col xs={12}>
+                            <ButtonGroup className="Button" bsSize="large">
+                                    <Button onClick={this.home}>Ecran d'acceuil</Button>
+                                    <Button onClick={this.user}>Mon profil</Button>
+                                    <Button onClick={this.myLeagues}>Mes ligues</Button>
+                                    <Button onClick={this.makeLeague}>Créer une ligue</Button>
+                                    <Button onClick={this.search}>Recherche</Button>
+                                    <Button onClick={this.disconnect}>Déconnexion</Button>
+                            </ButtonGroup>
+                        </Col>
+                    </Row>
                 </div>
             )
         }
         else {
             return(
                 <div className="Dashboard">
-                    <h1>Bienvenue sur notre site d'impro !</h1>
-                    <ButtonGroup className="Button" bsSize="large">
-                        <Button onClick={this.home}>Ecran d'acceuil</Button>
-                        <Button onClick={this.search}>Recherche</Button>
-                        <Button onClick={this.login}>Se connecter</Button>
-                    </ButtonGroup>
+                    <Title/>
+                    <Row>
+                        <Col xs={2}></Col>
+                        <Col xs={8}>
+                            <ButtonGroup className="Button" bsSize="large">
+                                <Button onClick={this.home}>Ecran d'acceuil</Button>
+                                <Button onClick={this.search}>Recherche</Button>
+                                <Button onClick={this.login}>Se connecter</Button>
+                            </ButtonGroup>
+                        </Col>
+                        <Col xs={2}></Col>
+                    </Row>
                 </div>
             )
         }

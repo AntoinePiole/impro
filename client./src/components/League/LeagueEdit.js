@@ -27,7 +27,6 @@ export class LeagueEdit extends React.Component {
     }
 
     render() {
-        //TODO : how to add photos ?
         return (
             <div className="LeagueEdit" >
 

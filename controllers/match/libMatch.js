@@ -301,7 +301,9 @@ function validateMatch(req, res, next){
 function validateMatchRequired(req, res, next){
     const match = req.body.match;
     const result = Validator.validate(match,true);
+
     if(result.error){ //should be a promise syntax, but didn't work
+        console.log(result.error)
         res.status(400).json({
             text: "Unfit parameters",
             errorDetail: {name: result.error.name, message: result.error.details[0].message},

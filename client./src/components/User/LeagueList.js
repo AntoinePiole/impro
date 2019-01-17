@@ -1,7 +1,8 @@
 import React from 'react';
-import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
+import { ListGroup, ListGroupItem, Button, Row, Col } from "react-bootstrap";
 import API from '../../utils/API';
 import { LeaguePhoto } from '../League/LeaguePhoto';
+import '../League/League.css';
 
 export class LeagueList extends React.Component {
     constructor(props) {
@@ -40,25 +41,35 @@ export class LeagueList extends React.Component {
     render() {
         return (
             <div>
-                <h2>
-                    Liste de ligues
-                </h2>
+                <Row>
+                    <Col xs ={12}>
+                    <h2>
+                        Liste de ligues
+                    </h2>
+                    </Col>
+                </Row>
                 <ListGroup>
                 {this.state.leagues.map((league) => ( 
                     <ListGroupItem key={league._id} >
-                        <div>
-                            <LeaguePhoto photoId = {league.photoId} thumbnail={true} />
-                        </div>
-                        {API.isAdminOfLeague(this.props.id, league.members) ?
-                            <span className="glyphicon glyphicon-asterisk"></span>
-                        : 
-                            <span className="glyphicon glyphicon-user"></span>} 
-                        <a onClick={() => this.selectLeague(league)}>{league.name}</a>
-                        {API.isMemberOfLeague(this.props.id, league.members) ?
-                            <Button className="glyphicon glyphicon-remove" onClick = {() => this.leaveLeague(league)}/>
-                        :
-                            null 
-                        }
+                        <Row>
+                            <Col md={12}>
+                                <LeaguePhoto photoId={league.photoId} thumbnail />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                {API.isAdminOfLeague(this.props.id, league.members) ?
+                                    <span className="glyphicon glyphicon-asterisk"></span>
+                                : 
+                                    <span className="glyphicon glyphicon-user"></span>} 
+                                <a onClick={() => this.selectLeague(league)}>{league.name}</a>
+                                {API.isMemberOfLeague(this.props.id, league.members) ?
+                                    <Button className="glyphicon glyphicon-remove" onClick = {() => this.leaveLeague(league)}/>
+                                :
+                                    null 
+                                }
+                            </Col>
+                        </Row>
                     </ListGroupItem>
                 ))}
                 </ListGroup>

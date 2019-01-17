@@ -22,7 +22,8 @@ export class User extends React.Component {
             phone : "",
             desc : "", 
             photoId : "",
-            userNotFound : null
+            userNotFound : null,
+            _isMounted : false
         }
         this.updateUser = this.updateUser.bind(this);
     }
@@ -48,8 +49,9 @@ export class User extends React.Component {
                 username : user.username || "Non renseigné",
                 phone : user.phone || "Non renseigné",
                 desc : user.desc || "Non renseigné",
-                photoId : user.photoId,
-                userNotFound : false
+                photoId : user.photoId || "",
+                userNotFound : false,
+                _isMounted : true
             })
         })
         .catch (err => {
@@ -72,25 +74,29 @@ export class User extends React.Component {
     }
 
     async updateUser (data) {
-        await API.patchUser(this.id, data).then (
-            this.setState({
-                editting : false
-            })
-        )
+        await API.patchUser(this.id, data);
+        await this.setState({
+            editting : false
+        })
     }
     render() {
         if(this.state.userNotFound) {
             return <UserNotFound />
         }
+        console.log(this.state)
         const birthday = this.state.birthday===""? 'Non renseignée': moment(this.state.birthday).format('DD/MM/YYYY');
         return (
             <div className="User">
-                {this.state.editting ?
-                    <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} handleChange={this.handleChange} updateUser={this.updateUser} /> 
-                :
-                    <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} setEdittingMode={this.setEdittingMode} />
-                }
-                <LeagueList id={this.state.id}/>  
+                {this.state._isMounted ?
+                    <div>
+                        {this.state.editting ?
+                            <UserEdit id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} handleChange={this.handleChange} updateUser={this.updateUser} /> 
+                        :
+                            <UserDisplay id={this.state.id} email={this.state.email} firstName={this.state.firstName} familyName={this.state.familyName} username={this.state.username} birthday={birthday} phone={this.state.phone} desc={this.state.desc} photoId={this.state.photoId} setEdittingMode={this.setEdittingMode} />
+                        }
+                        <LeagueList id={this.state.id}/>  
+                    </div>
+                :null}
             </div>
         )
     }

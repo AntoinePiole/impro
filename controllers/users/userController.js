@@ -1,4 +1,4 @@
-const account = require('./users/usersLib.js');
+const account = require('./usersLib.js');
 var express = require('express');
 var router = express.Router();
 
@@ -8,7 +8,7 @@ router.get('/:id', account.getUserById);
 //Setter
 router.patch('/:id', account.patchUserById); 
 //Constructor
-router.post('/', account.signup, function(req,res){res.status(200).json({hello:"hello"})});
+router.post('/', account.signup, function(req,res){res.status(200).json({session:req.session})});
 //Logging
 router.post('/login', account.login, function(req,res){res.status(200).json({user:req.user})});
 //User in a league

@@ -18,7 +18,7 @@ router.post('/', upload,
         console.log(req.file)
         res.json({ //Par défaut, statut = 200
             success: true,
-            path : req.file.path,
+            filename : req.file.filename,
             message : "Image uploaded"
         })
     }, 

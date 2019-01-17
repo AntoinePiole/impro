@@ -30,8 +30,11 @@ export class Login extends React.Component {
             return;
         }
         API.login(this.state.email, this.state.password).then(function(data){
-            localStorage.setItem('id', data.data.user._id);
-            window.location='/home';//TO DO : stop using localStorage (?)
+            var id = data.data.session.passport.user;
+            var cookie = data.data.session.cookie;
+            localStorage.setItem('cookie', cookie);
+            localStorage.setItem('id', id)
+            window.location = "/home"
         },function(error){
             console.log(error);
             return;

@@ -10,7 +10,6 @@ getMatchById(String id)
   
 getLeaguesOfUser(String userId)
   Returns the Ids of all the leagues an user is in
-    => Should then get their names and photos... Any way to get all that data at once ???
   
 ########## Setters ##########
 (patch) patchUser(String id, ...)
@@ -75,6 +74,9 @@ acceptMemberPropositionOfLeague(String userId, String leagueId)
   
 refuseMemberPropositionOfLeague(String userId, String leagueId)
   Remove the user from the league's memberPropositions
+  
+addMatchRequest(Match match, String sendingId, String receivingId)
+  Add the request to both league's pending match requests. League1 is the sending league
   
 getLeaguesOfUser(String userId, String leagueId)
   Get all the leagues an user is in

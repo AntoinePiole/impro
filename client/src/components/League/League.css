@@ -17,23 +17,15 @@
     border:none;
 }
 
-.UserList div {
-    display: inline-block;
-    width: 85%;
-    color: blueviolet;
-    border:none;
-}
-
 .MatchSuggestions div {
     display:block;
 }
 
 Grid {
     display:block;
-    color: red;
 }
 
-#MatchSuggester {
-    display:block;
-    margin : 100px
+ListGroupItem {
+    margin-left: auto;
+    margin-right: auto;
 }
