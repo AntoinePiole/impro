@@ -69,7 +69,7 @@ function searchMatch(req, res){
 function patchMatch(req, res){ 
 
     const id = req.params.id;
-    const query = Match.findByIdAndUpdate(id, req.body.match, {new:true}); //new true allows to return the modified document
+    const query = Match.findByIdAndUpdate(id, req.body, {new:true}); //new true allows to return the modified document
 
     query.exec(function (err, match){
         if (err) {
@@ -85,14 +85,13 @@ function patchMatch(req, res){
 }
 
 function makeMatch(req, res){ 
-    console.log(req.body)
     const match = { 
-        name: req.body.match.name,
+        name: req.body.name,
         status: 'waitingConfirmation',  //between [finished, waitingConfirmation, confirmed, canceled]
-        league1Id: req.body.match.league1Id,
-        league2Id: req.body.match.league2Id,
-        league1Members: req.body.match.league1Members,
-        league2Members: req.body.match.league2Members,
+        league1Id: req.body.league1Id,
+        league2Id: req.body.league2Id,
+        league1Members: req.body.league1Members,
+        league2Members: req.body.league2Members,
         league1MembersPropositions: [],
         league2MembersPropositions: [],
         referee: null,
@@ -101,9 +100,9 @@ function makeMatch(req, res){
         mcPropositions: [],
         admins: [],
         subscribers: [],
-        description: req.body.match.description ? req.body.match.description : "",
-        date: req.body.match.date, //TO CHECK : how to manage dates request ?
-        location: req.body.match.location,
+        description: req.body.description ? req.body.description : "",
+        date: req.body.date, //TO CHECK : how to manage dates request ?
+        location: req.body.location,
         score: {score1: 0, score2: 0}
     } ;
     
@@ -124,10 +123,41 @@ function makeMatch(req, res){
 
 //------ USER IN MATCH ------
 
+/**
+ * checks if user has a certain role in match, if no calls next
+ */
+function hasRole(req, res, next){
+    const matchId = req.params.matchId;
+    const userId = req.params.userId;
+    const role = req.body.role;
+    const waiting = req.body.waiting;
 
+    Match.findById(matchId).exec(function(err,match){
+        if(err){
+            res.status(500).json({text: 'Internal Error'});
+            return;
+        }
+        const field = match.findField(role,waiting);
+        var hasRole = false;
+        if((role==='referee' || role==="mc") && !waiting){ //fields that are not array
+            hasRole = (field.fieldValue === userId)
+        }
+        else {
+            hasRole = field.fieldValue.includes(userId)
+        }
+        if(hasRole){
+            res.status(400).json({
+                text: 'User already has this role'
+            })
+            return;
+        }
+        else {
+            next();
+        }
+    })
+}
 
 /**
- * 
  * ajoute un user au match, renvoie un objet {liste: newList} correspond au champ modifié dans l'objet match avec sa nouvelle valeur
  */
 function addToMatch(req,res){  
@@ -285,7 +315,7 @@ function getMatchesList(req, res) {
 //-----VALIDATION-----
 
 function validateMatch(req, res, next){
-    const match = req.body.match;
+    const match = req.body;
     const result = Validator.validate(match,false);
     if(result.error){ //should be a promise syntax, but didn't work
         res.status(400).json({
@@ -299,7 +329,7 @@ function validateMatch(req, res, next){
 }
 
 function validateMatchRequired(req, res, next){
-    const match = req.body.match;
+    const match = req.body;
     const result = Validator.validate(match,true);
 
     if(result.error){ //should be a promise syntax, but didn't work
@@ -380,16 +410,59 @@ function validateParamsMatchesList(req, res, next){
     next(); //else pass to next middleware
 }
 
+function isAdminOfMatch(req, res, next){ //gérer cas où il y a id dans les params et où il n'y est pas ? ou 2 trucs différents ?
+    const userId = req.params.userId ? req.params.userId : req.session.user._id; //TO CHECK req.session.user._id?
+    const matchId = req.params.matchId;
+    if(!matchId || !userId){
+        res.status(400).json({
+            text: "Missing id"
+        })
+        return;
+    }
+    const findMatch=Match.findById(matchId)
+    findMatch.exec(function(err,match){
+        if(err){
+            res.status(500).json({
+                text:'Internal error'
+            });
+            return;
+        }
+        const league1Id = match.league1Id;
+        const league2Id = match.league2Id;
+        const admins = match.admins;
+        if(admins.includes(userId)){
+            res.status(200).json({
+                admin: true
+            })
+        }
+        //ELSE CHECK IF ADMIN OF LEAGUE1 OR ADMIN OF LEAGUE2 
+    })
+}
+
+function deleteMatch(req, res){
+    Match.findByIdAndDelete(matchId).exec(function(err,result){
+        if(err){
+            res.status(500).json({text:'Erreur interne'});
+            return;
+        }
+        res.status(200).json({text: "Match successfully deleted"})
+    })
+}
+
+
+
 
 //-----MIDDLEWARES-----
 exports.getAllMatches = getAllMatches;
 exports.getMatch = getMatch;
+exports.hasRole = hasRole;
 exports.patchMatch = patchMatch;
 exports.makeMatch = makeMatch;
 exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
 exports.searchMatch = searchMatch;
 exports.getMatchesList = getMatchesList;
+exports.deleteMatch = deleteMatch;
 
 //-----VALIDATON-----
 exports.validateMatch = validateMatch;
