@@ -40,12 +40,12 @@ export class StaffContainer extends React.Component{
         return(
             <div className='staff'>
                 <div className='referee'>
-                    <UserResult result={this.props.referee} />
-                    <JoiningButton addParticipant={this.addReferee} removeParticipant={this.removeReferee} isParticpating={participatingReferee} isWaiting={this.props.waitingReferee} update={this.render.bind(this)} />
+                    <UserResult user={this.props.referee} />
+                    <JoiningButton addParticipant={this.addReferee} removeParticipant={this.removeReferee} isParticipating={participatingReferee} isWaiting={this.props.waitingReferee} update={this.props.update} />
                 </div>
                 <div>
-                    <UserResult result={this.props.mc} />
-                    <JoiningButton addParticipant={this.addMc} removeParticipant={this.removeMc} isParticpating={participatingMc} isWaiting={this.props.waitingMc} update={this.render.bind(this)}/>
+                    <UserResult user={this.props.mc} />
+                    <JoiningButton addParticipant={this.addMc} removeParticipant={this.removeMc} isParticipating={participatingMc} isWaiting={this.props.waitingMc} update={this.props.update}/>
                 </div>
             </div>
         )

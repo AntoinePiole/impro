@@ -27,8 +27,7 @@ export class JoiningButton extends React.Component{
             this.props.removeParticipant(userId,false).then( //removes the user from definitive list
                 result => {
                     console.log("Ne participe plus!");
-                    console.log(match.league1MembersPropositions);
-                    update();
+                    update(result.data.updates);
                 }).catch(
                     err => console.log(err)
                 )
@@ -38,8 +37,7 @@ export class JoiningButton extends React.Component{
             this.props.removeParticipant(userId,true).then( //removes the user from waiting list
                 result => {
                     console.log("N'est plus sur liste d'attente!");
-                    console.log(match.league1MembersPropositions);
-                    update();
+                    update(result.data.updates);
                 }).catch(
                     err => console.log(err)
                 )
@@ -48,8 +46,7 @@ export class JoiningButton extends React.Component{
         this.props.addParticipant(userId,true).then( //adds the user to the waiting list
             result => {
                 console.log("Mis sur liste d'attente!");
-                console.log(match.league1MembersPropositions);
-                update()
+                update(result.data.updates)
             }
         ).catch(
             err => console.log(err)

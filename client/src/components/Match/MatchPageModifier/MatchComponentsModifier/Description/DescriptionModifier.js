@@ -1,11 +1,10 @@
 import React from 'react';
 
 /**
- * @property {boolean} isModifying - true if modification mode
  * @property {String} descriptionText
  * @property {function} setDescriptionText - changes the description text of the match
  */
-export class Description extends React.Component{
+export class DescriptionModifier extends React.Component{
     
     constructor(props){
         super(props);
@@ -17,14 +16,10 @@ export class Description extends React.Component{
         this.props.setDescriptionText(text);
     }
 
-
     render(){
         return (
             <div>
-            {this.props.isModifying ? 
-                <textarea onChange={this.handleChange}>{this.props.descriptionText}</textarea> :
-                <p>{this.props.descriptionText}</p>
-            }
+                <textarea onChange={this.handleChange} value={this.props.descriptionText} />
             </div>
         )
     }

@@ -22,6 +22,10 @@ export class TeamContainer extends React.Component{
             user => user._id === userId)) //if one prticipants has same id
     }
 
+    isMemberLeague(){
+        return this.props.league.members ? this.props.league.members.includes(localStorage.getItem('id')) : false;
+    }
+
     render(){
         const participating = this.isParticipating(localStorage.getItem("id"));
         const waiting = this.props.waiting;
@@ -29,7 +33,7 @@ export class TeamContainer extends React.Component{
             <div className='teamContainer'>
                 <LeagueInfo league={this.props.league} />
                 <PlayerList participantsList={this.props.participants} />
-                <JoiningButton isParticipating={participating} isWaiting={waiting} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} update={this.render.bind(this)}/>
+                {this.isMemberLeague() ?<JoiningButton isParticipating={participating} isWaiting={waiting} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} update={this.props.update}/> : null}
             </div>
         )
     }

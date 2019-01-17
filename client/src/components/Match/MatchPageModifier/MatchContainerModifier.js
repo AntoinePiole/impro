@@ -41,7 +41,7 @@ export class MatchContainerModifier extends React.Component{
         const role = 'participant' + leagueNumber;
         return API.addToMatch(userId, this.props.match._id, {role: role, waiting: waiting});
     }
-    
+
     /**
      * removes a participant from definitive or waiting list for this league/match
      * @param {String} userId 
@@ -58,7 +58,7 @@ export class MatchContainerModifier extends React.Component{
      * @returns {Promise} a promise resolved iff we found all users, value is the array of users
      * @param {id array} userIdList 
      */
-    async findUsers(userIdList){ //TO CHECK : this might be full of bugs because of async
+    async findUsers(userIdList){
         if(!userIdList){
             return Promise.resolve([]);
         }
@@ -131,7 +131,7 @@ export class MatchContainerModifier extends React.Component{
                     refereePropositions : result[8].map(userData => userData.data.user),
                     mcPropositions : result[9].map(userData => userData.data.user),
                     admin : result[10],
-                    descriptionText: this.props.match.description
+                    descriptionText: self.props.match.description
             })
         }
         ).catch(
@@ -162,8 +162,8 @@ export class MatchContainerModifier extends React.Component{
                 <span className='VS'>VS</span>
                 <TeamContainerModifier className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
                 <DescriptionModifier descriptionText={this.state.descriptionText} setDescriptionText={this.setDescriptionText} />
-                <StaffContainerModifier matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={refereePropositions} waitingMc={mcPropositions} />
-                <ModificationButtonModifier matchId = {this.props.match._id} descriptionText={this.state.descriptionText}/>
+                <StaffContainerModifier matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={refereePropositions} waitingMc={mcPropositions} matchId={this.props.match._id}/>
+                <ModificationButtonModifier matchId = {this.props.match._id} descriptionText={this.state.descriptionText} />
                 <DeleteButton matchId={this.props.match._id} />   
             </div>
         )

@@ -17,7 +17,12 @@ export class MatchContainer extends React.Component{
             league2Members : [],
             referee: null,
             mc: null,
-            admin : false
+            admin : false,
+            //lists of id, can be changed by joiningButton, no call to backend
+            league1MembersPropositions: [],
+            league2MembersPropositions: [],
+            refereePropositions:[],
+            mcPropositions:[]
         }; 
         this.addToLeague = this.addToLeague.bind(this);
         this.removeFromLeague = this.removeFromLeague.bind(this);
@@ -110,7 +115,11 @@ export class MatchContainer extends React.Component{
                     league2Members : result[3].map(userData => userData.data.user),
                     referee : result[4].data.user,
                     mc : result[5].data.user,
-                    admin : result[6]
+                    admin : result[6],
+                    league1MembersPropositions: self.props.match.league1MembersPropositions,
+                    league2MembersPropositions: self.props.match.league2MembersPropositions,
+                    refereePropositions: self.props.match.refereePropositions,
+                    mcPropositions: self.props.match.mcPropositions
             })
         }
         ).catch(
@@ -125,7 +134,6 @@ export class MatchContainer extends React.Component{
     render(){
         //local info
         const userId = localStorage.getItem('id');
-        const match = this.props.match;
         
         //infos about the match that were fetched from DB
         const league1 = this.state.league1;
@@ -136,19 +144,19 @@ export class MatchContainer extends React.Component{
         const mc = this.state.mc;
 
         //true if current user is waiting for the role
-        const waitingLeague1 = match.league1MembersPropositions.includes(userId);
-        const waitingLeague2 = match.league2MembersPropositions.includes(userId);
-        const waitingReferee = match.refereePropositions.includes(userId);
-        const waitingMc = match.mcPropositions.includes(userId);
+        const waitingLeague1 = this.state.league1MembersPropositions.includes(userId);
+        const waitingLeague2 = this.state.league2MembersPropositions.includes(userId);
+        const waitingReferee = this.state.refereePropositions.includes(userId);
+        const waitingMc = this.state.mcPropositions.includes(userId);
         const admin = this.state.admin;
 
         return(
             <div className='matchContainer'>
-                <TeamContainer className='league1' league={league1} participants={league1Members} waiting={waitingLeague1} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
+                <TeamContainer className='league1' league={league1} participants={league1Members} waiting={waitingLeague1} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} update={this.setState.bind(this)} />
                 <span className='VS'>VS</span>
-                <TeamContainer className='league2' league={league2} participants={league2Members} waiting={waitingLeague2} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
+                <TeamContainer className='league2' league={league2} participants={league2Members} waiting={waitingLeague2} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} update={this.setState.bind(this)} />
                 <p className='description'>{this.props.match.description}</p>
-                <StaffContainer matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={waitingReferee} waitingMc={waitingMc} />
+                <StaffContainer matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={waitingReferee} waitingMc={waitingMc} update={this.setState.bind(this)} />
                 {admin ? <ModificationButton matchId={this.props.match._id} /> : null /* modification button, displayed only if current user is admin of the page */}          
             </div>
         )
