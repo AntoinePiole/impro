@@ -4,8 +4,8 @@ import { StaffContainerModifier } from './MatchComponentsModifier/Staff/StaffCon
 import { ModificationButtonModifier } from './MatchComponentsModifier/ModificationButton/ModificationButtonModifier';
 import { DeleteButton } from './MatchComponentsModifier/DeleteButton/DeleteButton';
 import { DescriptionModifier } from './MatchComponentsModifier/Description/DescriptionModifier.js';
+import { NotFound } from '../../NotFound/NotFound';
 import API from '../../../utils/API.js';
-
 /**
  * @property {match Object} - json object representing the match
  */
@@ -155,17 +155,23 @@ export class MatchContainerModifier extends React.Component{
         const referee = this.state.referee;
         const mc = this.state.mc;
         const mcPropositions = this.state.mcPropositions;
+        const admin = this.state.isAdmin;
 
-        return(
-            <div className='matchContainer'>
-                <TeamContainerModifier className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
-                <span className='VS'>VS</span>
-                <TeamContainerModifier className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
-                <DescriptionModifier descriptionText={this.state.descriptionText} setDescriptionText={this.setDescriptionText} />
-                <StaffContainerModifier matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={refereePropositions} waitingMc={mcPropositions} matchId={this.props.match._id}/>
-                <ModificationButtonModifier matchId = {this.props.match._id} descriptionText={this.state.descriptionText} />
-                <DeleteButton matchId={this.props.match._id} />   
-            </div>
-        )
+        if(admin){ //to prevent typing directly in url by a non-admin user
+            return(
+                <div className='matchContainer'>
+                    <TeamContainerModifier className='league1' league={league1} participants={league1Members} participantsPropositions={league1MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,1)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,1)} />
+                    <span className='VS'>VS</span>
+                    <TeamContainerModifier className='league2' league={league2} participants={league2Members} participantsPropositions={league2MembersPropositions} addParticipant={(x,y)=> this.addToLeague(x,y,2)} removeParticipant={(x,y)=> this.removeFromLeague(x,y,2)} />
+                    <DescriptionModifier descriptionText={this.state.descriptionText} setDescriptionText={this.setDescriptionText} />
+                    <StaffContainerModifier matchId={this.props.match._id} referee={referee} mc={mc} waitingReferee={refereePropositions} waitingMc={mcPropositions} matchId={this.props.match._id}/>
+                    <ModificationButtonModifier matchId = {this.props.match._id} descriptionText={this.state.descriptionText} />
+                    <DeleteButton matchId={this.props.match._id} />   
+                </div>
+            )
+        }
+        else {
+            return(<NotFound />)
+        }
     }
 }
