@@ -23,7 +23,14 @@ export class TeamContainer extends React.Component{
     }
 
     isMemberLeague(){
-        return this.props.league.members ? this.props.league.members.includes(localStorage.getItem('id')) : false;
+        if (this.props.league.members) {
+            return (this.props.league.members.some(
+                member => member._id === localStorage.getItem('id')
+            ));
+        }
+        else {
+            return false;
+        }
     }
 
     render(){

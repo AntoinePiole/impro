@@ -29,8 +29,11 @@ export class Dashboard extends React.Component {
         window.location = "/search";
     }
     disconnect = event => {
-        API.logout();
-        window.location = "/login";
+        API.logout().then(
+            res => window.location = "/login"
+        ).catch(
+            err => console.log(err)
+        )
     }
     login = event => {
         window.location = "/login";

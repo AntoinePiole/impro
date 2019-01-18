@@ -50,7 +50,7 @@ export default {
         return (localStorage.getItem('cookie') !== null);
     },
     logout : function() {
-        localStorage.clear();
+        return axios.get('/users/logout').then(res => localStorage.clear());
     },
 
     // ########## User in a league ########## 

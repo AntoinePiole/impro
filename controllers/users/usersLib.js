@@ -88,6 +88,11 @@ function login(req,res,next){ //MIGHT LEAD TO BUGS, if so go back to export pass
     middleware(req,res,next)
 }
 
+function logout(req,res){
+    req.logout();
+    res.status(200).json({text: "Succesfully logged out"})
+}
+
 function signup(req,res,next){
     const middleware = passport.authenticate('signup');
     middleware(req,res,next);
@@ -356,6 +361,7 @@ exports.patchUserById = patchUserById;
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;
 exports.login = login;
+exports.logout = logout;
 exports.signup = signup;
 exports.getUsersOfLeague = getUsersOfLeague;
 exports.getDetailedMemberPropositionsOfLeague = getDetailedMemberPropositionsOfLeague;
