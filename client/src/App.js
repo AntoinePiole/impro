@@ -10,19 +10,13 @@ import { Signup } from './components/Signup/Signup.js';
 import { SearchResultContainer } from './components/SearchResult/SearchResultContainer.js';
 import { NotFound } from './components/NotFound/NotFound.js';
 import './App.css';
-import {MatchContainer} from './components/Match/MatchContainer';
 import API from './utils/API';
-import { MatchPageModifier } from './components/MatchNew/MatchPageModifier/MatchPageModifier';
-import { MatchPage } from './components/MatchNew/MatchPage/MatchPage';
+import { MatchPageModifier } from './components/Match/MatchPageModifier/MatchPageModifier';
+import { MatchPage } from './components/Match/MatchPage/MatchPage';
 
 
 
 class App extends Component {
-
-    constructor(props){
-        super(props);
-        this.state={match:null};
-    }
 
     componentDidMount(){
         var self = this;

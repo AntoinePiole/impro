@@ -1,5 +1,6 @@
 const Validator = require('./matchValidator');
 const Match = require ('./matchModel');
+const League = require('../../models/leagueModel');
 
 function getAllMatches(req, res){
     Match.find({}, function(err, matches){
@@ -119,6 +120,16 @@ function makeMatch(req, res){
             })
         }
     });
+}
+
+function deleteMatch(req, res){
+    Match.findByIdAndDelete(req.params.matchId).exec(function(err,result){
+        if(err){
+            res.status(500).json({text:'Erreur interne'});
+            return;
+        }
+        res.status(200).json({text: "Match successfully deleted"})
+    })
 }
 
 //------ USER IN MATCH ------
@@ -311,6 +322,61 @@ function getMatchesList(req, res) {
             })
     }
 }
+
+function isAdminOfMatch(req, res, next){
+    
+    //gérer cas où il y a id dans les params et où il n'y est pas ? ou 2 trucs différents ?
+    const userId = req.user ? req.user._id : null;
+    const matchId = req.params.matchId;
+    if(!matchId || !userId){
+        res.status(400).json({
+            text: "Missing id"
+        })
+        return;
+    }
+    const findMatch = Match.findById(matchId);
+    findMatch.exec( function(err,match){
+        if(err){
+            res.status(500).json(res.status(500).json({
+                text: 'Erreur interne',
+                context: 'Loading league2'
+            }));
+            return;
+        }
+        const findLeague1 = League.findById(match.league1Id);
+        const findLeague2 = League.findById(match.league2Id);
+        findLeague1.exec(function(err, league1){
+            if(err){
+                res.status(500).json({
+                    text: 'Erreur interne',
+                    context: 'Loading league1'
+                });
+                return;
+            }
+            findLeague2.exec(function(err,league2){
+                if(err){
+                    res.status(500).json({
+                        text: 'Erreur interne',
+                        context: 'Loading league2'
+                    });
+                    return;
+                }
+                const member1 = league1.members.find(member => member._id === userId); //true if user is admin of league1
+                const member2 = league2.members.find(member => member._id === userId); //true if user is admin of league2
+                const matchAdmin = match.admins.includes(userId); //true if user is explicitly admin of match
+                const admin1 = member1 ? member1.isAdmin : false; 
+                const admin2 = member2 ? member2.isAdmin : false;
+                const admin = admin1 || admin2 || matchAdmin;
+                if(admin){
+                    next();
+                }
+                else {
+                    res.status(403).json({text: 'Match admins only'})
+                }
+            })
+        })
+    })
+}
     
 //-----VALIDATION-----
 
@@ -410,47 +476,6 @@ function validateParamsMatchesList(req, res, next){
     next(); //else pass to next middleware
 }
 
-function isAdminOfMatch(req, res, next){ //gérer cas où il y a id dans les params et où il n'y est pas ? ou 2 trucs différents ?
-    const userId = req.params.userId ? req.params.userId : req.session.user._id; //TO CHECK req.session.user._id?
-    const matchId = req.params.matchId;
-    if(!matchId || !userId){
-        res.status(400).json({
-            text: "Missing id"
-        })
-        return;
-    }
-    const findMatch=Match.findById(matchId)
-    findMatch.exec(function(err,match){
-        if(err){
-            res.status(500).json({
-                text:'Internal error'
-            });
-            return;
-        }
-        const league1Id = match.league1Id;
-        const league2Id = match.league2Id;
-        const admins = match.admins;
-        if(admins.includes(userId)){
-            res.status(200).json({
-                admin: true
-            })
-        }
-        //ELSE CHECK IF ADMIN OF LEAGUE1 OR ADMIN OF LEAGUE2 
-    })
-}
-
-function deleteMatch(req, res){
-    Match.findByIdAndDelete(matchId).exec(function(err,result){
-        if(err){
-            res.status(500).json({text:'Erreur interne'});
-            return;
-        }
-        res.status(200).json({text: "Match successfully deleted"})
-    })
-}
-
-
-
 
 //-----MIDDLEWARES-----
 exports.getAllMatches = getAllMatches;
@@ -458,11 +483,12 @@ exports.getMatch = getMatch;
 exports.hasRole = hasRole;
 exports.patchMatch = patchMatch;
 exports.makeMatch = makeMatch;
+exports.deleteMatch = deleteMatch;
 exports.addToMatch = addToMatch;
 exports.removeFromMatch = removeFromMatch;
 exports.searchMatch = searchMatch;
 exports.getMatchesList = getMatchesList;
-exports.deleteMatch = deleteMatch;
+exports.isAdminOfMatch = isAdminOfMatch;
 
 //-----VALIDATON-----
 exports.validateMatch = validateMatch;
@@ -470,4 +496,4 @@ exports.validateMatchRequired = validateMatchRequired;
 exports.validateParamsId = validateParamsId;
 exports.validateBodyUser = validateBodyUser;
 exports.validateParamsUser = validateParamsUser;
-exports.validateParamsMatchesList = validateParamsMatchesList
+exports.validateParamsMatchesList = validateParamsMatchesList;

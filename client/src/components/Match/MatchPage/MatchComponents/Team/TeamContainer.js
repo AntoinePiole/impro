@@ -40,7 +40,7 @@ export class TeamContainer extends React.Component{
             <div className='teamContainer'>
                 <LeagueInfo league={this.props.league} />
                 <PlayerList participantsList={this.props.participants} />
-                {this.isMemberLeague() ?<JoiningButton isParticipating={participating} isWaiting={waiting} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} update={this.props.update}/> : null}
+                {this.isMemberLeague() ? <JoiningButton isParticipating={participating} isWaiting={waiting} addParticipant={this.props.addParticipant} removeParticipant={this.props.removeParticipant} update={this.props.update}/> : null}
             </div>
         )
     }

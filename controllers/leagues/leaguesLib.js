@@ -538,6 +538,29 @@ function searchLeague(req, res){
     })
 }
 
+function isAdminOfLeague(req, res, next){
+    const userId = req.user._id;
+    const leagueId = req.leagueId;
+    if(!userId || !leagueId){
+        res.status(400).json({text: "Missing id"});
+        return;
+    }
+    League.findById(leagueId).exec(function(err, league){
+        if(err){
+            res.status(500).json({text: "Erreur interne"});
+            return;
+        }
+        const member = league.members.find(
+            member => member._id === userId
+        );
+        if(member){
+            member.isAdmin ? next() : res.status(403).json({text: "League admins only"})
+            return;
+        }
+        res.status(403).json({text: "League admins only"})
+    })
+}
+
 exports.getLeagues = getLeagues;
 exports.getLeagueById = getLeagueById;
 exports.patchLeagueById = patchLeagueById;
@@ -551,3 +574,4 @@ exports.refuseMember = refuseMember;
 exports.addMatchRequest = addMatchRequest;
 exports.getLeaguesOfUser = getLeaguesOfUser;
 exports.searchLeague = searchLeague;
+exports.isAdminOfLeague = isAdminOfLeague;

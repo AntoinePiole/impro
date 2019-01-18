@@ -4,6 +4,11 @@ import API from '../../../../../utils/API';
 
 export class DeleteButton extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
     handleClick(event){
         API.cancelMatch(this.props.matchId).then(
             res => window.location = '/home'
@@ -14,7 +19,7 @@ export class DeleteButton extends React.Component{
 
     render(){
         return (
-            <Button onClick={this.props.onClick}>ANNULER MATCH</Button>
+            <Button onClick={this.handleClick}>ANNULER MATCH</Button>
         )
     }
 }
